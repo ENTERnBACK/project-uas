@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->integer('rating')->nullable();
+            $table->text('review_driver')->nullable();
             $table->timestamps();
         });
     }
