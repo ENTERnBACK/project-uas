@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
-class DriverLocation extends Model
+class SupportTicket extends Model
 {
     protected $fillable = [
     'user_id',
-    'latitude',
-    'longitude'
+    'subject',
+    'description',
+    'status'
     ];
 
     public function user()

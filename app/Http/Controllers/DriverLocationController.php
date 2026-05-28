@@ -12,7 +12,8 @@ class DriverLocationController extends Controller
      */
     public function index()
     {
-        //
+        $driverLocations = DriverLocation::all();
+        return view('driver_locations.index', compact('driverLocations'));
     }
 
     /**
@@ -20,7 +21,7 @@ class DriverLocationController extends Controller
      */
     public function create()
     {
-        //
+        return view('driver_locations.create');
     }
 
     /**
@@ -28,8 +29,15 @@ class DriverLocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DriverLocation::create([
+            'user_id' => $request->user_id,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+
+        return redirect('/driver-locations');
     }
+
 
     /**
      * Display the specified resource.
@@ -44,15 +52,22 @@ class DriverLocationController extends Controller
      */
     public function edit(DriverLocation $driverLocation)
     {
-        //
+        return view('driver_locations.edit', compact('driverLocation'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, DriverLocation $driverLocation)
     {
-        //
+        $driverLocation->update([
+            'user_id' => $request->user_id,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+
+        return redirect('/driver-locations');
     }
 
     /**
@@ -60,6 +75,9 @@ class DriverLocationController extends Controller
      */
     public function destroy(DriverLocation $driverLocation)
     {
-        //
+        $driverLocation->delete();
+
+        return redirect('/driver-locations');
     }
+
 }
