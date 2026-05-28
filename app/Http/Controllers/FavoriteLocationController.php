@@ -16,8 +16,8 @@ class FavoriteLocationController extends Controller
         // Mengambil semua data lokasi favorit dari database lewat Model
         $locations = FavoriteLocation::all();
 
-        // Melempar data ke view 'FavoriteLocations.index'
-        return view('FavoriteLocations.index', compact('locations'));
+        // Melempar data ke view 'favorite-locations.index'
+        return view('favoritelocations.index', compact('locations'));
     }
 
     /**
@@ -26,7 +26,7 @@ class FavoriteLocationController extends Controller
      */
     public function create()
     {
-        return view('FavoriteLocations.create');
+        return view('favoritelocations.create');
     }
 
     /**
@@ -59,7 +59,7 @@ class FavoriteLocationController extends Controller
      */
     public function show(FavoriteLocation $favoriteLocation)
     {
-        return view('FavoriteLocations.show', compact('favoriteLocation'));
+        return view('favoritelocations.show', compact('favoriteLocation'));
     }
 
     /**
@@ -68,7 +68,7 @@ class FavoriteLocationController extends Controller
      */
     public function edit(FavoriteLocation $favoriteLocation)
     {
-        return view('FavoriteLocations.edit', compact('favoriteLocation'));
+        return view('favoritelocations.edit', compact('favoriteLocation'));
     }
 
     /**
@@ -78,6 +78,7 @@ class FavoriteLocationController extends Controller
     public function update(Request $request, FavoriteLocation $favoriteLocations)
     {
         $request->validate([
+
             'label'  => 'required|string',
             'alamat' => 'required|string',
         ]);
@@ -88,7 +89,7 @@ class FavoriteLocationController extends Controller
             
         ]);
 
-        return redirect('/FavoriteLocations');
+        return redirect('/favorite-locations');
     }
 
     /**
@@ -100,6 +101,6 @@ class FavoriteLocationController extends Controller
         // Menghapus data dari MySQL
         $favoriteLocation->delete();
 
-        return redirect('/FavoriteLocations');
+        return redirect('/favorite-locations');
     }
 }
