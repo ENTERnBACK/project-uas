@@ -1,5 +1,5 @@
 <h1>Ubah Review</h1>
-<form method="POST" action="{{ route('reviews.update') }}">
+<form method="POST" action="{{ route('reviews.update', $review) }}">
     @csrf
     @method('PUT')
     Rating:
