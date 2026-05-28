@@ -31,7 +31,7 @@
                     </td>
                     
                     <td style="text-align: center;">
-                        <a href="{{ route('reviews.edit', $review }}">Ubah</a>
+                        <a href="{{ route('reviews.edit', $review) }}">Ubah</a>
                         <form action="{{ route('reviews.destroy', $review) }}" method="post" style="display:inline;">
                             @csrf @method('DELETE')
                             <button type="submit">Hapus</button>
