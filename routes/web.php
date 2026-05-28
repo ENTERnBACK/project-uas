@@ -6,6 +6,8 @@ use App\Http\Controllers\FavoriteLocationController;
 use App\Http\Controllers\DriverLocationController;
 use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ServiceTypeController;
+
 Route::get('/', function () {
     return redirect('/reviews');
 });
@@ -19,3 +21,5 @@ Route::resource('driver-locations', DriverLocationController::class);
 Route::resource('support-tickets', SupportTicketController::class);
 
 Route::resource('reviews', ReviewController::class);
+
+Route::resource('service-types', ServiceTypeController::class);
