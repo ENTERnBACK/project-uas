@@ -34,7 +34,7 @@ class ReviewController extends Controller
             'review_driver' => 'nullable|string',
         ]);
 
-        Review:create($request->only('rating', 'review_driver'));
+        Review::create($request->only('rating', 'review_driver'));
 
         return redirect()->route('reviews.index')->with('success', 'Review created successfully');
     }
