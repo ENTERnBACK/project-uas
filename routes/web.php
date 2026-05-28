@@ -1,12 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\FavoriteLocationController;
 use App\Http\Controllers\DriverLocationController;
 use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\ReviewController;
 Route::get('/', function () {
     return redirect('/reviews');
 });
+
+Route::resource('favorite-locations', FavoriteLocationController::class);
+
+Route::resource('drivers', DriverController::class);
 
 Route::resource('driver-locations', DriverLocationController::class);
 
