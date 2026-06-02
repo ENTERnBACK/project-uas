@@ -19,7 +19,7 @@ class AuthController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password, // atau otomatis hashed dari model
+            'password' => $request->password,
         ]);
         
         return redirect('/login');

@@ -29,15 +29,16 @@ class DriverLocationController extends Controller
      */
     public function store(Request $request)
     {
-        DriverLocation::create([
-            'user_id' => $request->user_id,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-        ]);
+    $validated = $request->validate([
+        'user_id' => 'required',
+        'latitude' => 'required',
+        'longitude' => 'required',
+    ]);
 
-        return redirect('/driver-locations');
+        DriverLocation::create($validated);
+
+        return redirect()->back();
     }
-
 
     /**
      * Display the specified resource.
