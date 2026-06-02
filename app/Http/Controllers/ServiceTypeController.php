@@ -12,9 +12,7 @@ class ServiceTypeController extends Controller
      */
     public function index()
     {
-        $serviceTypes = ServiceType::all();
-
-        return view('service_types.index', compact('serviceTypes'));
+        return view('service_types.index');
     }
 
     /**
@@ -22,7 +20,6 @@ class ServiceTypeController extends Controller
      */
     public function create()
     {
-        return view('service_types.create');
     }
 
     /**
@@ -38,7 +35,7 @@ class ServiceTypeController extends Controller
             'service_type' => $request->service_type
         ]);
 
-        return redirect('/service-types');
+        return redirect('/favorite-locations/create');
     
     }
 
@@ -47,7 +44,7 @@ class ServiceTypeController extends Controller
      */
     public function show(ServiceType $service_type)
     {
-        //
+        return view('services_types.show' , compact('serviceTypes'));
     }
 
     /**
@@ -63,7 +60,15 @@ class ServiceTypeController extends Controller
      */
     public function update(Request $request, ServiceType $service_type)
     {
-        //
+        $request->validate([
+            'service_type' => 'required'
+        ]);
+
+        $service_type->update([
+            'service_type' => $request->service_type
+        ]);
+
+        return redirect('/favorite-locations/create');
     }
 
     /**
