@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\service_type;
+use App\Models\ServiceType;
 use Illuminate\Http\Request;
 
 class ServiceTypeController extends Controller
@@ -45,7 +45,7 @@ class ServiceTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(service_type $service_type)
+    public function show(ServiceType $service_type)
     {
         //
     }
@@ -53,7 +53,7 @@ class ServiceTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(service_type $service_type)
+    public function edit(ServiceType $service_type)
     {
         //
     }
@@ -61,7 +61,7 @@ class ServiceTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, service_type $service_type)
+    public function update(Request $request, ServiceType $service_type)
     {
         //
     }
@@ -69,7 +69,7 @@ class ServiceTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(service_type $service_type)
+    public function destroy(ServiceType $service_type)
     {
         //
     }
