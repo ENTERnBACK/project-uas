@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\service_type;
+use App\Models\ServiceType;
 use Illuminate\Http\Request;
 
 class ServiceTypeController extends Controller
@@ -12,9 +12,7 @@ class ServiceTypeController extends Controller
      */
     public function index()
     {
-        $serviceTypes = ServiceType::all();
-
-        return view('service_types.index', compact('serviceTypes'));
+        return view('service_types.index');
     }
 
     /**
@@ -22,7 +20,6 @@ class ServiceTypeController extends Controller
      */
     public function create()
     {
-        return view('service_types.create');
     }
 
     /**
@@ -38,22 +35,22 @@ class ServiceTypeController extends Controller
             'service_type' => $request->service_type
         ]);
 
-        return redirect('/service-types');
+        return redirect('/favorite-locations/create');
     
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(service_type $service_type)
+    public function show(ServiceType $service_type)
     {
-        //
+        return view('services_types.show' , compact('serviceTypes'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(service_type $service_type)
+    public function edit(ServiceType $service_type)
     {
         //
     }
@@ -61,15 +58,23 @@ class ServiceTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, service_type $service_type)
+    public function update(Request $request, ServiceType $service_type)
     {
-        //
+        $request->validate([
+            'service_type' => 'required'
+        ]);
+
+        $service_type->update([
+            'service_type' => $request->service_type
+        ]);
+
+        return redirect('/favorite-locations/create');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(service_type $service_type)
+    public function destroy(ServiceType $service_type)
     {
         //
     }
