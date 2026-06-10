@@ -16,18 +16,25 @@ Route::get('/', function () {
 Route::get('/register', function () {
     return view('auth.register');
 });
+
+Route::post('/register', [AuthController::class, 'register']);
+
 Route::get('/login', function () {
     return view('auth.login');
-});
+    })->name('login');
+
+// Route::get('/login', function () {
+//     return view('auth.login');
+// });
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth');
 
 Route::get('/logout', [AuthController::class, 'logout']);
 
-Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/register', [AuthController::class, 'register']);
+// Route::post('/register', [AuthController::class, 'register']);
 
 Route::resource('favorite-locations', FavoriteLocationController::class);
 
