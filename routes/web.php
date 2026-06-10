@@ -5,6 +5,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FavoriteLocationController;
 use App\Http\Controllers\DriverLocationController;
 use App\Http\Controllers\SupportTicketController;
+use App\Http\Controllers\TripController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
 
@@ -13,6 +14,8 @@ use App\Http\Controllers\ServiceTypeController;
 Route::get('/', function () {
     return redirect('/reviews');
 });
+
+Route::resource('trips', TripController::class)->middleware('auth');
 
 Route::get('/register', function () {
     return view('auth.register');
