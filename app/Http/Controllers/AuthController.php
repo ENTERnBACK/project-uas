@@ -20,17 +20,21 @@ class AuthController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
         ]);
         
-        return redirect('login');
+        return redirect('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->validate([
+            'email' => 'required|email', 
+            'password' => 'required',
+        ]);
 
         if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
             return redirect('/dashboard');
         }
 
