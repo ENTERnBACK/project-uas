@@ -23,8 +23,7 @@ class AuthController extends Controller
             'password' => $request->password,
         ]);
         
-        // return redirect('login');
-        dd($user);
+        return redirect('login');
     }
 
     public function login(Request $request)
