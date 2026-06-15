@@ -1,5 +1,12 @@
 <h2>Register</h2>
 
+<label>Daftar sebagai</label>
+
+<select name="role">
+    <option value="user">User</option>
+    <option value="driver">Driver</option>
+</select>
+
 <form method="POST" action="/register">
     @csrf
 
@@ -19,3 +26,4 @@
     Sudah punya akun?
     <a href="/login">Login di sini</a>
 </p>
+
