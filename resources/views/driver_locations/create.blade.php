@@ -3,8 +3,15 @@
 <form action="/driver-locations" method="POST">
     @csrf
 
-    <label>User ID</label>
-    <input type="number" name="user_id">
+    <label>Driver</label>
+
+    <select name="user_id" required>
+    @foreach($users as $user)
+        <option value="{{ $user->id }}">
+            {{ $user->name }}
+        </option>
+    @endforeach
+    </select>
 
     <br><br>
 

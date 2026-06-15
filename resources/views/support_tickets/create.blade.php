@@ -15,6 +15,7 @@
         <input type="number" name="user_id" required>
     </p>
 
+
     <p>
         Subject
         <input type="text" name="subject" required>
@@ -35,6 +36,16 @@
 <a href="{{ route('support-tickets.index') }}">
     Kembali
 </a>
+
+@if ($errors->any())
+    <div style="color:red">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 </body>
 </html>

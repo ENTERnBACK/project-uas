@@ -12,8 +12,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceTypeController;
 
 Route::get('/', function () {
-    return redirect('/reviews');
+    return view('home');
 });
+
+// Route::get('/', function () {
+//     return redirect('/reviews');
+// });
 
 Route::resource('trips', TripController::class)->middleware('auth');
 
@@ -27,9 +31,6 @@ Route::get('/login', function () {
 })->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-// Route::get('/login', function () {
-//     return view('auth.login');
-// });
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/dashboard', function () {
     return view('dashboard');

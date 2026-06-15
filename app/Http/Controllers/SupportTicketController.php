@@ -12,9 +12,13 @@ class SupportTicketController extends Controller
      */
     public function index()
     {
-        $supportTickets = SupportTicket::all();
-        return view('support_tickets.index', compact('supportTickets'));
-    }
+    $supportTickets = SupportTicket::all();
+
+    return view(
+        'support_tickets.index',
+        compact('supportTickets')
+    );
+    }   
 
     /**
      * Show the form for creating a new resource.
@@ -29,21 +33,22 @@ class SupportTicketController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'subject' => 'required|max:255',
-            'description' => 'required',
-        ]);
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'subject' => 'required',
+        'description' => 'required',
+    ]);
 
-        SupportTicket::create([
-            'user_id' => $request->user_id,
-            'subject' => $request->subject,
-            'description' => $request->description,
-            'status' => 'open',
-        ]);
+    SupportTicket::create([
+        'user_id' => $request->user_id,
+        'subject' => $request->subject,
+        'description' => $request->description,
+        'status' => 'open',
+    ]);
 
-        return redirect('/support-tickets')
-            ->with('success', 'Ticket berhasil dibuat');
+    return redirect()
+        ->route('support-tickets.index')
+        ->with('success', 'Support ticket berhasil ditambahkan');
     }
 
     /**
