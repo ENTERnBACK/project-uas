@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DriverLocation;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DriverLocationController extends Controller
@@ -12,7 +13,8 @@ class DriverLocationController extends Controller
      */
     public function index()
     {
-        $driverLocations = DriverLocation::all();
+        $driverLocations = DriverLocation::with('user')->get();
+
         return view('driver_locations.index', compact('driverLocations'));
     }
 
@@ -21,7 +23,9 @@ class DriverLocationController extends Controller
      */
     public function create()
     {
-        return view('driver_locations.create');
+        $users = User::all();
+
+        return view('driver_locations.create', compact('users'));
     }
 
     /**
@@ -29,15 +33,17 @@ class DriverLocationController extends Controller
      */
     public function store(Request $request)
     {
-    $validated = $request->validate([
-        'user_id' => 'required',
-        'latitude' => 'required',
-        'longitude' => 'required',
-    ]);
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
 
         DriverLocation::create($validated);
 
-        return redirect()->back();
+        return redirect()
+            ->route('driver-locations.index')
+            ->with('success', 'Lokasi driver berhasil ditambahkan.');
     }
 
     /**
@@ -45,7 +51,7 @@ class DriverLocationController extends Controller
      */
     public function show(DriverLocation $driverLocation)
     {
-        //
+        return view('driver_locations.show', compact('driverLocation'));
     }
 
     /**
@@ -56,19 +62,22 @@ class DriverLocationController extends Controller
         return view('driver_locations.edit', compact('driverLocation'));
     }
 
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, DriverLocation $driverLocation)
     {
-        $driverLocation->update([
-            'user_id' => $request->user_id,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
-        return redirect('/driver-locations');
+        $driverLocation->update($validated);
+
+        return redirect()
+            ->route('driver-locations.index')
+            ->with('success', 'Lokasi driver berhasil diperbarui.');
     }
 
     /**
@@ -78,7 +87,8 @@ class DriverLocationController extends Controller
     {
         $driverLocation->delete();
 
-        return redirect('/driver-locations');
+        return redirect()
+            ->route('driver-locations.index')
+            ->with('success', 'Lokasi driver berhasil dihapus.');
     }
-
 }
