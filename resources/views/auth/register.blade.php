@@ -1,14 +1,24 @@
 <h2>Register</h2>
 
-<label>Daftar sebagai</label>
-
-<select name="role">
-    <option value="user">User</option>
-    <option value="driver">Driver</option>
-</select>
+@if ($errors->any())
+    <div style="color: red; font-weight: bold; margin-bottom: 20px;">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 <form method="POST" action="/register">
     @csrf
+
+    <label>Daftar sebagai</label>
+    <select name="role" required>
+        <option value="user">User</option>
+        <option value="driver">Driver</option>
+    </select>
+    <br><br>
 
     <input type="text" name="name" placeholder="Nama" required>
     <br><br>
@@ -20,10 +30,5 @@
     <br><br>
 
     <button type="submit">Register</button>
-</form>
-
-<p>
-    Sudah punya akun?
-    <a href="/login">Login di sini</a>
-</p>
-
+</form> 
+<p>Sudah punya akun? <a href="/login">Login di sini</a></p>
