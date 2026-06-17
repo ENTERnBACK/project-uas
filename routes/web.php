@@ -29,10 +29,14 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     
     Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    $trips = \App\Models\Trip::where('user_id', auth()->id())->latest()->get();
+    return view('dashboard', compact('trips'));
+    })->middleware('auth')->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
 
     Route::resource('trips', TripController::class);
     Route::resource('drivers', DriverController::class);

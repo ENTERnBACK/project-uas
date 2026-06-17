@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('pickup_point');
             $table->string('dropoff_point');
             $table->enum('status', ['pending', 'on_trip', 'completed', 'cancelled'])->default('pending');
