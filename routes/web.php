@@ -8,47 +8,37 @@ use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
-
 use App\Http\Controllers\ServiceTypeController;
 
 Route::get('/', function () {
     return view('home');
 });
 
-// Route::get('/', function () {
-//     return redirect('/reviews');
-// });
+Route::middleware('guest')->group(function () {
+    Route::get('/register', function () {
+        return view('auth.register');
+    })->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
 
-Route::resource('trips', TripController::class)->middleware('auth');
-
-Route::get('/register', function () {
-    return view('auth.register');
+    Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
 });
-Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth')->group(function () {
+    
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::get('/logout', [AuthController::class, 'logout']);
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/logout', [AuthController::class, 'logout']);
-
-
-// Route::post('/register', [AuthController::class, 'register']);
-
-Route::resource('favorite-locations', FavoriteLocationController::class);
-
-Route::resource('drivers', DriverController::class);
-
-Route::resource('driver-locations', DriverLocationController::class);
-
-Route::resource('support-tickets', SupportTicketController::class);
-
-Route::resource('reviews', ReviewController::class);
-
-Route::resource('service-types', ServiceTypeController::class);
+    Route::resource('trips', TripController::class);
+    Route::resource('drivers', DriverController::class);
+    Route::resource('reviews', ReviewController::class);
+    Route::resource('service-types', ServiceTypeController::class);
+    Route::resource('support-tickets', SupportTicketController::class);
+    Route::resource('driver-locations', DriverLocationController::class);
+    Route::resource('favorite-locations', FavoriteLocationController::class);
+});

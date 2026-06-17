@@ -15,13 +15,14 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'role' => $request->role,
+            'role' => 'required|string',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
         
         return redirect('login')->with('success', 'Registrasi berhasil! Silakan login.');
@@ -45,7 +46,11 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('/login');
+
+        $request->session()->invalidate(); 
+        $request->session()->regenerateToken();
+
+        return redirect('/register');
     }
 
 }
