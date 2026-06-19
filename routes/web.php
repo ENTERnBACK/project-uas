@@ -29,24 +29,22 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     
     Route::get('/dashboard', function () {
-    $user = auth()->user();
-    
-    if ($user->role === 'driver') {
+        $trips = \App\Models\Trip::latest()->get();
+        return view('dashboard', compact('trips'));
+    })->name('dashboard');
+
+
+    Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::latest()->get();
-        $reviews = collect([]); 
+        $reviews = collect([]);
         $averageRating = '5.0';
 
-        return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
-        
-    }
+        return view(
+            'dashboard_driver',
+            compact('availableTrips', 'reviews', 'averageRating')
+        );
 
-    $trips = \App\Models\Trip::latest()->get();
-    return view('dashboard', compact('trips'));
-
-    // $trips = \App\Models\Trip::where('user_id', $user->id)->latest()->get();
-    // return view('dashboard', compact('trips'));
-    
-    })->name('dashboard');
+    })->name('dashboard.driver');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
