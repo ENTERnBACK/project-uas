@@ -23,9 +23,12 @@ class DriverLocationController extends Controller
      */
     public function create()
     {
-        $users = User::all();
+        $users = User::where('role', 'driver')->get();
 
-        return view('driver_locations.create', compact('users'));
+        return view(
+            'driver_locations.create',
+            compact('users')
+        );
     }
 
     /**
