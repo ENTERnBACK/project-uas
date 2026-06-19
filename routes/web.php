@@ -32,15 +32,19 @@ Route::middleware('auth')->group(function () {
     $user = auth()->user();
     
     if ($user->role === 'driver') {
-        $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
+        $availableTrips = \App\Models\Trip::latest()->get();
         $reviews = collect([]); 
         $averageRating = '5.0';
 
         return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
+        
     }
 
-    $trips = \App\Models\Trip::where('user_id', $user->id)->latest()->get();
+    $trips = \App\Models\Trip::latest()->get();
     return view('dashboard', compact('trips'));
+
+    // $trips = \App\Models\Trip::where('user_id', $user->id)->latest()->get();
+    // return view('dashboard', compact('trips'));
     
     })->name('dashboard');
 
