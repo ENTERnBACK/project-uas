@@ -54,6 +54,15 @@
         @csrf
 
         <div class="mb-3">
+            <label class="form-label">Daftar Sebagai</label>
+                <select name="role" class="form-select" required>
+                <option value="">-- Pilih Role --</option>
+                <option value="user">User</option>
+                <option value="driver">Driver</option>
+                </select>
+        </div>
+
+        <div class="mb-3">
             <label>Nama</label>
             <input
                 type="text"

@@ -40,7 +40,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         if (Auth::user()->role == 'driver') {
-            return redirect('/dashboard_driver');
+            return redirect('/dashboard-driver');
         }
 
             return redirect('/dashboard');
