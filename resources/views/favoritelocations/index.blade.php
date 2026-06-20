@@ -1,7 +1,19 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Lokasi Favorit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
 <body class="bg-gray-100 font-sans antialiased text-gray-900 min-h-screen">
 
     <div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md transition duration-300 hover:shadow-xl">
         
+        <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100 flex justify-between items-center">
+            <h2 class="text-blue-800 font-semibold">Total Lokasi Tersimpan: {{ $locations->count() }}</h2>
+        </div>
+
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">📍 Lokasi Favorit Saya</h1>
             <a href="{{ route('favorite-locations.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200 shadow-md hover:scale-105">
@@ -40,9 +52,6 @@
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                                     {{ $location->label }}
                                 </span>
-                                @if($location->is_default)
-                                    <span class="ml-2 px-2 py-0.5 text-[10px] font-bold rounded bg-yellow-200 text-yellow-800 uppercase">Utama</span>
-                                @endif
                             </td>
                             <td class="px-6 py-4 text-gray-600">{{ $location->alamat }}</td>
                             <td class="px-6 py-4 text-center space-x-2">

@@ -1,3 +1,4 @@
+</div>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -73,5 +74,28 @@
             </div>
         </form>
     </div>
+
+    <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md mb-10">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Daftar Lokasi Tersimpan</h2>
+        <table class="w-full text-left border-collapse border">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-3 border">No</th>
+                    <th class="p-3 border">Label</th>
+                    <th class="p-3 border">Alamat</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($locations as $index => $loc)
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 border text-center">{{ $index + 1 }}</td>
+                    <td class="p-3 border">{{ $loc->label }}</td>
+                    <td class="p-3 border">{{ $loc->alamat }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
+</div>
