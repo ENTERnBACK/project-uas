@@ -17,10 +17,11 @@ return new class extends Migration
             // Tambahkan kolom-kolom driver di bawah ini:
             $table->string('nama');            // Menyinpan nama driver
             $table->string('email')->unique(); // Menyimpan email driver (tidak boleh kembar)
+            $table->string('no_telepon');      // Menyimpan nomor telepon driver
             $table->text('alamat');            // Menyimpan alamat lengkap driver
             $table->string('jenis_kendaraan'); // Menyimpan jenis kendaraan (GoRide / GoCar)
             $table->string('status')->default('nonaktif'); // Menyimpan status (aktif / nonaktif)
-            $table->string('plate_nomor');    // Menyimpan nomor plat kendaraan
+            $table->string('plate_nomor');    // Menyimpan nomor plate kendaraan
             
             $table->timestamps(); // create_at dan updated_at otomatis
         });

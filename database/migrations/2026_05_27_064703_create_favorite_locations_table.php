@@ -12,14 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('favorite_locations', function (Blueprint $table) {
-            $table->id(); // Primary Key otomatis
-            
-            // Tambahkan kolom-kolom untuk lokasi favorit di bawah ini:
-            $table->integer('user_id'); // Mencatat ID pelanggan pemilik alamat ini
-            $table->string('label');    // Menyimpan nama tempat (contoh: Rumah, Kosan, Kantor)
-            $table->text('alamat');     // Menyimpan teks alamat lengkap tempat tersebut
-            
-            $table->timestamps(); // membuat kolom created_at dan updated_at otomatis
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->index();
+            $table->string('label')->index(); 
+            $table->text('alamat');
+            $table->boolean('is_default')->default(false); 
+            $table->timestamps();
         });
     }
 

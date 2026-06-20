@@ -4,103 +4,92 @@ namespace App\Http\Controllers;
 
 use App\Models\FavoriteLocation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FavoriteLocationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * (Menampilkan semua daftar lokasi favorit user)
-     */
+    // Menampilkan daftar lokasi milik user yang sedang login
     public function index()
     {
-        // Mengambil semua data lokasi favorit dari database lewat Model
-        $locations = FavoriteLocation::all();
-
-        // Melempar data ke view 'favorite-locations.index'
+        $locations = FavoriteLocation::where('user_id', Auth::id())->get();
         return view('favoritelocations.index', compact('locations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * (Menampilkan halaman form untuk menambah lokasi favorit baru)
-     */
+    // Menampilkan form tambah lokasi
     public function create()
     {
         return view('favoritelocations.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * (Menyimpan lokasi favorit baru yang dikirim dari form create ke database)
-     */
+    // Menyimpan data lokasi baru
     public function store(Request $request)
     {
-        // Validasi data input agar aman dari error database
         $request->validate([
-            'user_id' => 'required|integer',
-            'label'   => 'required|string', // Contoh: Rumah, Kampus, Kosan
-            'alamat'  => 'required|string', // Alamat lengkap
+            'label'  => 'required|string|max:255',
+            'alamat' => 'required|string',
         ]);
 
-        // Menyimpan ke database MySQL via Eloquent ORM
         FavoriteLocation::create([
-            'user_id' => $request->user_id,
+            'user_id' => Auth::id(), // Mengambil ID user otomatis dari sesi login
             'label'   => $request->label,
             'alamat'  => $request->alamat,
         ]);
 
-        // Setelah berhasil, redirect kembali ke halaman daftar lokasi
-        return redirect('/favorite-locations');
+        return redirect()->route('favorite-locations.index')->with('success', 'Lokasi berhasil disimpan!');
     }
 
-    /**
-     * Display the specified resource.
-     * (Menampilkan detail satu lokasi tertentu, biasanya opsional untuk fitur ini)
-     */
+    // Menampilkan detail lokasi tertentu
     public function show(FavoriteLocation $favoriteLocation)
     {
-        return view('favoritelocations.show', compact('favoriteLocation'));
+        // Proteksi: User lain tidak bisa melihat data user lain
+        if ($favoriteLocation->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki izin.');
+        }
+        $location = $favoriteLocation;
+        return view('favoritelocations.show', compact('location'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * (Menampilkan form untuk edit alamat atau label lokasi)
-     */
+    // Menampilkan form edit
     public function edit(FavoriteLocation $favoriteLocation)
     {
-        return view('favoritelocations.edit', compact('favoriteLocation'));
+        // Proteksi: User lain tidak bisa edit data user lain
+        if ($favoriteLocation->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki izin.');
+        }
+        $location = $favoriteLocation;
+        return view('favoritelocations.edit', compact('location'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     * (Menyimpan perubahan data dari form edit ke database)
-     */
-    public function update(Request $request, FavoriteLocation $favoriteLocations)
+    // Memperbarui data ke database
+    public function update(Request $request, FavoriteLocation $favoriteLocation)
     {
-        $request->validate([
+        // Proteksi: User lain tidak bisa update data user lain
+        if ($favoriteLocation->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki izin.');
+        }
 
-            'label'  => 'required|string',
+        $request->validate([
+            'label'  => 'required|string|max:255',
             'alamat' => 'required|string',
         ]);
 
-        $favoriteLocations->update([
+        $favoriteLocation->update([
             'label'  => $request->label,
             'alamat' => $request->alamat,
-            
         ]);
 
-        return redirect('/favorite-locations');
+        return redirect()->route('favorite-locations.index')->with('success', 'Lokasi berhasil diupdate!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * (Menghapus lokasi favorit dari daftar)
-     */
+    // Menghapus data
     public function destroy(FavoriteLocation $favoriteLocation)
     {
-        // Menghapus data dari MySQL
-        $favoriteLocation->delete();
+        // Proteksi: User lain tidak bisa hapus data user lain
+        if ($favoriteLocation->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki izin.');
+        }
 
-        return redirect('/favorite-locations');
+        $favoriteLocation->delete();
+        return redirect()->route('favorite-locations.index')->with('success', 'Lokasi berhasil dihapus!');
     }
 }

@@ -33,7 +33,7 @@
                         <th class="p-4">Kontak / Email</th>
                         <th class="p-4">Alamat</th>
                         <th class="p-4">Layanan</th>
-                        <th class="p-4">Plat Nomor</th>
+                        <th class="p-4">Plate Nomor</th>
                         <th class="p-4">Status</th>
                         <th class="p-4 text-center">Aksi</th>
                     </tr>
@@ -63,8 +63,8 @@
                             </span>
                         </td>
                         
-                        <!-- Plat Nomor -->
-                        <td class="p-4 font-mono font-semibold text-gray-700 uppercase">{{ $driver->plat_nomor }}</td>
+                        <!-- Plate Nomor -->
+                        <td class="p-4 font-mono font-semibold text-gray-700 uppercase">{{ $driver->plate_nomor }}</td>
                         
                         <!-- Status -->
                         <td class="p-4">

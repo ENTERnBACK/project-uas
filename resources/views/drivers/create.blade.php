@@ -61,8 +61,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nomor Registrasi Kendaraan (Plat Nomor)</label>
-                    <input type="text" name="plat_nomor" required placeholder="Contoh: B 1234 ABC" 
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nomor Registrasi Kendaraan (Plate Nomor)</label>
+                    <input type="text" name="plate_nomor" required placeholder="Contoh: B 1234 ABC" 
                            class="w-full border border-gray-300 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition uppercase">
                 </div>
             </div>

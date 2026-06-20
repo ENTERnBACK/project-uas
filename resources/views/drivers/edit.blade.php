@@ -46,7 +46,7 @@
                 </div>
             </div>
 
-            <!-- Baris 3: Atribut Kendaraan (Layanan & Plat) - Terkunci (Disabled/Readonly) -->
+            <!-- Baris 3: Atribut Kendaraan (Layanan & Plate) - Terkunci (Disabled/Readonly) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 opacity-70">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Jenis Layanan Gojek (Tidak dapat diubah)</label>
@@ -54,8 +54,8 @@
                            class="w-full bg-gray-100 border border-gray-300 p-2.5 rounded-lg cursor-not-allowed focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Plat Nomor (Tidak dapat diubah)</label>
-                    <input type="text" value="{{ $driver->plat_nomor }}" readonly 
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Plate Nomor (Tidak dapat diubah)</label>
+                    <input type="text" value="{{ $driver->plate_nomor }}" readonly 
                            class="w-full bg-gray-100 border border-gray-300 p-2.5 rounded-lg cursor-not-allowed focus:outline-none uppercase">
                 </div>
             </div>

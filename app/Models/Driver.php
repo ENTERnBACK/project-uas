@@ -10,6 +10,7 @@ class Driver extends Model
     protected $fillable = [
         'nama',
         'email',
+        'no_telepon', 
         'alamat',
         'jenis_kendaraan',
         'status',

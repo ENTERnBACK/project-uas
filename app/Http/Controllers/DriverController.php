@@ -34,30 +34,29 @@ class DriverController extends Controller
      * (Menyimpan data driver baru yang dikirim dari form create ke database)
      */
     public function store(Request $request)
-    {
-        // SESUAIKAN VALIDASI: Tambahkan kolom no_telepon dan plat_nomor sesuai kebutuhan Gojek
-        $request->validate([
-            'nama' => 'required',
-            'email' => 'required|email',
-            'no_telepon' => 'required', // Tambahan agar sesuai form create
-            'jenis_kendaraan' => 'required',
-            'status' => 'required',
-            'plate_nomor' => 'required', // Tambahan
-        ]);
+{
+    $request->validate([
+        'nama' => 'required',
+        'email' => 'required|email',
+        'no_telepon' => 'required',
+        'alamat' => 'required',
+        'jenis_kendaraan' => 'required',
+        'plate_nomor' => 'required',
+        'status' => 'required',
+    ]);
 
-        // Menyimpan data ke database MySQL lewat Eloquent
-        Driver::create([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'no_telepon' => $request->no_telepon, // Tambahan
-            'jenis_kendaraan' => $request->jenis_kendaraan,
-            'plate_nomor' => $request->plat_nomor, // Tambahan
-            'status' => $request->status, 
-        ]);
+    Driver::create([
+        'nama' => $request->nama,
+        'email' => $request->email,
+        'no_telepon' => $request->no_telepon,
+        'alamat' => $request->alamat,
+        'jenis_kendaraan' => $request->jenis_kendaraan,
+        'plate_nomor' => $request->plate_nomor,
+        'status' => $request->status,
+    ]);
 
-        // Redirect kembali ke halaman utama driver setelah berhasil disimpan
-        return redirect('/drivers');
-    }
+    return redirect('/drivers');
+}
 
     /**
      * Display the specified resource.

@@ -55,10 +55,10 @@
                 </div>
             </div>
 
-            <!-- Baris 5: Plat Nomor -->
+            <!-- Baris 5: Plate Nomor -->
             <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-gray-500">Nomor Plat Kendaraan</span>
-                <span class="text-sm font-mono font-bold text-gray-800 col-span-2 uppercase">{{ $driver->plat_nomor }}</span>
+                <span class="text-sm font-semibold text-gray-500">Nomor Plate Kendaraan</span>
+                <span class="text-sm font-mono font-bold text-gray-800 col-span-2 uppercase">{{ $driver->plate_nomor }}</span>
             </div>
 
             <!-- Baris 6: Alamat Domisili -->
