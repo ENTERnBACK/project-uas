@@ -1,71 +1,77 @@
-</div>
-<!DOCTYPE html>
+<div>
+    <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Lokasi: {{ $location->label }}</title>
+    <title>Detail Lokasi Favorit</title>
+    <!-- Tailwind CSS untuk styling cepat dan modern -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans antialiased text-gray-900 min-h-screen p-4">
+<body class="bg-gray-100 font-sans antialiased text-gray-900 min-h-screen">
 
-    <div class="max-w-2xl mx-auto mt-10 bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">🔍 Detail Lokasi</h1>
-            <a href="{{ route('favorite-locations.index') }}" class="text-blue-100 hover:text-white text-sm font-medium transition">
-                ← Kembali ke Daftar
-            </a>
-        </div>
-
-        <div class="p-6 space-y-8">
-            <div class="flex items-start justify-between">
-                <div>
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">Label Tempat</span>
-                    <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-100 shadow-sm">
-                        {{ $location->label }}
-                    </span>
-                </div>
-                
-                @if(isset($location->is_default) && $location->is_default)
-                    <div class="px-3 py-1 bg-amber-100 text-amber-800 text-[10px] font-black uppercase tracking-wider rounded-lg border border-amber-200">
-                        Alamat Utama
-                    </div>
-                @endif
-            </div>
-
+    <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md transition duration-300 hover:shadow-xl">
+        
+        <!-- Header & Tombol Kembali -->
+        <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
             <div>
-                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Alamat Lengkap</span>
-                <div class="p-5 bg-gray-50 border border-gray-100 rounded-xl text-gray-700 leading-relaxed italic font-medium">
-                    "{{ $location->alamat }}"
+                <h1 class="text-2xl font-bold text-gray-800">🔍 Detail Lokasi</h1>
+                <p class="text-gray-500 text-sm">Informasi lengkap mengenai lokasi favorit Anda.</p>
+            </div>
+            <a href="{{ route('favorite-locations.index') }}" class="text-gray-500 hover:text-gray-700 text-sm font-medium transition duration-200 hover:underline">
+                &larr; Kembali
+            </a>
+        </div>
+
+        <!-- Konten Detail Lokasi -->
+        <div class="space-y-4">
+            <!-- Menampilkan Label Tempat -->
+            <div>
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1">Nama / Label Tempat</span>
+                <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800 shadow-sm">
+                    {{ $location->label }}
+                </span>
+            </div>
+
+            <!-- Menampilkan Alamat Lengkap -->
+            <div>
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1">Alamat Lengkap</span>
+                <div class="p-4 bg-gray-50 border border-gray-200 rounded-md text-gray-700 leading-relaxed whitespace-pre-line">
+                    {{ $location->alamat }}
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
-                <div class="text-xs">
-                    <span class="block font-bold text-gray-400 uppercase text-[9px]">Dibuat Pada</span>
-                    <span class="text-gray-600">{{ $location->created_at ? $location->created_at->translatedFormat('d F Y, H:i') : '-' }}</span>
+            <!-- Menampilkan Waktu Dibuat -->
+            <div class="grid grid-cols-2 gap-4 text-xs text-gray-400 pt-2">
+                <div>
+                    <span class="block font-medium">Disimpan Pada:</span>
+                    <span>{{ $location->created_at->translatedFormat('d F Y, H:i') }}</span>
                 </div>
-                <div class="text-xs">
-                    <span class="block font-bold text-gray-400 uppercase text-[9px]">Diperbarui</span>
-                    <span class="text-gray-600">{{ $location->updated_at ? $location->updated_at->translatedFormat('d F Y, H:i') : '-' }}</span>
+                <div>
+                    <span class="block font-medium">Terakhir Diperbarui:</span>
+                    <span>{{ $location->updated_at->translatedFormat('d F Y, H:i') }}</span>
                 </div>
             </div>
         </div>
 
-        <div class="bg-gray-50 p-6 flex space-x-4 border-t border-gray-100">
-            <a href="{{ route('favorite-locations.edit', $location->id) }}" 
-               class="flex-1 text-center bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white py-2.5 rounded-xl font-bold transition-all duration-200">
-                Edit Data
+        <!-- Tombol Aksi Cepat -->
+        <div class="flex items-center justify-end space-x-3 border-t border-gray-100 mt-6 pt-4">
+            <a href="{{ route('favorite-locations.edit', $location->id) }}" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md text-sm font-medium transition duration-150 hover:scale-105 shadow-sm">
+                Ubah Data
             </a>
-            <form action="{{ route('favorite-locations.destroy', $location->id) }}" method="POST" class="flex-1" onsubmit="return confirm('Hapus lokasi ini?')">
+            
+            <form action="{{ route('favorite-locations.destroy', $location->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus lokasi ini?')">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full bg-red-50 text-red-600 hover:bg-red-600 hover:text-white py-2.5 rounded-xl font-bold transition-all duration-200">
+                <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium cursor-pointer transition duration-150 hover:scale-105 shadow-sm">
                     Hapus
                 </button>
             </form>
         </div>
+
     </div>
+
 </body>
 </html>
+
 </div>

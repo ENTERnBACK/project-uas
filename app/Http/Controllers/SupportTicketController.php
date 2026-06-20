@@ -18,7 +18,7 @@ class SupportTicketController extends Controller
         'support_tickets.index',
         compact('supportTickets')
     );
-    }   
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -48,7 +48,7 @@ class SupportTicketController extends Controller
 
     return redirect()
         ->route('support-tickets.index')
-        ->with('success', 'Support ticket berhasil ditambahkan');
+        ->with('success', 'Pengaduan berhasil dikirim.');
     }
 
     /**
