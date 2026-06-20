@@ -6,8 +6,23 @@
 </head>
 <body>
 
-    <h2>Selamat Datang Driver, {{ Auth::user()->name }}!</h2>
-    <p>Status Akun: <span style="color: green; font-weight: bold;">Aktif</span></p>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 15px; border-bottom: 1px solid #eee; margin-bottom: 20px;">
+        <div>
+            <h1 style="margin: 0; font-size: 28px; font-weight: bold; color: #000;">Selamat Datang Driver, {{ auth()->user()->name }}!</h1>
+            <p style="margin: 5px 0 0 0; font-weight: bold;">Status Akun: <span style="color: #28a745;">Aktif</span></p>
+        </div>
+
+        <div style="z-index: 999;">
+            <a href="{{ route('drivers.index') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; padding: 6px 12px; border-radius: 25px; background-color: #f8f9fa; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.background='#edf2f7'" onmouseout="this.style.background='#f8f9fa'">
+                <span style="font-weight: 500; color: #333; font-family: sans-serif; font-size: 14px;">
+                    {{ auth()->user()->name }}
+                </span>
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=0D8ABC&color=fff" 
+                    alt="Profile" 
+                    style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc;">
+            </a>
+        </div>
+    </div>
 
     @if(session('success'))
         <p style="color: green; font-weight: bold;">{{ session('success') }}</p>
