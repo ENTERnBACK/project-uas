@@ -1,18 +1,19 @@
-<div>
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Lokasi Favorit</title>
-    <!-- Tailwind CSS untuk styling cepat dan modern -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans antialiased text-gray-900 min-h-screen">
 
-    <div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md transition-300 hover:shadow-xl">
+    <div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md transition duration-300 hover:shadow-xl">
         
-        <!-- Header & Tombol Tambah -->
+        <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100 flex justify-between items-center">
+            <h2 class="text-blue-800 font-semibold">Total Lokasi Tersimpan: {{ $locations->count() }}</h2>
+        </div>
+
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">📍 Lokasi Favorit Saya</h1>
             <a href="{{ route('favorite-locations.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200 shadow-md hover:scale-105">
@@ -20,14 +21,19 @@
             </a>
         </div>
 
-        <!-- Notifikasi Sukses -->
         @if(session('success'))
-            <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+            <div id="flash-message" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded transition-opacity duration-500">
                 {{ session('success') }}
             </div>
+            <script>
+                setTimeout(() => {
+                    const msg = document.getElementById('flash-message');
+                    msg.style.opacity = '0';
+                    setTimeout(() => msg.remove(), 500);
+                }, 3000);
+            </script>
         @endif
 
-        <!-- Tabel / Daftar Lokasi -->
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                 <thead>
@@ -49,36 +55,23 @@
                             </td>
                             <td class="px-6 py-4 text-gray-600">{{ $location->alamat }}</td>
                             <td class="px-6 py-4 text-center space-x-2">
-                                <!-- Tombol Edit -->
-                                <a href="{{ route('favorite-locations.edit', $location->id) }}" class="text-amber-600 hover:text-amber-800 font-medium">
-                                    Edit
-                                </a>
+                                <a href="{{ route('favorite-locations.edit', $location->id) }}" class="text-amber-600 hover:text-amber-800 font-medium">Edit</a>
                                 
-                                <!-- Tombol Hapus (Wajib pakai Form Method DELETE) -->
                                 <form action="{{ route('favorite-locations.destroy', $location->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus lokasi ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800 font-medium cursor-pointer hover:underline">
-                                        Hapus
-                                    </button>
+                                    <button type="submit" class="text-red-600 hover:text-red-800 font-medium cursor-pointer">Hapus</button>
                                 </form>
                             </td>
                         </tr>
                     @empty
-                        <!-- Tampilan jika data kosong -->
                         <tr>
-                            <td colspan="4" class="px-6 py-10 text-center text-gray-500">
-                                Belum ada lokasi favorit yang disimpan.
-                            </td>
+                            <td colspan="4" class="px-6 py-10 text-center text-gray-500">Belum ada lokasi favorit.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-
     </div>
-
 </body>
 </html>
-
-</div>
