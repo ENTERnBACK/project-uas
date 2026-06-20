@@ -8,20 +8,21 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteLocationController extends Controller
 {
-    // Menampilkan daftar lokasi milik user yang sedang login
+    // 1. Menampilkan daftar lokasi milik user yang sedang login
     public function index()
     {
-        $locations = FavoriteLocation::where('user_id', Auth::id())->get();
-        return view('favoritelocations.index', compact('locations'));
+        $locations = FavoriteLocation::where('user_id', Auth::id())->latest()->get();
+        return view('FavoriteLocations.index', compact('locations'));
     }
 
-    // Menampilkan form tambah lokasi
+    // 2. Menampilkan form tambah lokasi + daftar lokasi di bawahnya
     public function create()
     {
-        return view('favoritelocations.create');
+        $locations = FavoriteLocation::where('user_id', Auth::id())->latest()->get();
+        return view('FavoriteLocations.create', compact('locations'));
     }
 
-    // Menyimpan data lokasi baru
+    // 3. Menyimpan data lokasi baru
     public function store(Request $request)
     {
         $request->validate([
@@ -30,7 +31,7 @@ class FavoriteLocationController extends Controller
         ]);
 
         FavoriteLocation::create([
-            'user_id' => Auth::id(), // Mengambil ID user otomatis dari sesi login
+            'user_id' => Auth::id(), 
             'label'   => $request->label,
             'alamat'  => $request->alamat,
         ]);
@@ -38,32 +39,31 @@ class FavoriteLocationController extends Controller
         return redirect()->route('favorite-locations.index')->with('success', 'Lokasi berhasil disimpan!');
     }
 
-    // Menampilkan detail lokasi tertentu
+    // 4. Menampilkan detail lokasi tertentu
     public function show(FavoriteLocation $favoriteLocation)
     {
-        // Proteksi: User lain tidak bisa melihat data user lain
         if ($favoriteLocation->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki izin.');
         }
-        $location = $favoriteLocation;
-        return view('favoritelocations.show', compact('location'));
+        return view('FavoriteLocations.show', compact('favoriteLocation'));
     }
 
-    // Menampilkan form edit
+    // 5. Menampilkan form edit + daftar lokasi agar tabel tetap muncul
     public function edit(FavoriteLocation $favoriteLocation)
     {
-        // Proteksi: User lain tidak bisa edit data user lain
         if ($favoriteLocation->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki izin.');
         }
-        $location = $favoriteLocation;
-        return view('favoritelocations.edit', compact('location'));
+        
+        // Ambil daftar lokasi untuk tabel di bawah form edit
+        $locations = FavoriteLocation::where('user_id', Auth::id())->latest()->get();
+        
+        return view('FavoriteLocations.edit', compact('favoriteLocation', 'locations'));
     }
 
-    // Memperbarui data ke database
+    // 6. Memperbarui data ke database
     public function update(Request $request, FavoriteLocation $favoriteLocation)
     {
-        // Proteksi: User lain tidak bisa update data user lain
         if ($favoriteLocation->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki izin.');
         }
@@ -81,10 +81,9 @@ class FavoriteLocationController extends Controller
         return redirect()->route('favorite-locations.index')->with('success', 'Lokasi berhasil diupdate!');
     }
 
-    // Menghapus data
+    // 7. Menghapus data
     public function destroy(FavoriteLocation $favoriteLocation)
     {
-        // Proteksi: User lain tidak bisa hapus data user lain
         if ($favoriteLocation->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki izin.');
         }

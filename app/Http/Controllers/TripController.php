@@ -35,12 +35,13 @@ class TripController extends Controller
         ]);
 
         Trip::create([
+            'user_id'       => auth()->id(),
             'pickup_point' => $request->pickup_point,
             'dropoff_point' => $request->dropoff_point,
             'status' => 'pending',
         ]);
 
-        return redirect('/dashboard')->with('success', 'Trip berhasil dibuat!');
+        return redirect()->route('driver-locations.index')->with('success', 'Trip berhasil dibuat!');
     }
 
     /**
