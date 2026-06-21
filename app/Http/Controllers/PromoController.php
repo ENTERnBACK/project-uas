@@ -2,143 +2,123 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Promo;
 use Illuminate\Http\Request;
 
 class PromoController extends Controller
 {
- 
-    public function index()
+    public function userIndex()
     {
-        $promos = Promo::latest()->paginate(10);
-        return view('promos.index', compact('promos'));
+        $promos = $this->getDummyPromos();
+        return view('promos.user', compact('promos'));
     }
 
-    public function create()
-    {
-        return view('promos.create');
+public function applyPromo(Request $request)
+{
+    $code = $request->promo_code;
+    $promos = $this->getDummyPromos();
+    $promo = $promos->firstWhere('code', $code);
+
+    if (!$promo) {
+        return redirect()->back()->with('error', 'Kode promo tidak ditemukan');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'code' => 'required|string|unique:promos,code|max:50',
-            'name' => 'required|string|max:100',
-            'description' => 'nullable|string',
-            'discount_type' => 'required|in:percentage,fixed',
-            'discount_value' => 'required|numeric|min:0',
-            'max_discount' => 'nullable|numeric|min:0',
-            'min_transaction' => 'nullable|numeric|min:0',
-            'usage_limit' => 'nullable|integer|min:1',
-            'status' => 'required|in:active,expired,disabled',
-            'valid_from' => 'nullable|date',
-            'valid_until' => 'nullable|date|after:valid_from',
-        ]);
+    $usageCount = session('promo_usage_' . $code, 0);
 
-        Promo::create($request->all());
+    $promoBawah3k = ['HEMAT10', 'RIDEAJA', 'NEWUSER'];
+    $promoPotongan5k = ['SELALU50', 'GRATIS5'];
 
-        return redirect()->route('promos.index')
-            ->with('success', 'Promo created successfully.');
+    if (in_array($code, $promoBawah3k) && $usageCount >= 5) {
+        return redirect()->back()->with('error', 'Promo sudah mencapai batas pemakaian (5x)');
     }
 
-    public function show(Promo $promo)
-    {
-
-        $isValid = $promo->isValid();
-        return view('promos.show', compact('promo', 'isValid'));
+    if (in_array($code, $promoPotongan5k) && $usageCount >= 2) {
+        return redirect()->back()->with('error', 'Promo sudah mencapai batas pemakaian (2x)');
     }
 
-    public function edit(Promo $promo)
-    {
-        return view('promos.edit', compact('promo'));
+    $basePrice = session('base_price', 10000);
+    $calculateDiscount = $promo->calculateDiscount;
+    $discount = $calculateDiscount($basePrice);
+
+    if ($discount == 0) {
+        return redirect()->back()->with('error', 'Minimal transaksi belum terpenuhi');
     }
 
-    public function update(Request $request, Promo $promo)
+    session(['promo_usage_' . $code => $usageCount + 1]);
+
+    session([
+        'applied_promo' => $promo->code,
+        'discount_amount' => $discount
+    ]);
+
+    $tripId = session('current_trip_id', 1);
+    return redirect()->route('payments.user', $tripId)
+        ->with('success', "Promo berhasil! Diskon Rp " . number_format($discount, 0, ',', '.'));
+}
+
+    private function getDummyPromos()
     {
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'description' => 'nullable|string',
-            'discount_type' => 'required|in:percentage,fixed',
-            'discount_value' => 'required|numeric|min:0',
-            'max_discount' => 'nullable|numeric|min:0',
-            'min_transaction' => 'nullable|numeric|min:0',
-            'usage_limit' => 'nullable|integer|min:1',
-            'status' => 'required|in:active,expired,disabled',
-            'valid_from' => 'nullable|date',
-            'valid_until' => 'nullable|date',
-        ]);
-
-        $promo->update($request->all());
-
-        return redirect()->route('promos.index')
-            ->with('success', 'Promo updated successfully.');
-    }
-  
-    public function destroy(Promo $promo)
-    {
-        $promo->delete();
-
-        return redirect()->route('promos.index')
-            ->with('success', 'Promo deleted successfully.');
-    }
-
-
-    public function validatePromo($code, Request $request)
-    {
-        $amount = $request->query('amount', 0);
-        
-        $promo = Promo::where('code', $code)->first();
-        
-        if (!$promo) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Promo code not found'
-            ], 404);
-        }
-
-        if (!$promo->isValid()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Promo code is not valid or expired'
-            ], 422);
-        }
-
-        $discountAmount = $promo->calculateDiscount($amount);
- 
-       if ($amount < $promo->min_transaction) {
-           return response()->json([
-           'success' => false,
-           'message' => 'Transaction amount does not meet minimum requirement'
-          ], 422);
-       } 
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Promo code is valid',
-            'data' => [
-                'id' => $promo->id,
-                'code' => $promo->code,
-                'name' => $promo->name,
-                'discount_type' => $promo->discount_type,
-                'discount_value' => $promo->discount_value,
-                'discount_amount' => $discountAmount,
-                'min_transaction' => $promo->min_transaction,
+        return collect([
+            (object) [
+                'code' => 'HEMAT10',
+                'name' => 'Diskon 10%',
+                'discount_type' => 'percentage',
+                'discount_value' => 10,
+                'max_discount' => 2000,
+                'min_transaction' => 10000,
+                'calculateDiscount' => function($amount) {
+                    if ($amount < 10000) return 0;
+                    $discount = $amount * 0.10;
+                    return min($discount, 2000);
+                }
+            ],
+            (object) [
+                'code' => 'RIDEAJA',
+                'name' => 'Diskon Rp 2.000',
+                'discount_type' => 'fixed',
+                'discount_value' => 2000,
+                'min_transaction' => 10000,
+                'calculateDiscount' => function($amount) {
+                    if ($amount < 10000) return 0;
+                    return min(2000, $amount);
+                }
+            ],
+            (object) [
+                'code' => 'NEWUSER',
+                'name' => 'Diskon 15% User Baru',
+                'discount_type' => 'percentage',
+                'discount_value' => 15,
+                'max_discount' => 3000,
+                'min_transaction' => 15000,
+                'calculateDiscount' => function($amount) {
+                    if ($amount < 15000) return 0;
+                    $discount = $amount * 0.15;
+                    return min($discount, 3000);
+                }
+            ],
+            (object) [
+                'code' => 'SELALU50',
+                'name' => 'DISKON 50% TIAP HARI',
+                'discount_type' => 'percentage',
+                'discount_value' => 50,
+                'max_discount' => 5000,
+                'min_transaction' => 15000,
+                'calculateDiscount' => function($amount) {
+                    if ($amount < 15000) return 0;
+                    $discount = $amount * 0.50;
+                    return min($discount, 5000);
+                }
+            ],
+            (object) [
+                'code' => 'GRATIS5',
+                'name' => 'Gratis Ongkir Rp 5.000',
+                'discount_type' => 'fixed',
+                'discount_value' => 5000,
+                'min_transaction' => 10000,
+                'calculateDiscount' => function($amount) {
+                    if ($amount < 10000) return 0;
+                    return min(5000, $amount);
+                }
             ]
-        ]);
-    }
-
-    public function getActivePromos()
-    {
-        $promos = Promo::active()->get();
-  
-        $validPromos = $promos->filter(function ($promo) {
-            return $promo->isValid();
-        })->values();
-
-        return response()->json([
-            'success' => true,
-            'count' => $validPromos->count(),
-            'data' => $validPromos
         ]);
     }
 }

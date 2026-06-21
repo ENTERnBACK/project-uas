@@ -56,11 +56,6 @@ class Payment extends Model
         return $query->where('status', 'pending');
     }
 
-    public function scopeByPassenger($query, $passengerId)
-    {
-        return $query->where('passenger_id', $passengerId);
-    }
-
     public function scopeByTrip($query, $tripId)
     {
         return $query->where('trip_id', $tripId);
