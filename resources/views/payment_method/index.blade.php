@@ -1,7 +1,11 @@
-<form action="/payment-method" method="POST">
+<form action="/payment-methods" method="POST">
     @csrf
 
     <h1> Payment Methods</h1>
+
+    <input type="hidden" 
+        name="trip_id" 
+         value="1">
 
         <input type="radio" 
          name="method"     
