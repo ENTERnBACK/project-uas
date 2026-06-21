@@ -77,7 +77,7 @@ class TripController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('trips.index')->with('success', 'Trip berhasil diperbarui!');
+        return redirect()->route('payment.method', ['trip_id' => $trip->id]);
     }
 
     /**
