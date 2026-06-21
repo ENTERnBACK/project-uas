@@ -41,7 +41,7 @@ class TripController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('driver-locations.index')->with('success', 'Trip berhasil dibuat!');
+        return redirect()->route('service-types.index')->with('success', 'Trip berhasil dibuat!');
     }
 
     /**
