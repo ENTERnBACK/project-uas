@@ -9,43 +9,47 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceTypeController;
+use App\Http\Controllers\PaymentMethodController;
 
-Route::get('/', function () {
+    Route::get('/', function () {
     return view('home');
-});
+    });
 
-Route::middleware('guest')->group(function () {
+    Route::middleware('guest')->group(function () {
     Route::get('/register', function () {
         return view('auth.register');
-    })->name('register');
+            })->name('register');
+
     Route::post('/register', [AuthController::class, 'register']);
 
     Route::get('/login', function () {
         return view('auth.login');
-    })->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-});
+             })->name('login');
 
-Route::middleware('auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    });
+
+    Route::middleware('auth')->group(function () {
     
     Route::get('/dashboard', function () {
         $trips = \App\Models\Trip::latest()->get();
-        return view('dashboard', compact('trips'));
-    })->name('dashboard');
+             return view('dashboard', compact('trips'));
+                })->name('dashboard');
 
 
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::latest()->get();
-        $reviews = collect([]);
-        $averageRating = '5.0';
+            $reviews = collect([]);
+                $averageRating = '5.0';
 
         return view(
             'dashboard_driver',
-            compact('availableTrips', 'reviews', 'averageRating')
+                 compact('availableTrips', 'reviews', 'averageRating')
         );
 
     })->name('dashboard.driver');
 
+  
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::resource('trips', TripController::class);
@@ -55,4 +59,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('support-tickets', SupportTicketController::class);
     Route::resource('driver-locations', DriverLocationController::class);
     Route::resource('favorite-locations', FavoriteLocationController::class);
+Route::resource('payment-methods', PaymentMethodController::class);
 });

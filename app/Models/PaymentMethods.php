@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethods extends Model
 {
-      protected $fillable = [
-        'name',
-        'status'
-      ];
+     protected $table = 'payment_methods';
+    
+
+    public $incrementing = false; 
+    protected $primaryKey = null; 
+    
+    protected $fillable = ['method', 'trip_id', 'status'];
 }

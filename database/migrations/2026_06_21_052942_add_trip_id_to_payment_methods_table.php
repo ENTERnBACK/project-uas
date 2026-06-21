@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('payment_methods', function (Blueprint $table) {
-    $table->string('method'); 
-    $table->string('status'); 
-    $table->timestamps();
-
+        Schema::table('payment_methods', function (Blueprint $table) {
+            $table->unsignedBigInteger('trip_id');
         });
     }
 
+    
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+   public function down(): void
     {
-        Schema::dropIfExists('payment_methods');
+        Schema::table('payment_methods', function (Blueprint $table){
+            $table->dropColumn('trip_id');
+        });
     }
 };
