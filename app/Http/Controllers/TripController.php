@@ -21,7 +21,8 @@ class TripController extends Controller
      */
     public function create()
     {
-        return view('trips.create');
+        $favoriteLocations = \App\Models\FavoriteLocation::where('user_id', auth()->id())->get();
+        return view('trips.create', compact('favoriteLocations'));;
     }
 
     /**
@@ -34,14 +35,15 @@ class TripController extends Controller
             'dropoff_point' => 'required|string|max:255',
         ]);
 
-        Trip::create([
+        $trip = Trip::create([
             'user_id'       => auth()->id(),
             'pickup_point' => $request->pickup_point,
             'dropoff_point' => $request->dropoff_point,
             'status' => 'pending',
         ]);
 
-        return redirect()->route('service-types.index')->with('success', 'Trip berhasil dibuat!');
+        return redirect()->route('service-types.index', ['trip_id' => $trip->id])
+            ->with('success', 'Trip berhasil dibuat!');
     }
 
     /**

@@ -18,6 +18,12 @@
             </div>
 
             <datalist id="lokasi-list">
+                @if(isset($favoriteLocations) && $favoriteLocations->count() > 0)
+                    @foreach($favoriteLocations as $loc)
+                        <option value="{{ $loc->alamat }}">⭐ {{ $loc->label }} ({{ $loc->alamat }})</option>
+                    @endforeach
+                @endif
+
                 <option value="Senayan Park (SPARK)">
                 <option value="GBK Madya B, Jakarta">
                 <option value="Mal Ciputra Jakarta">
