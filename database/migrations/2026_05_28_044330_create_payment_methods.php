@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
        Schema::create('payment_methods', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('status')->default('active');
-            $table->timestamps();
+    $table->string('method'); 
+    $table->string('status'); 
+    $table->timestamps();
+
         });
     }
 

@@ -77,7 +77,7 @@ class TripController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('payment.method', ['trip_id' => $trip->id]);
+        return redirect()->route('payment-methods.index', ['trip_id' => $trip->id]);
     }
 
     /**

@@ -7,9 +7,4 @@
             value="go_ride"
             onchange ="this.form.submit()">Go Ride
 
-        <input type="radio" 
-            name="service_type"
-                value="go_car"
-                onchange ="this.form.submit()">Go Car
-
 </form>
