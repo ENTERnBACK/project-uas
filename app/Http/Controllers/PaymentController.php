@@ -24,7 +24,6 @@ class PaymentController extends Controller
     {
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
-            'passenger_id' => 'required|string',
             'passenger_name' => 'required|string',
             'total_amount' => 'required|numeric|min:0',
             'tip_amount' => 'nullable|numeric|min:0',
@@ -40,7 +39,6 @@ class PaymentController extends Controller
 
         $payment = Payment::create([
             'trip_id' => $request->trip_id,
-            'passenger_id' => $request->passenger_id,
             'passenger_name' => $request->passenger_name,
             'total_amount' => $request->total_amount,
             'tip_amount' => $request->tip_amount ?? 0,
@@ -90,14 +88,14 @@ class PaymentController extends Controller
     }
 
     public function markAsPaid(Payment $payment)
-    {
+    { 
         $payment->update([
-            'status' => 'paid',
-            'payment_time' => now(),
-        ]);
+        'status' => 'paid',
+        'payment_time' => now(),
+    ]);
 
-        return redirect()->back()
-            ->with('success', 'Payment marked as paid successfully.');
+    return redirect()->route('driver-locations.show-by-trip', $payment->trip_id)
+        ->with('success', 'Payment successful! Tracking driver location...');
     }
 
     public function getByPassenger($passengerId)

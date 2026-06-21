@@ -10,6 +10,8 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PromoController;
 
     Route::get('/', function () {
     return view('home');
@@ -50,6 +52,10 @@ use App\Http\Controllers\PaymentMethodController;
     })->name('dashboard.driver');
 
   
+    Route::get('/driver-locations/trip/{tripId}', [DriverLocationController::class, 'showByTrip'])
+            ->name('driver-locations.show-by-trip');
+
+  
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::resource('trips', TripController::class);
@@ -59,5 +65,7 @@ use App\Http\Controllers\PaymentMethodController;
     Route::resource('support-tickets', SupportTicketController::class);
     Route::resource('driver-locations', DriverLocationController::class);
     Route::resource('favorite-locations', FavoriteLocationController::class);
-Route::resource('payment-methods', PaymentMethodController::class);
+    Route::resource('payment-methods', PaymentMethodController::class);
+    Route::resource('payments', PaymentController::class);
+    Route::resource('promos', PromoController::class);
 });
