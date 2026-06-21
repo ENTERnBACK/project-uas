@@ -9,6 +9,7 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceTypeController;
+use App\Http\Controllers\PaymentMethodController;
 
 Route::get('/', function () {
     return view('home');
@@ -55,4 +56,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('support-tickets', SupportTicketController::class);
     Route::resource('driver-locations', DriverLocationController::class);
     Route::resource('favorite-locations', FavoriteLocationController::class);
+    Route::resource('payment-methods', PaymentMethodController::class);
 });

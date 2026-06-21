@@ -20,7 +20,7 @@ class ServiceTypeController extends Controller
      */
     public function create()
     {
-        return view('service_types.create');
+       // return view('service_types.create');
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PaymentMethod;
+use App\Models\PaymentMethods;
 use Illuminate\Http\Request;
 
 class PaymentMethodController extends Controller
@@ -12,7 +12,10 @@ class PaymentMethodController extends Controller
      */
     public function index()
     {
-        return PaymentMethod::all();
+        $paymentMethods = \App\Models\PaymentMethods::all();
+        
+        return view('payment_method.index', compact('paymentMethods')); 
+
     }
 
     /**
@@ -27,8 +30,25 @@ class PaymentMethodController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+{
+    
+    $request->validate([
+        'method' => 'required',
+        'trip_id' => 'required',
+    ]);
+
+  
+    \App\Models\PaymentMethods::create([
+        'method' => $request->method,
+        'trip_id' => $request->trip_id,
+        'status' => 'pending'
+    ]);
+
+   $va_number = ($request->method === 'bca') ? '8808' . mt_rand(10000000, 99999999) : null;
+    return back()->with([
+        'success' => 'Pembayaran Anda Berhasil ' . $request->trip_id,
+        'va_number' => $va_number
+    ]);
     }
 
     /**
