@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('favorite_locations', function (Blueprint $table) {
             $table->id();
-            $table->integer('rating')->nullable();
-            $table->text('review_driver')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->index();
+            $table->string('label')->index(); 
+            $table->text('alamat');
+            $table->boolean('is_default')->default(false); 
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('favorite_locations');
     }
 };

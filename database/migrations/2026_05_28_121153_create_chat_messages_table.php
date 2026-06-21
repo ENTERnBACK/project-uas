@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('chat_messages', function (Blueprint $table) {
             $table->id();
-            $table->integer('rating')->nullable();
-            $table->text('review_driver')->nullable();
+            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
+            $table->string('sender_type');
+            $table->foreignId('sender_id');
+            $table->text('message');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('chat_messages');
     }
 };

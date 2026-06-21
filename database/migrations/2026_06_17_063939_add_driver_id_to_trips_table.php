@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
-            $table->id();
-            $table->integer('rating')->nullable();
-            $table->text('review_driver')->nullable();
-            $table->timestamps();
+        Schema::table('trips', function (Blueprint $table) {
+            $table->foreignId('driver_id')->nullable()->after('user_id')->constrained('drivers')->onDelete('set null');
         });
     }
 
@@ -24,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::table('trips', function (Blueprint $table) {
+            $table->dropForeign(['driver_id']);
+            $table->dropColumn('driver_id');
+        });
     }
 };
