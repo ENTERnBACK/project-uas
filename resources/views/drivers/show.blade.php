@@ -1,3 +1,4 @@
+</div>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,24 +8,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-50 p-8">
-
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-blue-100">
-        
         <div class="mb-6 border-b border-blue-100 pb-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <span class="text-4xl">{{ $driver->jenis_kendaraan == 'GoRide' ? '🏍️' : '🚗' }}</span>
                 <div>
                     <h1 class="text-2xl font-bold text-blue-700">Profil Lengkap Driver</h1>
-                    <p class="text-sm text-gray-500">Informasi personal dan operasional mitra Gojek</p>
+                    <p class="text-sm text-gray-500">Informasi personal dan operasional mitra</p>
                 </div>
             </div>
-        
-            <span class="px-3 py-1.5 rounded-full text-xs font-bold {{ $driver->status == 'aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                ID: #{{ $driver->id }} — {{ ucfirst($driver->status) }}
-            </span>
         </div>
-
-        <div class="divide-y divide-blue-50">
+  <div class="divide-y divide-blue-50">
             
             <div class="py-3.5 grid grid-cols-3 gap-4">
                 <span class="text-sm font-semibold text-blue-600">Nama Lengkap</span>
@@ -51,7 +45,7 @@
             </div>
 
             <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-blue-600">Nomor Plate Kendaraan</span>
+                <span class="text-sm font-semibold text-blue-600">Nomor Plate</span>
                 <span class="text-sm font-mono font-bold text-gray-800 col-span-2 uppercase">{{ $driver->plate_nomor }}</span>
             </div>
 
@@ -68,10 +62,10 @@
         </div>
 
         <div class="flex justify-between items-center pt-6 mt-6 border-t border-blue-100">
-            <a href="/drivers" class="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1 transition">
-                &larr; Kembali ke Daftar
+            <a href="{{ route('dashboard.driver') }}" class="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1 transition">
+                &larr; Kembali ke Dashboard
             </a>
-            <a href="/drivers/{{ $driver->id }}/edit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition shadow-sm">
+            <a href="{{ route('drivers.edit', $driver->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition shadow-sm">
                 Edit Profil Ini
             </a>
         </div>
@@ -80,3 +74,4 @@
 
 </body>
 </html>
+</div>

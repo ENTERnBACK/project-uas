@@ -8,10 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans antialiased text-gray-900 min-h-screen">
-
-    <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md transition duration-300 hover:shadow-xl">
-        
-        
+<div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md transition duration-300 hover:shadow-xl">
         <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">🔍 Detail Lokasi</h1>
@@ -21,27 +18,20 @@
                 &larr; Kembali
             </a>
         </div>
-
-        
-        <div class="space-y-4">
-           
+  <div class="space-y-4">
             <div>
                 <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1">Nama / Label Tempat</span>
                 <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800 shadow-sm">
                     {{ $location->label }}
                 </span>
             </div>
-
-           
-            <div>
+             <div>
                 <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1">Alamat Lengkap</span>
                 <div class="p-4 bg-gray-50 border border-gray-200 rounded-md text-gray-700 leading-relaxed whitespace-pre-line">
                     {{ $location->alamat }}
                 </div>
             </div>
-
-           
-            <div class="grid grid-cols-2 gap-4 text-xs text-gray-400 pt-2">
+ <div class="grid grid-cols-2 gap-4 text-xs text-gray-400 pt-2">
                 <div>
                     <span class="block font-medium">Disimpan Pada:</span>
                     <span>{{ $location->created_at->translatedFormat('d F Y, H:i') }}</span>
@@ -52,13 +42,10 @@
                 </div>
             </div>
         </div>
-
-        
-        <div class="flex items-center justify-end space-x-3 border-t border-gray-100 mt-6 pt-4">
+    <div class="flex items-center justify-end space-x-3 border-t border-gray-100 mt-6 pt-4">
             <a href="{{ route('favorite-locations.edit', $location->id) }}" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md text-sm font-medium transition duration-150 hover:scale-105 shadow-sm">
                 Ubah Data
             </a>
-            
             <form action="{{ route('favorite-locations.destroy', $location->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus lokasi ini?')">
                 @csrf
                 @method('DELETE')
@@ -67,10 +54,7 @@
                 </button>
             </form>
         </div>
-
-    </div>
-
-</body>
+</div>
+  </body>
 </html>
-
 </div>
