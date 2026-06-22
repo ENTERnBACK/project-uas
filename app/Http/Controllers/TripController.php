@@ -39,7 +39,7 @@ class TripController extends Controller
             'user_id'       => auth()->id(),
             'pickup_point' => $request->pickup_point,
             'dropoff_point' => $request->dropoff_point,
-            'status' => 'pending',
+            'status' => 'cancelled',
         ]);
 
         return redirect()->route('service-types.index', ['trip_id' => $trip->id])
@@ -67,6 +67,15 @@ class TripController extends Controller
      */
     public function update(Request $request, Trip $trip)
     {
+
+        if ($request->has('activate_trip')) {
+            $trip->update([
+                'status' => 'pending'
+            ]);
+
+            return redirect()->route('trips.index')->with('success');
+        }
+
         $request->validate([
             'pickup_point' => 'required|string|max:255',
             'dropoff_point' => 'required|string|max:255',
