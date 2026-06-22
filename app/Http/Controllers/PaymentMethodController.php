@@ -33,13 +33,13 @@ class PaymentMethodController extends Controller
 {
     $type = $request->query('type'); 
     
-    if ($type === 'bank') {
-        return view('payment_method.create_bank');
-    } elseif ($type === 'linkjago') {
-        return view('payment_method.create_linkjago');
-    }
-    
-    return redirect()->route('payment_method.index');
+    //if ($type === 'bank') {
+       // return view('payment_method.create_bank');
+   // } elseif ($type === 'linkjago') {
+   //     return view('payment_method.create_linkjago');
+   // }
+    return view('payment_method.create');
+   // return redirect()->route('payment_method.index');
 }
 
 
@@ -62,6 +62,7 @@ class PaymentMethodController extends Controller
         'user_id' => auth()->id(),
         'method'  => $request->method, 
         'label'   => $request->bank_name ?? $request->account_name,
+        'status'  => 'active'
        
     ]);
 
@@ -100,7 +101,7 @@ class PaymentMethodController extends Controller
     public function destroy(PaymentMethod $paymentMethod)
     {
         $payment = PaymentMethods::findOrFail($id);
-        $payment->delete();
-        return redirect()->back()->with('SUCCESS', 'Metode dihapus!');
+    $payment->delete();
+    return redirect()->back()->with('success', 'Metode dihapus!');
     }
 }
