@@ -48,11 +48,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/driver-locations/trip/{tripId}', [DriverLocationController::class, 'showByTrip'])
         ->name('driver-locations.show-by-trip');
 
-    Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])->name('payments.user');
+    Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])
+    ->name('payments.user');
+
     Route::post('/payments/process', [PaymentController::class, 'processPayment'])->name('payments.process');
 
-    Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
+    Route::get('/promos/remove', function () {
+        session()->forget([
+            'discount_amount',
+            'applied_promo'
+        ]);
+
+        return redirect()->back();
+    })->name('promos.remove');
+
+    Route::post('/payments/set-service', [PaymentController::class, 'setService'])->name('payments.set-service');
+
     Route::post('/promos/apply', [PromoController::class, 'applyPromo'])->name('promos.apply');
+
+    Route::post('/promos/validate', [PromoController::class, 'validatePromo'])->name('promos.validate');
+
+    Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
