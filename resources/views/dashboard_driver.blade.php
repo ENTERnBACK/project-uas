@@ -42,9 +42,21 @@
             <h3 style="margin: 5px 0 0 0; color: #28a745;">Rp 0</h3>
         </div>
         <div>
-            <p style="margin: 0; color: #6c757d; font-size: 14px;">Rating Driver</p>
-            <h3 style="margin: 5px 0 0 0; color: #ffc107;">⭐ 5.0</h3>
-        </div>
+    <span style="font-size: 14px; color: #6c757d; display: block;">Rating Driver</span>
+        <a href="{{ route('reviews.index') }}" 
+            class="rating-link"
+            style="text-decoration: none; color: #f5b301; display: inline-flex; align-items: center; gap: 5px; font-weight: bold; font-size: 22px;">
+            <span>⭐</span>
+            <span>{{ $averageRating }}</span>
+        </a>
+    </div>
+
+<style>
+    .rating-link:hover {
+        text-decoration: underline !important;
+        opacity: 0.8; /* Sedikit meredup pas di-hover biar makin berasa tombolnya */
+    }
+</style>
     </div>
 
     <hr>
