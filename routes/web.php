@@ -12,9 +12,8 @@ use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\DriverTripController;
-
-
-
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChatMessageController;
 Route::get('/', function () {
     return view('home');
 });
@@ -44,22 +43,43 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
-        $reviews = collect([]);
-        $averageRating = '5.0';
+        $reviews = \App\Models\Review::latest()->get();
+        $avg = \App\Models\Review::avg('rating') ?? 5.0;
+        $averageRating = number_format((float)$avg, 1, '.', '');
         return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
     })->name('dashboard.driver');
     
+    Route::get('/profile', [ProfileController::class, 'index'])->name('user_profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user_profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('user_profile.update');
 
     Route::get('/driver-locations/trip/{tripId}', [DriverLocationController::class, 'showByTrip'])
         ->name('driver-locations.show-by-trip');
+
+    Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])
+    ->name('payments.user');
 
     Route::put('/driver-trips/{id}', [DriverTripController::class, 'update'])->name('driver-trips.update');
     Route::post('/driver-trips', [DriverTripController::class, 'store'])->name('driver-trips.store');
 
     
 
-    Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
+    Route::get('/promos/remove', function () {
+        session()->forget([
+            'discount_amount',
+            'applied_promo'
+        ]);
+
+        return redirect()->back();
+        })->name('promos.remove');
+
+
+    Route::post('/payments/set-service', [PaymentController::class, 'setService'])->name('payments.set-service');
     Route::post('/promos/apply', [PromoController::class, 'applyPromo'])->name('promos.apply');
+
+    Route::post('/promos/validate', [PromoController::class, 'validatePromo'])->name('promos.validate');
+
+    Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -79,5 +99,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('support-tickets', SupportTicketController::class);
     Route::resource('driver-locations', DriverLocationController::class);
     Route::resource('favorite-locations', FavoriteLocationController::class);
-    Route::resource('payment-methods', PaymentMethodController::class)->names('payment_method');
-  });  
+    Route::resource('payment-methods', PaymentMethodController::class);
+});

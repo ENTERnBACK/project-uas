@@ -6,7 +6,7 @@
     <title>Register - Ride Hailing</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
 
         body{
@@ -37,6 +37,28 @@
         h2{
             font-weight:bold;
         }
+
+        .password-wrapper{
+    position:relative;
+}
+
+.password-wrapper input{
+    padding-right:45px;
+}
+
+.toggle-password{
+    position:absolute;
+    top:50%;
+    right:15px;
+    transform:translateY(-50%);
+    cursor:pointer;
+    color:#6c757d;
+    font-size:20px;
+}
+
+.toggle-password:hover{
+    color:#0d6efd;
+}
 
     </style>
 
@@ -81,22 +103,52 @@
         </div>
 
         <div class="mb-3">
-            <label>Password</label>
-            <input
-                type="password"
-                name="password"
-                class="form-control"
-                required>
-        </div>
+
+    <label>Password</label>
+
+    <div class="password-wrapper">
+
+        <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            required>
+
+        <span class="toggle-password"
+            onclick="togglePassword('password','icon1')">
+
+            <i class="bi bi-eye" id="icon1"></i>
+
+        </span>
+
+    </div>
+
+</div>
 
         <div class="mb-3">
-            <label>Konfirmasi Password</label>
-            <input
-                type="password"
-                name="password_confirmation"
-                class="form-control"
-                required>
-        </div>
+
+    <label>Konfirmasi Password</label>
+
+    <div class="password-wrapper">
+
+        <input
+            type="password"
+            id="password_confirmation"
+            name="password_confirmation"
+            class="form-control"
+            required>
+
+        <span class="toggle-password"
+            onclick="togglePassword('password_confirmation','icon2')">
+
+            <i class="bi bi-eye" id="icon2"></i>
+
+        </span>
+
+    </div>
+
+</div>
 
         <button class="btn btn-success w-100 btn-register">
             Register
@@ -110,6 +162,31 @@
     </form>
 
 </div>
+<script>
 
+function togglePassword(inputId, iconId){
+
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+
+    if(input.type === "password"){
+
+        input.type = "text";
+
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+
+    }else{
+
+        input.type = "password";
+
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+
+    }
+
+}
+
+</script>
 </body>
 </html>

@@ -17,9 +17,13 @@
                 🚕 Ride Hailing App
             </h1>
 
-            <div class="text-white">
-                Halo Selamat Datang, {{ Auth::user()->name }}
+            <a href="{{ route('user_profile.index') }}" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background-color: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 50px; transition: 0.3s;">
+                <span style="color: white; font-size: 14px; font-weight: bold;">{{ auth()->user()->name }}</span>
+        
+            <div style="width: 35px; height: 35px; background-color: #007bff; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 2px solid white;">
+                {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
             </div>
+    </a>
 
         </div>
     </nav>

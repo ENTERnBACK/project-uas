@@ -42,7 +42,6 @@ class AuthController extends Controller
         if (Auth::user()->role == 'driver') {
             return redirect('/dashboard-driver');
         }
-
             return redirect('/dashboard');
     }
 

@@ -62,7 +62,9 @@ class DriverLocationController extends Controller
      */
     public function edit(DriverLocation $driverLocation)
     {
-        return view('driver_locations.edit', compact('driverLocation'));
+        $users = User::where('role', 'driver')->get();
+
+        return view('driver_locations.edit', compact('driverLocation', 'users'));
     }
 
     /**
