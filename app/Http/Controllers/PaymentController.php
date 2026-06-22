@@ -4,127 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Trip;
+use App\Models\PaymentMethods;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function index()
+    public function userPayment($tripId)
     {
-        $payments = Payment::with('trip')->latest()->paginate(10);
-        return view('payments.index', compact('payments'));
+        session(['current_trip_id' => $tripId]);
+
+        $trip = Trip::findOrFail($tripId);
+        $passengerName = auth()->user()->name ?? 'Guest';
+        $paymentMethods = PaymentMethods::all();
+
+        return view('payments.user', compact('trip', 'paymentMethods', 'passengerName'));
     }
 
-    public function create()
-    {
-        $trips = Trip::where('status', 'completed')->get();
-        return view('payments.create', compact('trips'));
-    }
-
-    public function store(Request $request)
+    public function processPayment(Request $request)
     {
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
-            'passenger_name' => 'required|string',
-            'total_amount' => 'required|numeric|min:0',
+            'service_type' => 'required|in:hemat,standar,comfort',
+            'payment_method' => 'required|string',
             'tip_amount' => 'nullable|numeric|min:0',
         ]);
 
-        $existingPayment = Payment::where('trip_id', $request->trip_id)->first();
+        $trip = Trip::findOrFail($request->trip_id);
 
-        if ($existingPayment) {
-            return redirect()->back()->withErrors([
-                'trip_id' => 'Payment already exists for this trip'
-            ])->withInput();
-        }
+        $basePrices = [
+            'hemat' => 7000,
+            'standar' => 10000,
+            'comfort' => 15000
+        ];
+
+        $basePrice = $basePrices[$request->service_type];
+        $tip = $request->tip_amount ?? 0;
+        $discount = session('discount_amount', 0);
+        $total = $basePrice + $tip - $discount;
 
         $payment = Payment::create([
             'trip_id' => $request->trip_id,
-            'passenger_name' => $request->passenger_name,
-            'total_amount' => $request->total_amount,
-            'tip_amount' => $request->tip_amount ?? 0,
+            'passenger_name' => $trip->passenger_name ?? 'Guest',
+            'total_amount' => $total,
+            'tip_amount' => $tip,
+            'payment_method' => $request->payment_method,
             'status' => 'pending',
         ]);
 
-        return redirect()->route('payments.show', $payment)
-            ->with('success', 'Payment created successfully.');
-    }
+        session()->forget(['discount_amount', 'applied_promo']);
 
-    public function show(Payment $payment)
-    {
-        return view('payments.show', compact('payment'));
-    }
-
-    public function edit(Payment $payment)
-    {
-        return view('payments.edit', compact('payment'));
-    }
-
-    public function update(Request $request, Payment $payment)
-    {
-        $request->validate([
-            'status' => 'required|in:pending,paid,failed,refunded',
-        ]);
-
-        $data = [
-            'status' => $request->status
-        ];
-
-        if ($request->status === 'paid') {
-            $data['payment_time'] = now();
-        }
-
-        $payment->update($data);
-
-        return redirect()->route('payments.index')
-            ->with('success', 'Payment status updated successfully.');
-    }
-
-    public function destroy(Payment $payment)
-    {
-        $payment->delete();
-
-        return redirect()->route('payments.index')
-            ->with('success', 'Payment deleted successfully.');
-    }
-
-    public function markAsPaid(Payment $payment)
-    { 
-        $payment->update([
-        'status' => 'paid',
-        'payment_time' => now(),
-    ]);
-
-    return redirect()->route('driver-locations.show-by-trip', $payment->trip_id)
-        ->with('success', 'Payment successful! Tracking driver location...');
-    }
-
-    public function getByPassenger($passengerId)
-    {
-        $payments = Payment::byPassenger($passengerId)
-            ->with('trip')
-            ->latest()
-            ->get();
-
-        return response()->json([
-            'success' => true,
-            'data' => $payments
-        ]);
-    }
-
-    public function getByTrip($tripId)
-    {
-        $payment = Payment::where('trip_id', $tripId)->first();
-
-        if (!$payment) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Payment not found for this trip'
-            ], 404);
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => $payment
-        ]);
+        return redirect()->route('payments.show', $payment->id)
+            ->with('success', 'Payment created successfully!');
     }
 }
