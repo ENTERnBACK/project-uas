@@ -6,8 +6,6 @@
     <title>Login - Ride Hailing</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <style>
@@ -19,8 +17,7 @@
             margin-bottom:20px;
             border-radius:5px;
             text-align:center;
-        }
-
+}
         body{
             background: linear-gradient(135deg,#4facfe,#00f2fe);
             height:100vh;
@@ -49,9 +46,6 @@
         h2{
             font-weight:bold;
         }
-
-        /* Password */
-
         .password-wrapper{
             position:relative;
         }
@@ -73,9 +67,7 @@
         .toggle-password:hover{
             color:#0d6efd;
         }
-
     </style>
-
 </head>
 <body>
 
@@ -88,49 +80,46 @@
 
     @if(session('error'))
 
-        <div class="error-message">
-            {{ session('error') }}
-        </div>
+    <div class="error-message">
+        {{ session('error') }}
+    </div>
 
     @endif
 
     <form method="POST" action="{{ route('login') }}">
-
         @csrf
 
         <div class="mb-3">
             <label>Email</label>
-
             <input
                 type="email"
                 name="email"
                 class="form-control"
-                value="{{ old('email') }}"
                 required>
         </div>
 
         <div class="mb-3">
 
-            <label>Password</label>
+    <label>Password</label>
 
-            <div class="password-wrapper">
+    <div class="password-wrapper">
 
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="form-control"
-                    required>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            required>
 
-                <span class="toggle-password" onclick="togglePassword()">
+        <span class="toggle-password" onclick="togglePassword()">
 
-                    <i class="bi bi-eye" id="toggleIcon"></i>
+            <i class="bi bi-eye" id="toggleIcon"></i>
 
-                </span>
+        </span>
 
-            </div>
+    </div>
 
-        </div>
+</div>
 
         <button class="btn btn-primary w-100 btn-login">
             Login
@@ -144,22 +133,21 @@
     </form>
 
 </div>
-
 <script>
 
-function togglePassword() {
+function togglePassword(){
 
     const password = document.getElementById("password");
     const icon = document.getElementById("toggleIcon");
 
-    if (password.type === "password") {
+    if(password.type === "password"){
 
         password.type = "text";
 
         icon.classList.remove("bi-eye");
         icon.classList.add("bi-eye-slash");
 
-    } else {
+    }else{
 
         password.type = "password";
 
@@ -171,6 +159,5 @@ function togglePassword() {
 }
 
 </script>
-
 </body>
 </html>

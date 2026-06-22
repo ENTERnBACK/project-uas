@@ -6,13 +6,11 @@
     <title>Register - Ride Hailing</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
     <style>
 
         body{
-            background: linear-gradient(135deg,#4facfe,#00f2fe);
+            background:linear-gradient(135deg,#43cea2,#185a9d);
             display:flex;
             justify-content:center;
             align-items:center;
@@ -20,14 +18,13 @@
         }
 
         .register-card{
-            width:420px;
-            border:none;
+            width:450px;
             border-radius:20px;
-            box-shadow:0 10px 30px rgba(0,0,0,.2);
+            border:none;
+            box-shadow:0 10px 30px rgba(0,0,0,.25);
         }
 
-        .form-control,
-        .form-select{
+        .form-control{
             border-radius:10px;
         }
 
@@ -41,37 +38,27 @@
             font-weight:bold;
         }
 
-        a{
-            text-decoration:none;
-        }
-
-        a:hover{
-            text-decoration:underline;
-        }
-
-        /* Password */
-
         .password-wrapper{
-            position:relative;
-        }
+    position:relative;
+}
 
-        .password-wrapper input{
-            padding-right:45px;
-        }
+.password-wrapper input{
+    padding-right:45px;
+}
 
-        .toggle-password{
-            position:absolute;
-            top:50%;
-            right:15px;
-            transform:translateY(-50%);
-            cursor:pointer;
-            color:#6c757d;
-            font-size:20px;
-        }
+.toggle-password{
+    position:absolute;
+    top:50%;
+    right:15px;
+    transform:translateY(-50%);
+    cursor:pointer;
+    color:#6c757d;
+    font-size:20px;
+}
 
-        .toggle-password:hover{
-            color:#0d6efd;
-        }
+.toggle-password:hover{
+    color:#0d6efd;
+}
 
     </style>
 
@@ -85,125 +72,85 @@
         <p class="text-muted">Buat akun baru</p>
     </div>
 
-    @if($errors->any())
-
-    <div class="alert alert-danger">
-
-        <ul class="mb-0">
-
-            @foreach($errors->all() as $error)
-
-                <li>{{ $error }}</li>
-
-            @endforeach
-
-        </ul>
-
-    </div>
-
-    @endif
-
     <form method="POST" action="{{ route('register') }}">
-
         @csrf
 
         <div class="mb-3">
-
             <label class="form-label">Daftar Sebagai</label>
-
-            <select name="role" class="form-select" required>
-
+                <select name="role" class="form-select" required>
                 <option value="">-- Pilih Role --</option>
-
-                <option value="user"
-                    {{ old('role')=='user' ? 'selected' : '' }}>
-                    User
-                </option>
-
-                <option value="driver"
-                    {{ old('role')=='driver' ? 'selected' : '' }}>
-                    Driver
-                </option>
-
-            </select>
-
+                <option value="user">User</option>
+                <option value="driver">Driver</option>
+                </select>
         </div>
 
         <div class="mb-3">
-
             <label>Nama</label>
-
             <input
                 type="text"
                 name="name"
                 class="form-control"
-                value="{{ old('name') }}"
                 required>
-
         </div>
 
         <div class="mb-3">
-
             <label>Email</label>
-
             <input
                 type="email"
                 name="email"
                 class="form-control"
-                value="{{ old('email') }}"
                 required>
-
         </div>
 
         <div class="mb-3">
 
-            <label>Password</label>
+    <label>Password</label>
 
-            <div class="password-wrapper">
+    <div class="password-wrapper">
 
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="form-control"
-                    required>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            required>
 
-                <span class="toggle-password"
-                    onclick="togglePassword('password','icon1')">
+        <span class="toggle-password"
+            onclick="togglePassword('password','icon1')">
 
-                    <i class="bi bi-eye" id="icon1"></i>
+            <i class="bi bi-eye" id="icon1"></i>
 
-                </span>
+        </span>
 
-            </div>
+    </div>
 
-        </div>
+</div>
 
         <div class="mb-3">
 
-            <label>Konfirmasi Password</label>
+    <label>Konfirmasi Password</label>
 
-            <div class="password-wrapper">
+    <div class="password-wrapper">
 
-                <input
-                    type="password"
-                    id="password_confirmation"
-                    name="password_confirmation"
-                    class="form-control"
-                    required>
+        <input
+            type="password"
+            id="password_confirmation"
+            name="password_confirmation"
+            class="form-control"
+            required>
 
-                <span class="toggle-password"
-                      onclick="togglePassword('password_confirmation','icon2')">
+        <span class="toggle-password"
+            onclick="togglePassword('password_confirmation','icon2')">
 
-                    <i class="bi bi-eye" id="icon2"></i>
+            <i class="bi bi-eye" id="icon2"></i>
 
-                </span>
+        </span>
 
-            </div>
+    </div>
 
-        </div>
+</div>
 
-        <button class="btn btn-primary w-100 btn-register">
+        <button class="btn btn-success w-100 btn-register">
             Register
         </button>
 
@@ -215,7 +162,6 @@
     </form>
 
 </div>
-
 <script>
 
 function togglePassword(inputId, iconId){
@@ -242,6 +188,5 @@ function togglePassword(inputId, iconId){
 }
 
 </script>
-
 </body>
 </html>
