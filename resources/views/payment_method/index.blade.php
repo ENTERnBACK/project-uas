@@ -9,8 +9,7 @@
 
         <input type="radio" 
          name="method"     
-            value="cash" checked> Cash <br><br>
-
+            value="cash"> Cash <br><br>
 
              <input type="radio" 
                         name="method"     
@@ -20,5 +19,5 @@
                     name="method"     
                      value="bca"> BCA Virtual Account <br><br>
             
-                       <button type="submit">Bayar</button>
+                       <button type="submit">Pilih</button>
 </form>
