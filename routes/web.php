@@ -43,8 +43,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
-        $reviews = collect([]);
-        $averageRating = '5.0';
+        $reviews = \App\Models\Review::latest()->get();
+        $avg = \App\Models\Review::avg('rating') ?? 5.0;
+        $averageRating = number_format((float)$avg, 1, '.', '');
         return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
     })->name('dashboard.driver');
     
