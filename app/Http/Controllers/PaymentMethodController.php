@@ -12,36 +12,61 @@ class PaymentMethodController extends Controller
      */
     public function index()
     {
-        $paymentMethods = \App\Models\PaymentMethods::all();
-        
-        return view('payment_method.index', compact('paymentMethods')); 
+    
+   $myMethods = \App\Models\PaymentMethods::where('user_id', auth()->id())->get(); // Ambil object-nya
+    
+    $allAvailableMethods = [
+        ['slug' => 'bank', 'name' => 'Kartu kredit atau debit', 'desc' => 'Visa, Mastercard, AMEX, dan JCB'],
+        ['slug' => 'linkjago', 'name' => 'Kantong Jago', 'desc' => 'Tambahkan kantongmu'],
+    ];
+
+    return view('payment_method.index', compact('myMethods', 'allAvailableMethods'));
+    
 
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+   
+   public function create(Request $request)
+{
+    $type = $request->query('type'); 
+    
+    if ($type === 'bank') {
+        return view('payment_method.create_bank');
+    } elseif ($type === 'linkjago') {
+        return view('payment_method.create_linkjago');
     }
+    
+    return redirect()->route('payment_method.index');
+}
+
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   public function store(Request $request)
 {
-   $payment = \App\Models\PaymentMethods::create([
-        'method' => $request->method, 
-        'trip_id' => $request->trip_id,
-        'status' => 'pending'
+    if ($request->has('action') && $request->action === 'select') {
+        if ($request->payment_option === 'bank') {
+            return redirect()->route('payment_method.create', ['type' => 'bank']);
+        } elseif ($request->payment_option === 'linkjago') {
+            return redirect()->route('payment_method.create', ['type' => 'linkjago']);
+        }
+        return redirect()->back();
+    }
+    
+    PaymentMethods::create([
+        'user_id' => auth()->id(),
+        'method'  => $request->method, 
+        'label'   => $request->bank_name ?? $request->account_name,
+       
     ]);
 
-    // Redirect
-    return redirect()->route('payment-methods.show', $payment->trip_id);
-
+    return redirect()->route('payment_method.index');
 }
-    
 
     /**
      * Display the specified resource.
@@ -74,6 +99,8 @@ class PaymentMethodController extends Controller
      */
     public function destroy(PaymentMethod $paymentMethod)
     {
-        //
+        $payment = PaymentMethods::findOrFail($id);
+        $payment->delete();
+        return redirect()->back()->with('SUCCESS', 'Metode dihapus!');
     }
 }

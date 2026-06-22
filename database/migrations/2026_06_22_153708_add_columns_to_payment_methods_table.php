@@ -12,18 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            $table->unsignedBigInteger('trip_id');
+           
+            $table->unsignedBigInteger('user_id')->nullable();
+                $table->string('label')->nullable();
+                     $table->json('details')->nullable();
         });
     }
 
-    
     /**
      * Reverse the migrations.
      */
-   public function down(): void
+    public function down(): void
     {
-        Schema::table('payment_methods', function (Blueprint $table){
-            $table->dropColumn('trip_id');
+        Schema::table('payment_methods', function (Blueprint $table) {
+            //
         });
     }
 };

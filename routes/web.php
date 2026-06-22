@@ -10,9 +10,10 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\PaymentMethodController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\DriverTripController;
+
+
 
 Route::get('/', function () {
     return view('home');
@@ -38,6 +39,8 @@ Route::middleware('auth')->group(function () {
         $trips = \App\Models\Trip::latest()->get();
         return view('dashboard', compact('trips'));
     })->name('dashboard');
+    });
+
 
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
@@ -53,8 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/driver-trips/{id}', [DriverTripController::class, 'update'])->name('driver-trips.update');
     Route::post('/driver-trips', [DriverTripController::class, 'store'])->name('driver-trips.store');
 
-    Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])->name('payments.user');
-    Route::post('/payments/process', [PaymentController::class, 'processPayment'])->name('payments.process');
+    
 
     Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
     Route::post('/promos/apply', [PromoController::class, 'applyPromo'])->name('promos.apply');
@@ -64,6 +66,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/trips/{id}/accept', [TripController::class, 'acceptTrip'])->name('driver.trips.accept');
     Route::get('/trips/{id}/ontrip', [TripController::class, 'showOnTrip'])->name('driver.trips.ontrip');
 
+    Route::prefix('payment-methods')->name('payment_method.')->group(function () {
+        Route::get('/', [PaymentMethodController::class, 'index'])->name('index');
+        Route::get('/create', [PaymentMethodController::class, 'create'])->name('create');
+        Route::post('/', [PaymentMethodController::class, 'store'])->name('store');
+        Route::delete('/{id}', [PaymentMethodController::class, 'destroy'])->name('destroy');
+    
     Route::resource('trips', TripController::class);
     Route::resource('drivers', DriverController::class);
     Route::resource('reviews', ReviewController::class);
@@ -71,5 +79,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('support-tickets', SupportTicketController::class);
     Route::resource('driver-locations', DriverLocationController::class);
     Route::resource('favorite-locations', FavoriteLocationController::class);
-    Route::resource('payment-methods', PaymentMethodController::class);
-});
+    Route::resource('payment-methods', PaymentMethodController::class)->names('payment_method');
+  });  

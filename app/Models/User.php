@@ -35,4 +35,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+         public function savedMethods()
+    {
+        return $this->hasMany(SavedMethod::class);
+    }
 }
