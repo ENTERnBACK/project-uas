@@ -10,7 +10,6 @@
 
     <div class="max-w-6xl mx-auto bg-white p-6 rounded-2xl shadow-lg border border-blue-100">
         
-        <!-- Bagian Header Tabel -->
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-3">
                 <span class="text-4xl">🚗🏍️</span>

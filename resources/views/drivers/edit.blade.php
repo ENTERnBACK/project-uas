@@ -23,14 +23,13 @@
             @csrf
             @method('PUT')
 
-            <!-- Baris 1: Nama Lengkap -->
+
             <div>
                 <label class="block text-sm font-semibold text-blue-700 mb-1">Nama Lengkap</label>
                 <input type="text" name="nama" value="{{ $driver->nama }}" required 
                        class="w-full border border-blue-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
             </div>
 
-            <!-- Baris 2: Email & Telepon - Readonly -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 opacity-70">
                 <div>
                     <label class="block text-sm font-semibold text-blue-700 mb-1">Alamat Email (Tidak dapat diubah)</label>
@@ -58,7 +57,6 @@
                 </div>
             </div>
 
-            <!-- Baris 4: Status -->
             <div>
                 <label class="block text-sm font-semibold text-blue-700 mb-1">Status Kesiapan Operasional</label>
                 <select name="status" required 
@@ -68,7 +66,6 @@
                 </select>
             </div>
 
-            <!-- Tombol Aksi -->
             <div class="flex justify-end gap-3 pt-4 border-t border-blue-100">
                 <a href="/drivers" class="bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg font-medium hover:bg-gray-300 transition text-sm">
                     Batal

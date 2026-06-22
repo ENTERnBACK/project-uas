@@ -6,24 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('drivers', function (Blueprint $table) {
-            $table->id(); // Primary Key otomatis
+            $table->id();
             
-            // Tambahkan kolom-kolom driver di bawah ini:
-            $table->string('nama');            // Menyinpan nama driver
-            $table->string('email')->unique(); // Menyimpan email driver (tidak boleh kembar)
-            $table->string('no_telepon');      // Menyimpan nomor telepon driver
-            $table->text('alamat');            // Menyimpan alamat lengkap driver
-            $table->string('jenis_kendaraan'); // Menyimpan jenis kendaraan (GoRide / GoCar)
-            $table->string('status')->default('nonaktif'); // Menyimpan status (aktif / nonaktif)
-            $table->string('plate_nomor');    // Menyimpan nomor plate kendaraan
+            $table->string('nama');            
+            $table->string('email')->unique(); 
+            $table->string('no_telepon');      
+            $table->text('alamat');            
+            $table->string('jenis_kendaraan'); 
+            $table->string('status')->default('nonaktif'); 
+            $table->string('plate_nomor');    
             
-            $table->timestamps(); // create_at dan updated_at otomatis
+            $table->timestamps(); 
         });
     }
 
