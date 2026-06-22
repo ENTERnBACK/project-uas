@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChatMessage;
+use App\Models\Trip;
+use App\Models\Notification;
+use App\Models\User;
+use App\Models\Driver;
 use Illuminate\Http\Request;
 
 class ChatMessageController extends Controller
@@ -38,19 +42,30 @@ class ChatMessageController extends Controller
 
         $chat = ChatMessage::create($request->all());
 
-        if ($chat->sender_type === 'driver') {
-            $trip = Trip::find($chat->trip_id);
-            if ($trip) {
+        $trip = Trip::find($chat->trip_id);
+
+        if ($trip) {
+            if ($chat->sender_type === 'driver') {
                 Notification::create([
-                    'user_id' => $trip->user_id, 
-                    'title'   => 'Pesan Baru dari Driver 💬',
-                    'message' => $chat->message,
-                    'is_read' => false,
+                    'notifiable_type' => User::class,
+                    'notifiable_id'   => $trip->user_id,
+                    'title'           => 'Driver mengirim pesan baru 💬',
+                    'message'         => $chat->message,
+                    'is_read'         => false,
+                ]);
+            }
+            elseif ($chat->sender_type === 'user') {
+                Notification::create([
+                    'notifiable_type' => Driver::class,
+                    'notifiable_id'   => $trip->driver_id,
+                    'title'           => 'Penumpang mengirim pesan baru 💬',
+                    'message'         => $chat->message,
+                    'is_read'         => false,
                 ]);
             }
         }
 
-        return redirect()->route('chat-messages.index')->with('success', 'Chat sent successfully.');
+        return back()->with('success', 'Pesan terkirim.');
     }
 
     /**
