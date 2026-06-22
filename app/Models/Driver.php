@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Driver extends Model
 {
-    // Mengizinkan kolom-kolom ini diisi data
+    
     protected $fillable = [
         'nama',
         'email',
@@ -14,6 +14,6 @@ class Driver extends Model
         'alamat',
         'jenis_kendaraan',
         'status',
-        'plate_nomor', // Tambahan agar sesuai dengan migrasi dan form create
+        'plate_nomor', 
     ];
 }

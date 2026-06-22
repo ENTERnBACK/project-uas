@@ -14,6 +14,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\DriverTripController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChatMessageController;
 
 Route::get('/', function () {
     return view('home');
@@ -76,4 +77,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('driver-locations', DriverLocationController::class);
     Route::resource('favorite-locations', FavoriteLocationController::class);
     Route::resource('payment-methods', PaymentMethodController::class);
+    Route::resource('chat-messages', ChatMessageController::class);
 });

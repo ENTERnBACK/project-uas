@@ -10,7 +10,6 @@
 
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-blue-100">
         
-        <!-- Header Halaman -->
         <div class="mb-6 border-b border-blue-100 pb-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <span class="text-4xl">{{ $driver->jenis_kendaraan == 'GoRide' ? '🏍️' : '🚗' }}</span>
@@ -19,13 +18,12 @@
                     <p class="text-sm text-gray-500">Informasi personal dan operasional mitra Gojek</p>
                 </div>
             </div>
-            <!-- Badge Status -->
+        
             <span class="px-3 py-1.5 rounded-full text-xs font-bold {{ $driver->status == 'aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                 ID: #{{ $driver->id }} — {{ ucfirst($driver->status) }}
             </span>
         </div>
 
-        <!-- Kartu Informasi Detail -->
         <div class="divide-y divide-blue-50">
             
             <div class="py-3.5 grid grid-cols-3 gap-4">
@@ -69,7 +67,6 @@
 
         </div>
 
-        <!-- Tombol Aksi Bawah -->
         <div class="flex justify-between items-center pt-6 mt-6 border-t border-blue-100">
             <a href="/drivers" class="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1 transition">
                 &larr; Kembali ke Daftar

@@ -12,7 +12,8 @@ class ChatMessageController extends Controller
      */
     public function index()
     {
-        //
+        $chats = ChatMessage::all();
+        return view('chats.index', compact('chats'));
     }
 
     /**
@@ -20,7 +21,7 @@ class ChatMessageController extends Controller
      */
     public function create()
     {
-        //
+        return view('chats.create');
     }
 
     /**
@@ -28,7 +29,28 @@ class ChatMessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'trip_id' => 'required|integer|exists:trips,id',
+            'sender_type' => 'required|string|in:user,driver',
+            'sender_id' => 'required|integer',
+            'message' => 'required|string',
+        ]);
+
+        $chat = ChatMessage::create($request->all());
+
+        if ($chat->sender_type === 'driver') {
+            $trip = Trip::find($chat->trip_id);
+            if ($trip) {
+                Notification::create([
+                    'user_id' => $trip->user_id, 
+                    'title'   => 'Pesan Baru dari Driver 💬',
+                    'message' => $chat->message,
+                    'is_read' => false,
+                ]);
+            }
+        }
+
+        return redirect()->route('chat-messages.index')->with('success', 'Chat sent successfully.');
     }
 
     /**
@@ -36,7 +58,7 @@ class ChatMessageController extends Controller
      */
     public function show(ChatMessage $chatMessage)
     {
-        //
+        return view('chats.show', compact('chatMessage'));
     }
 
     /**
@@ -44,7 +66,7 @@ class ChatMessageController extends Controller
      */
     public function edit(ChatMessage $chatMessage)
     {
-        //
+        return view('chats.edit', compact('chatMessage'));
     }
 
     /**
@@ -52,7 +74,12 @@ class ChatMessageController extends Controller
      */
     public function update(Request $request, ChatMessage $chatMessage)
     {
-        //
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $chatMessage->update($request->only('message'));
+        return redirect()->route('chat-messages.index')->with('success', 'Chat updated successfully.');
     }
 
     /**
@@ -60,6 +87,7 @@ class ChatMessageController extends Controller
      */
     public function destroy(ChatMessage $chatMessage)
     {
-        //
+        $chatMessage->delete();
+        return redirect()->route('chat-messages.index')->with('success', 'Chat deleted successfully.');
     }
 }

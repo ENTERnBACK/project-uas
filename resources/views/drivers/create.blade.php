@@ -10,7 +10,6 @@
 
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-blue-100">
         
-        <!-- Header Halaman -->
         <div class="mb-6 border-b border-blue-100 pb-4">
             <div class="flex items-center gap-3 mb-2">
                 <span class="text-4xl">🚗🏍️</span>
@@ -22,14 +21,12 @@
         <form action="/drivers" method="POST" class="space-y-5">
             @csrf
 
-            <!-- Baris 1: Nama Lengkap - OTOMATIS DARI REGISTER -->
             <div>
                 <label class="block text-sm font-semibold text-blue-700 mb-1">Nama Lengkap</label>
                 <input type="text" name="nama" value="{{ auth()->user()->name }}" readonly
                        class="w-full bg-blue-50 border border-blue-200 p-2.5 rounded-lg cursor-not-allowed focus:outline-none text-gray-600">
             </div>
 
-            <!-- Baris 2: Kontak (Email dan No. Telepon) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-semibold text-blue-700 mb-1">Alamat Email</label>
@@ -42,15 +39,11 @@
                            class="w-full border border-blue-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                 </div>
             </div>
-
-            <!-- Baris 3: Alamat Lengkap -->
             <div>
                 <label class="block text-sm font-semibold text-blue-700 mb-1">Alamat Domisili Sekarang</label>
                 <textarea name="alamat" required rows="3" placeholder="Tuliskan alamat lengkap beserta kota asal" 
                           class="w-full border border-blue-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"></textarea>
             </div>
-
-            <!-- Baris 4: Atribut Kendaraan (Layanan & Plat) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-semibold text-blue-700 mb-1">Jenis Layanan Gojek</label>
@@ -67,7 +60,6 @@
                 </div>
             </div>
 
-            <!-- Baris 5: Status Awal Akun -->
             <div>
                 <label class="block text-sm font-semibold text-blue-700 mb-1">Status Kesiapan Operasional</label>
                 <select name="status" required 
@@ -77,7 +69,6 @@
                 </select>
             </div>
 
-            <!-- Bagian Tombol Aksi -->
             <div class="flex justify-end gap-3 pt-4 border-t border-blue-100">
                 <a href="/drivers" class="bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg font-medium hover:bg-gray-300 transition text-sm">
                     Batal
