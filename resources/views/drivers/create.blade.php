@@ -14,7 +14,7 @@
         <div class="mb-6 border-b border-blue-100 pb-4">
             <div class="flex items-center gap-3 mb-2">
                 <span class="text-4xl">🚗🏍️</span>
-                <h1 class="text-2xl font-bold text-blue-700">Formulir Pendaftaran Driver</h1>
+                <h1 class="text-2xl font-bold text-blue-700">Profile Driver</h1>
             </div>
             <p class="text-sm text-gray-500">Masukkan informasi lengkap calon driver untuk disimpan ke dalam pangkalan data</p>
         </div>
@@ -87,8 +87,8 @@
             <input type="hidden" name="status" value="nonaktif">
 
             <div class="flex justify-between gap-3 pt-4 border-t border-blue-100">
-                <a href="{{ route('dashboard.driver') }}" class="bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg font-medium hover:bg-gray-300 transition text-sm">
-                    ← Dashboard
+                <a href="{{ route('dashboard.driver') }}" class="bg-gray-500 text-gray-700 px-5 py-2.5 rounded-lg font-medium hover:bg-gray-500 transition text-sm">
+                    ← Lihat Daftar Driver
                 </a>
                 <div class="flex gap-3">
                     <a href="/drivers" class="bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg font-medium hover:bg-gray-300 transition text-sm">
