@@ -21,7 +21,7 @@
                 Matikan untuk istirahat
             </button>
 
-            <a href="{{ route('drivers.index') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; padding: 6px 12px; border-radius: 25px; background-color: #f8f9fa; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.background='#edf2f7'" onmouseout="this.style.background='#f8f9fa'">
+            <a href="{{ route('drivers.create') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; padding: 6px 12px; border-radius: 25px; background-color: #f8f9fa; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.background='#edf2f7'" onmouseout="this.style.background='#f8f9fa'">
                 <span style="font-weight: 500; color: #333; font-family: sans-serif; font-size: 14px;">
                     {{ auth()->user()->name }}
                 </span>
@@ -87,7 +87,6 @@
                                         Ambil Orderan
                                     </button>
                                 </form>
-
                             </td>
                         </tr>
                     @endforeach
@@ -111,6 +110,10 @@
             <button type="button" style="background-color: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 14px; cursor: pointer;">
                 📞 Halo Center
             </button>
+        </a>
+
+        <a href="{{ route('chat-messages.index') }}" style="background-color: #0d6efd; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 14px; display: inline-block;">
+                💬 Chat
         </a>
     </div>
 
