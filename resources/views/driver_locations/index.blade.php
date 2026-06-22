@@ -163,6 +163,10 @@
 
 @if(auth()->user()->role=='driver')
 
+<a href="{{ route('driver-locations.show',$location->id) }}">
+    <button>Detail</button>
+</a>
+
 <a href="{{ route('driver-locations.edit',$location->id) }}">
 <button>Edit</button>
 </a>
@@ -184,6 +188,10 @@ Hapus
 </form>
 
 @else
+
+<a href="{{ route('driver-locations.show',$location->id) }}">
+    <button>Detail</button>
+</a>
 
 <form action="{{ route('trips.store') }}" method="POST">
 

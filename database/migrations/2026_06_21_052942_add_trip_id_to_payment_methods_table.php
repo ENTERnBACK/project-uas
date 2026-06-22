@@ -20,7 +20,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-   public function down(): void
+    public function down(): void
     {
         Schema::table('payment_methods', function (Blueprint $table){
             $table->dropColumn('trip_id');
