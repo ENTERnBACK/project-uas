@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory; // Tambahkan ini
 
 class Driver extends Model
 {
-    // Mengizinkan kolom-kolom ini diisi data
+    use HasFactory; // Tambahkan ini
+
     protected $fillable = [
         'nama',
         'email',
@@ -14,6 +16,6 @@ class Driver extends Model
         'alamat',
         'jenis_kendaraan',
         'status',
-        'plate_nomor', // Tambahan agar sesuai dengan migrasi dan form create
+        'plate_nomor', 
     ];
 }

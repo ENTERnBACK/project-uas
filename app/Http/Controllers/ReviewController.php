@@ -12,7 +12,7 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        $reviews = Review::all();
+        $reviews = Review::latest()->get();
         return view('reviews.index', compact('reviews'));
     }
 
@@ -32,11 +32,18 @@ class ReviewController extends Controller
         $request->validate([
             'rating' => 'nullable|integer|min:1|max:5',
             'review_driver' => 'nullable|string',
+            'trip_id' => 'required|exists:trips,id',
         ]);
 
-        Review::create($request->only('rating', 'review_driver'));
+        $trip = \App\Models\Trip::findOrFail($request->trip_id);
+        Review::create([
+            'trip_id'       => $trip->id,
+            'driver_id'     => $trip->driver_id,
+            'rating'        => $request->rating,
+            'review_driver' => $request->review_driver,
+        ]);
 
-        return redirect()->route('reviews.index')->with('success', 'Review created successfully');
+        return redirect()->route('/trips')->with('success', 'Review created successfully');
     }
 
     /**

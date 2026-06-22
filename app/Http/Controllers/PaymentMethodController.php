@@ -31,38 +31,25 @@ class PaymentMethodController extends Controller
      */
     public function store(Request $request)
 {
-    //dd($request->all());
-    $request->validate([
-        'method' => 'required',
-        'trip_id' => 'required',
-    ]);
-
-  
    $payment = \App\Models\PaymentMethods::create([
-        'method' => $request->method,
+        'method' => $request->method, 
         'trip_id' => $request->trip_id,
         'status' => 'pending'
     ]);
 
-        $data = [];
-            if ($request->method === 'bca') {
-                $data['info'] = '8808' . mt_rand(10000000, 99999999);
-                    $data['label'] = 'Nomor VA BCA';
-            } elseif ($request->method === 'qris') {
-                        $data['info'] = 'QRIS-TRIP-' . $request->trip_id;
-                            $data['label'] = 'Kode QRIS';
-    }
-return redirect()->route('payment-methods.show', ['payment_method' => $payment->trip_id]);
+    // Redirect
+    return redirect()->route('payment-methods.show', $payment->trip_id);
+
 }
     
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+
+   public function show($id)
 {
    $payment = \App\Models\PaymentMethods::where('trip_id', $id)->firstOrFail();
-    
     return view('payment_method.show', compact('payment'));
 }
 

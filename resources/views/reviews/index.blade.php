@@ -1,44 +1,16 @@
-<h1>Review Driver</h1>
+<div class="container" style="padding: 20px;">
+    <h2>📜 Riwayat Ulasan Anda</h2>
+    <a href="{{ route('dashboard.driver') }}" class="btn btn-secondary" style="margin-bottom: 20px; display: inline-block;">⬅️ Kembali ke Dashboard</a>
 
-<a href="{{ route('reviews.create') }}">Buat Review Baru</a>
-<br><br>
-
-@if ($reviews->isEmpty())
-    <p>Belum ada review yang tersimpan.</p>
-@else
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead>
-            <tr>
-                <th style="width: 50px">No</th>
-                <th style="width: 150px">Rating</th>
-                <th style="width: 300px">Ulasan</th>
-                <th style="width: 120px">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($reviews as $review)
-                <tr>
-                    <td style="text-align: center;">{{ $loop->iteration }}</td>
-
-                    <td style="text-align: center;">
-                        <a href="{{ route('reviews.show', $review) }}">
-                            {{ $review->rating ?? 'No Rating' }}
-                        </a>
-                    </td>
-
-                    <td>
-                        {{ $review->review_driver ?? '(Tanpa Ulasan)' }}
-                    </td>
-                    
-                    <td style="text-align: center;">
-                        <a href="{{ route('reviews.edit', $review) }}">Ubah</a>
-                        <form action="{{ route('reviews.destroy', $review) }}" method="post" style="display:inline;">
-                            @csrf @method('DELETE')
-                            <button type="submit">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-@endif
+    @if($reviews->isEmpty())
+        <p>Belum ada ulasan dari penumpang untuk Anda saat ini.</p>
+    @else
+        @foreach($reviews as $review)
+            <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 8px;">
+                <strong style="color: #f5b301;">⭐ {{ $review->rating }}/5</strong>
+                <p style="margin: 5px 0 0 0; font-style: italic;">"{{ $review->review_driver ?? 'Tidak ada ulasan tertulis' }}"</p>
+                <small style="color: #888;">Diterima pada: {{ $review->created_at->format('d M Y') }}</small>
+            </div>
+        @endforeach
+    @endif
+</div>

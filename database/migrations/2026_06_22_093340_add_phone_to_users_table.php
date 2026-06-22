@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('payment_methods', function (Blueprint $table) {
-            $table->unsignedBigInteger('trip_id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('phone', 15)->nullable()->after('email');
         });
     }
 
-    
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('payment_methods', function (Blueprint $table){
-            $table->dropColumn('trip_id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('phone');
         });
     }
 };
