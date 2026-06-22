@@ -75,8 +75,7 @@ class PaymentMethodController extends Controller
 
    public function show($id)
 {
-   $payment = \App\Models\PaymentMethods::where('trip_id', $id)->firstOrFail();
-    return view('payment_method.show', compact('payment'));
+        return view('payment_method.show');
 }
 
     /**
