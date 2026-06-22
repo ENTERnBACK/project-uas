@@ -33,20 +33,18 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-    ]);
+        ]);
 
-    if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials)) {
 
-        $request->session()->regenerate();
+            $request->session()->regenerate();
 
-        if (Auth::user()->role == 'driver') {
-            return redirect('/dashboard-driver');
+            return redirect()->route('dashboard');
         }
 
-            return redirect('/dashboard');
-    }
-
-        return back()->with('error', 'Email atau password salah');
+            return back()
+            ->withInput($request->only('email'))
+            ->with('error', 'Email atau Password salah.');
     }
 
     public function logout(Request $request)
