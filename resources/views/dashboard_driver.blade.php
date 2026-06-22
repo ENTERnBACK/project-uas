@@ -9,10 +9,18 @@
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 15px; border-bottom: 1px solid #eee; margin-bottom: 20px;">
         <div>
             <h1 style="margin: 0; font-size: 28px; font-weight: bold; color: #000;">Selamat Datang Driver, {{ auth()->user()->name }}!</h1>
-            <p style="margin: 5px 0 0 0; font-weight: bold;">Status Akun: <span style="color: #28a745;">Aktif</span></p>
+            
+            <p style="margin: 5px 0 0 0; font-weight: bold;">
+                Status Akun: <span id="text-status" style="color: #28a745;">Aktif</span>
+            </p>
         </div>
 
-        <div style="z-index: 999;">
+        <div style="z-index: 999; display: flex; align-items: center; gap: 15px;">
+            
+            <button type="button" id="btn-toggle" onclick="toggleDriverStatus()" style="background-color: #dc3545; color: white; border: none; padding: 8px 14px; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: bold;">
+                Matikan untuk istirahat
+            </button>
+
             <a href="{{ route('drivers.index') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; padding: 6px 12px; border-radius: 25px; background-color: #f8f9fa; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.background='#edf2f7'" onmouseout="this.style.background='#f8f9fa'">
                 <span style="font-weight: 500; color: #333; font-family: sans-serif; font-size: 14px;">
                     {{ auth()->user()->name }}
@@ -42,11 +50,23 @@
     <hr>
     <div style="margin-top: 20px;">
         <h3>Pesanan Masuk</h3>
+
+        <div style="margin-bottom: 15px;">
+            <a href="{{ url('driver-locations') }}" style="text-decoration: none;">
+                <button type="button" style="background-color: #0d8abc; color: white; border: none; padding: 8px 14px; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                    📍 Kelola Lokasi Saya
+                </button>
+            </a>
+        </div>
         
+        <p id="pesanan-off-text" style="color: #6c757d; font-style: italic; display: none;">
+            Status akun Anda sedang off. Aktifkan status untuk melihat pesanan.
+        </p>
+
         @if($availableTrips->isEmpty())
-            <p style="color: #6c757d; font-style: italic;">Belum ada pesanan masuk dari penumpang di sekitar Anda.</p>
+            <p id="pesanan-kosong-text" style="color: #6c757d; font-style: italic;">Belum ada pesanan masuk dari penumpang di sekitar Anda.</p>
         @else
-            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <table id="tabel-pesanan" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
                 <thead>
                     <tr style="background-color: #f8f9fa; text-align: left; border-bottom: 2px solid #eee;">
                         <th style="padding: 10px;">Titik Jemput</th>
@@ -59,10 +79,15 @@
                         <tr style="border-bottom: 1px solid #eee;">
                             <td style="padding: 10px;">{{ $trip->pickup_point }}</td>
                             <td style="padding: 10px;">{{ $trip->dropoff_point }}</td>
-                            <td style="padding: 10px;">
-                                <button type="button" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">
-                                    Ambil Orderan
-                                </button>
+                            <td style="padding: 10px;">          
+                                <form action="{{ route('driver-trips.update', $trip->id) }}" method="POST" style="margin: 0;">
+                                    @csrf
+                                    @method('PUT')               
+                                    <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                                        Ambil Orderan
+                                    </button>
+                                </form>
+
                             </td>
                         </tr>
                     @endforeach
@@ -88,6 +113,46 @@
             </button>
         </a>
     </div>
+
+    <script>
+        let isDriverActive = true;
+
+        function toggleDriverStatus() {
+            const btn = document.getElementById('btn-toggle');
+            const statusText = document.getElementById('text-status');
+            const tabelPesanan = document.getElementById('tabel-pesanan');
+            const pesananOffText = document.getElementById('pesanan-off-text');
+            const pesananKosongText = document.getElementById('pesanan-kosong-text');
+
+            if (isDriverActive) {
+                isDriverActive = false;
+                statusText.innerText = "Off";
+                statusText.style.color = "#6c757d";
+                
+                btn.innerText = "🔛 Aktifkan untuk menerima orderan";
+                btn.style.backgroundColor = "#28a745";
+
+                if (tabelPesanan) { tabelPesanan.style.display = 'none'; }
+                if (pesananKosongText) { pesananKosongText.style.display = 'none'; }
+                pesananOffText.style.display = 'block';
+
+            } else {
+                isDriverActive = true;
+                statusText.innerText = "On";
+                statusText.style.color = "#28a745";
+                
+                btn.innerText = "Matikan untuk istirahat";
+                btn.style.backgroundColor = "#dc3545";
+
+                pesananOffText.style.display = 'none';
+                if (tabelPesanan) { 
+                    tabelPesanan.style.display = 'table'; 
+                } else if (pesananKosongText) {
+                    pesananKosongText.style.display = 'block';
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>

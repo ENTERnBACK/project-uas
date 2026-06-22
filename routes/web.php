@@ -12,6 +12,7 @@ use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\DriverTripController;
 
 Route::get('/', function () {
     return view('home');
@@ -39,14 +40,18 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     Route::get('/dashboard-driver', function () {
-        $availableTrips = \App\Models\Trip::latest()->get();
+        $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
         $reviews = collect([]);
         $averageRating = '5.0';
         return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
     })->name('dashboard.driver');
+    
 
     Route::get('/driver-locations/trip/{tripId}', [DriverLocationController::class, 'showByTrip'])
         ->name('driver-locations.show-by-trip');
+
+    Route::put('/driver-trips/{id}', [DriverTripController::class, 'update'])->name('driver-trips.update');
+    Route::post('/driver-trips', [DriverTripController::class, 'store'])->name('driver-trips.store');
 
     Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])->name('payments.user');
     Route::post('/payments/process', [PaymentController::class, 'processPayment'])->name('payments.process');
@@ -55,6 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/promos/apply', [PromoController::class, 'applyPromo'])->name('promos.apply');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::put('/trips/{id}/accept', [TripController::class, 'acceptTrip'])->name('driver.trips.accept');
+    Route::get('/trips/{id}/ontrip', [TripController::class, 'showOnTrip'])->name('driver.trips.ontrip');
 
     Route::resource('trips', TripController::class);
     Route::resource('drivers', DriverController::class);
