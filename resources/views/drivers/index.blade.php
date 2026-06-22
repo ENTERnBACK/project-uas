@@ -1,3 +1,4 @@
+</div>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -10,6 +11,7 @@
 
     <div class="max-w-6xl mx-auto bg-white p-6 rounded-2xl shadow-lg border border-blue-100">
         
+        <!-- Header -->
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-3">
                 <span class="text-4xl">🚗🏍️</span>
@@ -18,10 +20,22 @@
                     <p class="text-sm text-gray-500">Kelola data, akun, dan status operasional driver</p>
                 </div>
             </div>
-            <a href="/drivers/create" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition shadow">
-                + Tambah Driver Baru
-            </a>
+            <div class="flex gap-3">
+                <a href="{{ route('dashboard.driver') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold text-sm transition shadow">
+                    ← Dashboard
+                </a>
+                <a href="/drivers/create" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition shadow">
+                    + Data Driver 
+                </a>
+            </div>
         </div>
+
+        {{-- Notifikasi sukses --}}
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-300 text-green-700 p-3 rounded-lg text-sm mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <!-- Tabel Data Driver -->
         <div class="overflow-x-auto rounded-lg border border-blue-100">
@@ -98,3 +112,4 @@
 
 </body>
 </html>
+</div>
