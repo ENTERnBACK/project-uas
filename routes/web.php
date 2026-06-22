@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\DriverTripController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatMessageController;
 
 Route::get('/', function () {
@@ -47,6 +48,9 @@ Route::middleware('auth')->group(function () {
         return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
     })->name('dashboard.driver');
     
+    Route::get('/profile', [ProfileController::class, 'index'])->name('user_profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user_profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('user_profile.update');
 
     Route::get('/driver-locations/trip/{tripId}', [DriverLocationController::class, 'showByTrip'])
         ->name('driver-locations.show-by-trip');
