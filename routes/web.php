@@ -60,6 +60,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/driver-locations/trip/{tripId}', [DriverLocationController::class, 'showByTrip'])
         ->name('driver-locations.show-by-trip');
+    Route::post('/driver-locations/select-driver',[DriverLocationController::class, 'selectDriver'])
+        ->name('driver-locations.select-driver');
 
     Route::put('/driver-trips/{id}', [DriverTripController::class, 'update'])->name('driver-trips.update');
     Route::post('/driver-trips', [DriverTripController::class, 'store'])->name('driver-trips.store');

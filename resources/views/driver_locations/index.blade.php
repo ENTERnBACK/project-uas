@@ -207,7 +207,15 @@ Hapus
     <button>Detail</button>
 </a>
 
-<form action="{{ route('trips.store') }}" method="POST">
+<form action="{{ route('driver-locations.select-driver') }}" method="POST">
+    @csrf
+
+    <input type="hidden"
+        name="driver_id"
+        value="{{ $location->user_id }}">
+
+    <button>Pilih Driver</button>
+</form>
 
 @csrf
 
