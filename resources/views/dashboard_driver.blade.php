@@ -5,7 +5,6 @@
     <title>Dashboard Driver</title>
 
     <style>
-
         body{
             margin:0;
             padding:0;
@@ -143,6 +142,20 @@
             color:gray;
             font-style:italic;
         }
+        
+        /* Tambahan style label agar tampilan rapi */
+        .badge-payment {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .text-price {
+            color: #ea580c;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -215,7 +228,6 @@
             </p>
 
             @if($availableTrips->isEmpty())
-
                 <p id="pesanan-kosong-text" class="empty">
                     Belum ada pesanan masuk dari penumpang sekitar Anda.
                 </p>
@@ -223,14 +235,21 @@
                 <table id="tabel-pesanan" class="table">
                     <thead>
                         <tr>
+                            <th>Penumpang</th>
                             <th>Pick Up</th>
                             <th>Drop Off</th>
+                            <th>Metode Bayar</th>
+                            <th>Total Tarif</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($availableTrips as $trip)
                             <tr>
+                                <td>
+                                    <strong>{{ $trip->user->name ?? 'Penumpang' }}</strong>
+                                </td>
+
                                 <td>
                                     {{ $trip->pickup_point }}
                                 </td>
@@ -240,10 +259,22 @@
                                 </td>
 
                                 <td>
-                                    <form action="{{ route('driver-trips.update',$trip->id) }}"method="POST">
+                                    <span class="badge-payment">
+                                        💳 {{ $trip->payment->paymentMethod->label ?? 'Cash' }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="text-price">
+                                        Rp{{ number_format($trip->payment->amount ?? 0, 0, ',', '.') }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <form action="{{ route('driver-trips.update',$trip->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit"class="btn green">
+                                        <button type="submit" class="btn green">
                                             Ambil Orderan
                                         </button>
                                     </form>
@@ -256,9 +287,9 @@
         </div>
 
         <div class="footer-buttons">
-            <form action="{{ route('logout') }}"method="POST">
+            <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit"class="btn red">
+                <button type="submit" class="btn red">
                     Logout
                 </button>
             </form>
@@ -276,12 +307,11 @@
             </a>
         </div>
     </div>
-<script>
 
+<script>
 let isDriverActive=true;
 
 function toggleDriverStatus(){
-
     const btn=document.getElementById('btn-toggle');
     const status=document.getElementById('text-status');
     const tabel=document.getElementById('tabel-pesanan');
@@ -289,9 +319,7 @@ function toggleDriverStatus(){
     const kosong=document.getElementById('pesanan-kosong-text');
 
     if(isDriverActive){
-
         isDriverActive=false;
-
         status.innerText="Off";
         status.style.color="gray";
 
@@ -308,18 +336,13 @@ function toggleDriverStatus(){
         }
 
         off.style.display="block";
-
     }
-
     else{
-
         isDriverActive=true;
-
         status.innerText="Aktif";
         status.style.color="#22c55e";
 
         btn.innerText="Matikan untuk istirahat";
-
         btn.classList.remove("green");
         btn.classList.add("red");
 
@@ -332,11 +355,8 @@ function toggleDriverStatus(){
         if(kosong){
             kosong.style.display="block";
         }
-
     }
-
 }
-
 </script>
 
 </body>
