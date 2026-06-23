@@ -41,7 +41,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [UserTripController::class, 'index'])->name('dashboard');
     Route::get('/trips/status/check', [UserTripController::class, 'show'])->name('trips.check-status');
-    Route::post('/trips/select-driver', [App\Http\Controllers\TripController::class, 'selectDriver'])->name('trips.selectDriver');
 
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
@@ -50,9 +49,6 @@ Route::middleware('auth')->group(function () {
         $averageRating = number_format((float)$avg, 1, '.', '');
         return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
     })->name('dashboard.driver');
-
-    Route::patch('/driver-trips/{trip}/complete', [
-        App\Http\Controllers\DriverTripController::class, 'completeTrip'])->name('driver-trips.complete');
     
     Route::get('/profile', [ProfileController::class, 'index'])->name('user_profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user_profile.edit');
@@ -60,8 +56,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/driver-locations/trip/{tripId}', [DriverLocationController::class, 'showByTrip'])
         ->name('driver-locations.show-by-trip');
-    Route::post('/driver-locations/select-driver',[DriverLocationController::class, 'selectDriver'])
-        ->name('driver-locations.select-driver');
 
     Route::put('/driver-trips/{id}', [DriverTripController::class, 'update'])->name('driver-trips.update');
     Route::post('/driver-trips', [DriverTripController::class, 'store'])->name('driver-trips.store');
@@ -69,9 +63,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])->name('payments.user');
     Route::post('/payments/process', [PaymentController::class, 'processPayment'])->name('payments.process');
     Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
-
-    Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
-    Route::get('/payments/{id}', [PaymentController::class, 'show'])->name('payments.show');
 
     Route::get('/promos', [PromoController::class, 'index'])->name('promos.index');
     Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
@@ -84,6 +75,7 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/trips/{id}/accept', [TripController::class, 'acceptTrip'])->name('driver.trips.accept');
     Route::get('/trips/{id}/ontrip', [TripController::class, 'showOnTrip'])->name('driver.trips.ontrip');
+    Route::post('/trips/select-driver', [TripController::class, 'selectDriver'])->name('trips.select-driver');
 
     Route::get('/payment-methods', [PaymentMethodController::class, 'index'])->name('payment_method.index');
     Route::prefix('payment-methods')->name('payment_method.')->group(function () {
@@ -106,7 +98,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('payment-methods', PaymentMethodController::class)->names('payment_method');
     Route::resource('chat-messages', ChatMessageController::class)->except(['show', 'edit', 'update', 'create', 'store']);
     Route::resource('notifications', NotificationController::class)->except(['show', 'edit', 'update']);
-     
+    
     Route::get('/trips/{trip}/chat', [ChatMessageController::class, 'room'])->name('trips.chat');
     Route::post('/trips/{trip}/chat', [ChatMessageController::class, 'storeMessage'])->name('trips.chat.store');
 });

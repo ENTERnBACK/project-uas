@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DriverLocation;
 use App\Models\User;
+use App\Models\Trip;
 use Illuminate\Http\Request;
 
 class DriverLocationController extends Controller
@@ -42,11 +43,35 @@ class DriverLocationController extends Controller
             'longitude' => 'required|numeric',
         ]);
 
-        DriverLocation::create($validated);
+        $driverLocation = DriverLocation::updateOrCreate(
+            ['user_id' => $validated['user_id']],
+            [
+                'latitude' => $validated['latitude'],
+                'longitude' => $validated['longitude'],
+            ]
+        );
+
+        $activeTrip = Trip::where('driver_id', $validated['user_id'])
+            ->latest()
+            ->first();
+
+        if (!$activeTrip) {
+            $activeTrip = Trip::create([
+                'user_id' => auth()->id(),
+                'driver_id' => $validated['user_id'],
+                'pickup_point' => 'Lokasi Penumpang',
+                'dropoff_point' => 'Tujuan Perjalanan',
+                'status' => 'on_trip',
+            ]);
+        } else {
+            $activeTrip->update([
+                'status' => 'on_trip'
+            ]);
+        }
 
         return redirect()
-            ->route('driver-locations.index')
-            ->with('success', 'Lokasi driver berhasil ditambahkan.');
+            ->route('trips.show', $activeTrip->id)
+            ->with('success', 'Driver dipilih dan perjalanan dimulai.');
     }
 
     /**
