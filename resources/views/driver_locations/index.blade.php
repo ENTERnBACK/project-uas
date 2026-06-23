@@ -136,13 +136,13 @@
     @if(auth()->user()->role == 'driver')
 
         <a href="{{ route('dashboard.driver') }}" class="btn btn-secondary">
-            Kembali ke Dashboard 
+            Kembali ke Dashboard
         </a>
 
     @else
 
         <a href="{{ route('dashboard') }}" class="btn btn-secondary">
-            Kembali ke Dashboard 
+            Kembali ke Dashboard
         </a>
 
     @endif
@@ -215,18 +215,6 @@ Hapus
         value="{{ $location->user_id }}">
 
     <button>Pilih Driver</button>
-</form>
-
-@csrf
-
-<input type="hidden"
-name="driver_id"
-value="{{ $location->user_id }}">
-
-<button>
-Pilih Driver
-</button>
-
 </form>
 
 @endif
