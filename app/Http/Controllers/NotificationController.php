@@ -12,7 +12,13 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifications = Notification::all();
+        $loggedInUser = auth()->user();
+
+        $notifications = \App\Models\Notification::where('notifiable_type', get_class($loggedInUser))
+                    ->where('notifiable_id', $loggedInUser->id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
         return view('notifications.index', compact('notifications'));
     }
 
@@ -30,13 +36,15 @@ class NotificationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|integer',
-            'title' => 'required|string|max:255',
-            'message' => 'required|string',
+        'notifiable_type' => 'required|string',
+        'notifiable_id'   => 'required|integer',
+        'title'           => 'required|string',
+        'message'         => 'required|string',
         ]);
 
-        Notification::create($request->all());
-        return redirect()->route('notifications.index')->with('success', 'Notification created.');
+        \App\Models\Notification::create($request->all());
+
+        return back()->with('success', 'Notifikasi berhasil ditembakkan ke target!');
     }
 
     /**
