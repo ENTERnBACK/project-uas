@@ -7,108 +7,31 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e3f2fd; padding: 20px; }
         .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; order-radius: 16px; box-shadow: 0 4px 20px rgba(25, 118, 210, 0.15); }
-        h1 { 
-            font-size: 24px; margin-bottom: 20px; color: #0d47a1; display: flex;align-items: center; gap: 10px;}
-        .promo-grid { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-        }
-        .promo-card {
-            background: #e3f2fd;
-            border-radius: 12px;
-            padding: 18px;
-            border-left: 5px solid #1976D2;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        .promo-card:hover { 
-            box-shadow: 0 2px 12px rgba(25, 118, 210, 0.3); 
-            transform: translateX(5px);
-        }
-        .promo-info h3 { 
-            margin: 0; 
-            color: #0d47a1; 
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .promo-info p { 
-            margin: 5px 0; 
-            color: #555; 
-            font-size: 14px;
-        }
-        .promo-info .min-trans {
-            font-size: 12px;
-            color: #1976D2;
-        }
+        h1 { font-size: 24px; margin-bottom: 20px; color: #0d47a1; display: flex;align-items: center; gap: 10px;}
+        .promo-grid { display: flex; flex-direction: column; gap: 15px; }
+        
+        .promo-card { background: #e3f2fd; border-radius: 12px; padding: 18px; border-left: 5px solid #1976D2; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s;}
+        .promo-card:hover { box-shadow: 0 2px 12px rgba(25, 118, 210, 0.3); transform: translateX(5px); }
+        .promo-info h3 { margin: 0; color: #0d47a1; font-size: 18px; font-weight: 700; }
+        
+        .promo-info p { margin: 5px 0; color: #555; font-size: 14px; }
+        .promo-info .min-trans { font-size: 12px;color: #1976D2;}
         .btn-pakai {
-            background: #1976D2;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-            min-width: 100px;
-        }
-        .btn-pakai:hover { 
-            background: #0d47a1; 
-            transform: scale(1.02);
-        }
-        .btn-pakai:disabled { 
-            background: #90caf9; 
-            cursor: not-allowed; 
-            transform: none;
-        }
-        .promo-message {
-            font-size: 12px;
-            margin-top: 8px;
-            font-weight: 600;
-            text-align: center;
-        }
+            background: #1976D2; color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s;  min-width: 100px; }
+        .btn-pakai:hover { background: #0d47a1; transform: scale(1.02); }
+        .btn-pakai:disabled { background: #90caf9; cursor: not-allowed; transform: none; }
+        
+        .promo-message { font-size: 12px; margin-top: 8px; font-weight: 600;text-align: center; }
         .promo-message.error { color: #c62828; }
         .promo-message.success { color: #0d47a1; }
-        .promo-empty { 
-            background: #e3f2fd; 
-            padding: 40px; 
-            border-radius: 12px; 
-            text-align: center; 
-            color: #666; 
-        }
-        .btn-kembali {
-            display: block;
-            margin-top: 20px;
-            padding: 12px;
-            background: #1976D2;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        .btn-kembali:hover {
-            background: #0d47a1;
-        }
-        .alert {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-        .alert-success {
-            background: #e3f2fd;
-            color: #0d47a1;
-            border-left: 4px solid #1976D2;
-        }
-        .alert-error {
-            background: #ffebee;
-            color: #c62828;
-            border-left: 4px solid #f44336;
-        }
+        .promo-empty { background: #e3f2fd; padding: 40px; border-radius: 12px; text-align: center; color: #666; }
+        
+        .btn-kembali { display: block; margin-top: 20px; padding: 12px; background: #1976D2; color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background 0.2s; }
+        .btn-kembali:hover { background: #0d47a1; }
+        .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+        .alert-success { background: #e3f2fd; color: #0d47a1; border-left: 4px solid #1976D2; }
+        .alert-error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336;  }
+
     </style>
 </head>
 <body>
@@ -124,7 +47,7 @@
 
         @if ($promos->isEmpty())
             <div class="promo-empty">
-                <p style="font-size: 18px;">😊 Belum ada promo tersedia</p>
+                <p style="font-size: 18px;"> Belum ada promo tersedia</p>
                 <p style="font-size: 14px; margin-top: 8px;">Silakan cek kembali nanti</p>
             </div>
         @else
@@ -149,8 +72,8 @@
             </div>
         @endif
 
-        <a href="{{ route('payments.user', session('current_trip_id', 1)) }}" class="btn-kembali">
-            ← Kembali ke Pembayaran
+        <a href="{{ route('dashboard') }}" class="btn-kembali">
+            ← Kembali ke Dashboard
         </a>
     </div>
 

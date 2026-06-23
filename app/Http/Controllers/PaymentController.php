@@ -195,4 +195,26 @@ class PaymentController extends Controller
             ]
         ]);
     }
+
+        public function index()
+    {
+        $payments = Payment::where('passenger_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $totalEarnings = Payment::where('passenger_id', auth()->id())
+            ->where('status', 'completed')
+            ->sum('total_amount');
+
+        return view('payments.index', compact('payments', 'totalEarnings'));
+    }
+
+    public function show($id)
+    {
+        $payment = Payment::where('passenger_id', auth()->id())
+            ->findOrFail($id);
+
+        return view('payments.invoice', compact('payment'));
+    }
+
 }
