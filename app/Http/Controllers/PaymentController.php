@@ -39,7 +39,7 @@ class PaymentController extends Controller
             if ($promo) {
                 $calculateDiscount = $promo->calculateDiscount;
                 $newDiscount = $calculateDiscount($basePrice);
-
+                
                 if ($newDiscount == 0) {
                     session()->forget(['discount_amount', 'applied_promo']);
                     $discountAmount = 0;
@@ -144,9 +144,9 @@ class PaymentController extends Controller
                 'discount_type' => 'percentage',
                 'discount_value' => 10,
                 'max_discount' => 2000,
-                'min_transaction' => 10000,
+                'min_transaction' => 7000,
                 'calculateDiscount' => function($amount) {
-                    if ($amount < 10000) return 0;
+                    if ($amount < 7000) return 0;
                     $discount = $amount * 0.10;
                     return min($discount, 2000);
                 }
