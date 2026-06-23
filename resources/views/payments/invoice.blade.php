@@ -64,15 +64,30 @@
 
         <hr class="divider">
 
-        <div class="row"><span>Base Price</span><span>Rp {{ number_format($payment->base_price ?? $payment->total_amount, 0, ',', '.') }}</span></div>
+        <div class="row">
+            <span>Base Price</span>
+            <span>Rp {{ number_format($payment->base_price ?? $payment->total_amount, 0, ',', '.') }}</span>
+        </div>
+
         @if(($payment->tip_amount ?? 0) > 0)
-        <div class="row"><span>Tip</span><span>+ Rp {{ number_format($payment->tip_amount, 0, ',', '.') }}</span></div>
+        <div class="row">
+            <span>Tip</span>
+            <span>+ Rp {{ number_format($payment->tip_amount, 0, ',', '.') }}</span>
+        </div>
         @endif
+
         @if(($payment->discount_amount ?? 0) > 0)
-        <div class="row" style="color: #c62828;"><span>Diskon</span><span>- Rp {{ number_format($payment->discount_amount, 0, ',', '.') }}</span></div>
+        <div class="row" style="color: #c62828;">
+            <span>Diskon</span>
+            <span>- Rp {{ number_format($payment->discount_amount, 0, ',', '.') }}</span>
+        </div>
         @endif
+
         @if($payment->promo_code)
-        <div class="row" style="font-size: 12px; color: #666;"><span>Promo</span><span>{{ $payment->promo_code }}</span></div>
+        <div class="row" style="font-size: 12px; color: #666;">
+            <span>Promo</span>
+            <span>{{ $payment->promo_code }}</span>
+        </div>
         @endif
 
         <div class="row total">
