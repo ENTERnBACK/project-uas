@@ -10,7 +10,11 @@ class PaymentController extends Controller
 {       
     public function userPayment($tripId)
     {
-        $trip = Trip::findOrFail($tripId);
+        $trip = Trip::where('user_id', auth()->id())
+            ->latest()
+            ->firstOrFail();
+
+        $tripId = $trip->id;
         
         session(['current_trip_id' => $tripId]);
         
