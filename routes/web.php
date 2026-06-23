@@ -114,4 +114,6 @@ Route::post('/service-types/select', [App\Http\Controllers\ServiceTypeController
     Route::resource('chat-messages', ChatMessageController::class)->except(['show', 'edit', 'update', 'create', 'store']);
     Route::resource('notifications', NotificationController::class)->except(['show', 'edit', 'update']);
      
+    Route::get('/trips/{trip}/chat', [ChatMessageController::class, 'room'])->name('trips.chat');
+    Route::post('/trips/{trip}/chat', [ChatMessageController::class, 'storeMessage'])->name('trips.chat.store');
 });
