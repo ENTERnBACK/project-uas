@@ -10,16 +10,19 @@ class PaymentController extends Controller
 {       
     public function userPayment($tripId)
     {
+        $trip = Trip::findOrFail($tripId);
+        
         session(['current_trip_id' => $tripId]);
-
-        $selectedService = session('selected_service', 'standar');
+        
+        $selectedService = request()->service ?? session('selected_service', 'standar');
         $basePrice = ['hemat' => 7000, 'standar' => 10000, 'comfort' => 15000][$selectedService];
         
-        session(['base_price' => $basePrice]);
+        session([
+            'selected_service' => $selectedService,
+            'base_price' => $basePrice
+        ]);
 
-        $trip = Trip::findOrFail($tripId);
         $passengerName = auth()->user()->name ?? 'Guest';
-        
         $selectedPaymentMethod = 'cash';
 
         $discountAmount = session('discount_amount', 0);
@@ -86,6 +89,7 @@ class PaymentController extends Controller
 
         $payment = Payment::create([
             'trip_id' => $request->trip_id,
+            'passenger_id' => auth()->id(),
             'passenger_name' => $trip->passenger_name ?? auth()->user()->name ?? 'Guest',
             'total_amount' => $total,
             'tip_amount' => $tip,
@@ -95,34 +99,36 @@ class PaymentController extends Controller
 
         session()->forget(['discount_amount', 'applied_promo', 'selected_service', 'base_price', 'current_trip_id']);
 
-         return redirect()->route('driver-locations.index')->with('success', 'Payment successful! Silakan Pilih Driver');
+        return redirect()->route('dashboard')
+            ->with('success', 'Payment successful! Your payment has been recorded.');
     }
 
-        public function store(Request $request)
-        {
-            $request->validate([
-                'driver_id' => 'required|exists:drivers,id',
-                'passenger_name' => 'required|string',
-                'total_amount' => 'required|numeric|min:0',
-                'tip_amount' => 'nullable|numeric|min:0',
-                'payment_method' => 'required|string',
-            ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'driver_id' => 'required|exists:drivers,id',
+            'passenger_name' => 'required|string',
+            'total_amount' => 'required|numeric|min:0',
+            'tip_amount' => 'nullable|numeric|min:0',
+            'payment_method' => 'required|string',
+        ]);
 
-            $payment = Payment::create([
-                'driver_id' => $request->driver_id,
-                'passenger_name' => $request->passenger_name,
-                'total_amount' => $request->total_amount,
-                'tip_amount' => $request->tip_amount ?? 0,
-                'payment_method' => $request->payment_method,
-                'status' => 'completed',
-            ]);
+        $payment = Payment::create([
+            'driver_id' => $request->driver_id,
+            'passenger_id' => auth()->id(),
+            'passenger_name' => $request->passenger_name,
+            'total_amount' => $request->total_amount,
+            'tip_amount' => $request->tip_amount ?? 0,
+            'payment_method' => $request->payment_method,
+            'status' => 'completed',
+        ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Payment data saved successfully',
-                'data' => $payment
-            ], 201);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment data saved successfully',
+            'data' => $payment
+        ], 201);
+    }
 
     private function getDummyPromos()
     {
