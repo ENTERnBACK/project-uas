@@ -16,6 +16,7 @@ use App\Http\Controllers\DriverTripController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('home');
@@ -109,7 +110,8 @@ Route::post('/service-types/select', [App\Http\Controllers\ServiceTypeController
     Route::resource('support-tickets', SupportTicketController::class);
     Route::resource('driver-locations', DriverLocationController::class);
     Route::resource('favorite-locations', FavoriteLocationController::class);
-   Route::resource('payment-methods', PaymentMethodController::class)->names('payment_method');
-     Route::resource('chat-messages', ChatMessageController::class);
+    Route::resource('payment-methods', PaymentMethodController::class)->names('payment_method');
+    Route::resource('chat-messages', ChatMessageController::class)->except(['show', 'edit', 'update', 'create', 'store']);
+    Route::resource('notifications', NotificationController::class)->except(['show', 'edit', 'update']);
      
 });
