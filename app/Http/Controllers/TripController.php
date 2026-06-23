@@ -52,7 +52,7 @@ class TripController extends Controller
     public function show(Trip $trip)
     {
         $currentTrip = $trip;
-        return view('trips.show', compact('currentTrip'));
+        return view('user_ontrip', compact('currentTrip'));
     }
 
     /**
