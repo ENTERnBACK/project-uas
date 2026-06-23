@@ -47,27 +47,28 @@ class PaymentMethodController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
-{
-    if ($request->has('action') && $request->action === 'select') {
-        if ($request->payment_option === 'bank') {
-            return redirect()->route('payment_method.create', ['type' => 'bank']);
-        } elseif ($request->payment_option === 'linkjago') {
-            return redirect()->route('payment_method.create', ['type' => 'linkjago']);
+  public function store(Request $request)
+    {
+        if ($request->has('action') && $request->action === 'select') {
+        
+            session(['selected_payment_method' => $request->payment_option]);
+            $tripId = $request->input('trip_id') ?? 1;
+            return redirect()->route('payments.user', ['tripId' => $tripId]);
         }
-        return redirect()->back();
-    }
-    
-    PaymentMethods::create([
-        'user_id' => auth()->id(),
-        'method'  => $request->method, 
-        'label'   => $request->bank_name ?? $request->account_name,
-        'status'  => 'active'
-       
-    ]);
+        
+        
+        PaymentMethods::create([
+            'user_id' => auth()->id(),
+            'method'  => $request->method, 
+            'label'   => $request->bank_name ?? $request->account_name,
+            'status'  => 'active'
+        ]);
 
-    return redirect()->route('payment_method.index');
-}
+        return redirect()->route('payment_method.index');
+    }
+
+
+
 
     /**
      * Display the specified resource.
