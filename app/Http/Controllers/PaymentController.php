@@ -99,8 +99,7 @@ class PaymentController extends Controller
 
         session()->forget(['discount_amount', 'applied_promo', 'selected_service', 'base_price', 'current_trip_id']);
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Payment successful! Your payment has been recorded.');
+        return redirect()->route('driver-locations.index')->with('success', 'Payment successful! Silakan Pilih Driver');
     }
 
     public function store(Request $request)
