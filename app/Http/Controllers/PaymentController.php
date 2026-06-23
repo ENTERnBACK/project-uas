@@ -120,13 +120,12 @@ class PaymentController extends Controller
         ]);
 
         $payment = Payment::create([
-            'driver_id' => $request->driver_id,
+            'trip_id' => $request->trip_id,
             'passenger_id' => auth()->id(),
-            'passenger_name' => $request->passenger_name,
-            'total_amount' => $request->total_amount,
-            'tip_amount' => $request->tip_amount ?? 0,
-            'payment_method' => $request->payment_method,
-            'status' => 'completed',
+            'passenger_name' => $trip->passenger_name ?? auth()->user()->name ?? 'Guest',
+            'total_amount' => $total,
+            'tip_amount' => $tip,
+            'status' => 'pending',
         ]);
 
         return response()->json([
@@ -209,9 +208,7 @@ class PaymentController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        $totalEarnings = Payment::where('passenger_id', auth()->id())
-            ->where('status', 'completed')
-            ->sum('total_amount');
+        $totalEarnings = Payment::where('passenger_id', auth()->id())->sum('total_amount');
 
         return view('payments.index', compact('payments', 'totalEarnings'));
     }
