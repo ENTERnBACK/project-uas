@@ -4,31 +4,55 @@
     <title>Pembayaran</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
-        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
-        .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { margin-top: 0; }
-        .trip-info { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .trip-info p { margin: 5px 0; }
-        .service-option { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin: 5px 0; cursor: pointer; }
-        .service-option:hover { background: #f0f0f0; }
-        .service-option .price { margin-left: auto; font-weight: bold; color: #4CAF50; }
-        .promo-section { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; align-items: center; }
-        .promo-section input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; min-width: 150px; }
-        .promo-section .btn-pakai { background: #2196F3; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-        .promo-section .btn-lihat { background: #FF9800; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; display: inline-block; }
-        .payment-method-group { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
-        .payment-option { padding: 10px 15px; border: 1px solid #ddd; border-radius: 5px; background: white; cursor: pointer; }
-        .payment-option.active { background: #4CAF50; color: white; border-color: #4CAF50; }
-        .tip-section input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; width: 100%; box-sizing: border-box; }
-        .total-section { text-align: center; padding: 15px; background: #e8f5e9; border-radius: 8px; margin: 15px 0; }
-        .total-section .amount { font-size: 24px; font-weight: bold; color: #2e7d32; }
-        .btn-bayar { width: 100%; padding: 15px; background: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; }
-        .btn-bayar:hover { background: #45a049; }
-        .promo-success { background: #e8f5e9; padding: 12px 15px; border-radius: 5px; color: #2e7d32; margin: 10px 0; border-left: 4px solid #4CAF50; }
-        .promo-error { background: #ffebee; padding: 12px 15px; border-radius: 5px; color: #c62828; margin: 10px 0; border-left: 4px solid #f44336; }
-        .back-link { display: block; margin-top: 15px; color: #666; text-decoration: none; }
-        .batal-promo { color: #c62828; margin-left: 10px; font-weight: bold; text-decoration: underline; cursor: pointer; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e3f2fd; padding: 20px; }
+        .container { max-width: 520px; margin: 0 auto; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(25, 118, 210, 0.15); }
+        
+        h1 { font-size: 24px; margin-bottom: 20px; color: #0d47a1; }
+        .trip-info { background: #e3f2fd; padding: 16px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #1976D2; }
+        .trip-info p { margin: 6px 0; font-size: 14px; color: #333; }
+        .trip-info strong { color: #0d47a1; }
+        .section-title { font-size: 15px; font-weight: 600; color: #0d47a1; margin: 18px 0 10px 0; }
+        .service-box { background: #e3f2fd; padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .service-box .service-name { font-weight: 600; color: #0d47a1; text-transform: capitalize; }
+        .service-box .service-price { font-weight: 700; color: #1976D2; }
+        
+        .promo-section { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
+        .promo-section input { flex: 1; padding: 11px 14px; border: 2px solid #bbdefb; border-radius: 10px; font-size: 14px; min-width: 150px; }
+        .promo-section input:focus { outline: none; border-color: #1976D2; }
+        
+        .btn-pakai { background: #0d47a1; color: white; border: none; padding: 11px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        .btn-pakai:hover { background: #062a6e; }
+        .btn-lihat { background: #F57C00; color: white; border: none; padding: 11px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; text-decoration: none; display: inline-block; }
+        .btn-lihat:hover { background: #0d47a1; }
+        
+        .promo-success { background: #e3f2fd; padding: 12px 16px; border-radius: 10px; color: #0d47a1; margin: 10px 0; border-left: 4px solid #1976D2; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .promo-error { background: #ffebee; padding: 12px 16px; border-radius: 10px; color: #c62828; margin: 10px 0; border-left: 4px solid #f44336; font-size: 14px; }
+        .batal-promo { color: #c62828; font-weight: 600; cursor: pointer; background: none; border: none; font-size: 13px; }
         .batal-promo:hover { color: #b71c1c; }
+        
+        .payment-method-box { background: #e3f2fd; padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .payment-method-box .method-label { font-weight: 500; color: #0d47a1; }
+        .payment-method-box .method-status { font-size: 13px; color: #1976D2; }
+        
+        .tip-section input { padding: 11px 14px; border: 2px solid #bbdefb; border-radius: 10px; width: 100%; box-sizing: border-box; font-size: 14px; }
+        .tip-section input:focus { outline: none; border-color: #1976D2; }
+        .divider { border: none; border-top: 2px dashed #bbdefb; margin: 16px 0; }
+        
+        .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 15px; color: #333; }
+        .row.total { font-weight: 700; font-size: 18px; color: #0d47a1; padding-top: 12px; border-top: 2px solid #bbdefb; margin-top: 6px; }
+        .total .amount { color: #1976D2; }
+        
+        .btn-bayar { width: 100%; padding: 16px; background: #4CAF50; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 18px; }
+        .btn-bayar:hover { background: #388E3C; }
+        .back-link { display: block; margin-top: 16px; color: #1976D2; text-decoration: none; text-align: center; font-size: 14px; }
+        .back-link:hover { color: #0d47a1; }
+        #promo_message { min-height: 50px; }
+        
+        .flash-message { padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 14px; }
+        .flash-success { background: #e3f2fd; color: #0d47a1; border-left: 4px solid #1976D2; }
+        .flash-error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
+        @media (max-width: 480px) { .container { padding: 16px; } .promo-section input { min-width: 120px; } }
     </style>
 </head>
 <body>
@@ -36,85 +60,61 @@
         <h1>💳 Pembayaran</h1>
 
         @if(session('success'))
-            <div class="promo-success">✅ {{ session('success') }}</div>
+            <div class="flash-message flash-success">✅ {{ session('success') }}</div>
         @endif
         @if(session('error'))
-            <div class="promo-error">❌ {{ session('error') }}</div>
+            <div class="flash-message flash-error">❌ {{ session('error') }}</div>
         @endif
 
         <div class="trip-info">
             <p><strong>📍 Pick Up:</strong> {{ $trip->pickup_point ?? 'Belum ada' }}</p>
-            <p><strong>📍 Destination:</strong> {{ $trip->dropoff_point ?? 'Belum ada' }}</p>
+            <p><strong>📍 Drop Off:</strong> {{ $trip->dropoff_point ?? 'Belum ada' }}</p>
             <p><strong>👤 Penumpang:</strong> {{ $passengerName ?? 'Guest' }}</p>
         </div>
 
-        <form method="POST" action="{{ route('payments.process') }}">
+        <form method="POST" action="{{ route('payments.process') }}" id="paymentForm">
             @csrf
             <input type="hidden" name="trip_id" value="{{ $trip->id }}">
+            <input type="hidden" name="payment_method" id="payment_method" value="cash">
 
-           <h3> Layanan Dipilih</h3>
-            <div class="service-option">
-                <strong>{{ ucfirst($selectedService) }}</strong>
+            <div class="section-title">Layanan Dipilih</div>
+            <div class="service-box">
+                <span class="service-name">{{ ucfirst($selectedService) }}</span>
+                <span class="service-price">Rp {{ number_format($basePrice, 0, ',', '.') }}</span>
             </div>
 
-            <h3> Kode Promo</h3>
+            <div class="section-title">Kode Promo</div>
             <div class="promo-section">
-                <input type="text" id="promo_code" placeholder="Masukkan kode promo">
+                <input type="text" id="promo_code" placeholder="Masukkan kode promo" onkeypress="if(event.key==='Enter'){event.preventDefault();applyPromo();}">
                 <button type="button" class="btn-pakai" onclick="applyPromo()">Pakai</button>
-                <button type="button" class="btn-lihat" onclick="goToPromo()">Lihat Promo </button>
+                <button type="button" class="btn-lihat" onclick="goToPromo()">Lihat Promo</button>
             </div>
-
             <div id="promo_message">
                 @if($appliedPromo && $discountAmount > 0)
                     <div class="promo-success">
-                        ✅ Promo <strong>{{ $appliedPromo }}</strong> sedang dipakai (Diskon Rp {{ number_format($discountAmount, 0, ',', '.') }})
-                        <a href="{{ route('promos.remove') }}" class="batal-promo">[Batal]</a>
+                        <span>✅ Promo <strong>{{ $appliedPromo }}</strong> (Diskon Rp {{ number_format($discountAmount, 0, ',', '.') }})</span>
+                        <button type="button" class="batal-promo" onclick="removePromo()">Batal</button>
                     </div>
                 @endif
             </div>
 
-            <h3>Metode Pembayaran</h3>
-
-            <div class="service-option">
-                <span>
-                    {{ $paymentMethod->label ?? 'Cash' }}
-                </span>
-
-                <span class="price">
-                    Aktif
-                </span>
+            <div class="section-title">💳 Metode Pembayaran</div>
+            <div class="payment-method-box">
+                <span class="method-label">Cash (Tunai)</span>
+                <span class="method-status">✅ Aktif</span>
             </div>
 
-            <input
-                type="hidden", name="payment_method", value="{{ $paymentMethod->method ?? 'cash' }}" >
-
-            <h3>💵 Tip (opsional)</h3>
+            <div class="section-title">💵 Tip (opsional)</div>
             <div class="tip-section">
-                <input type="number" name="tip_amount" id="tip_amount" placeholder="Masukkan tip" min="0" oninput="updateTotal()">
+                <input type="number" name="tip_amount" id="tip_amount" placeholder="Masukkan nominal tip" min="0" step="1000" oninput="updateTotal()">
             </div>
 
-            <div class="trip-info">
-                <p><strong>Harga Layanan:</strong> Rp {{ number_format($basePrice,0,',','.') }}</p>
+            <hr class="divider">
 
-                <p>
-                    <strong>Potongan Promo:</strong>
-                    <span id="promo_discount">Rp {{ number_format($discountAmount,0,',','.') }}</span>
-                </p>
-
-                <p>
-                    <strong>Tip:</strong>
-                    <span id="tip_display">Rp 0</span>
-                </p>
-
-                <hr>
-
-                <p>
-                    <strong>Total:</strong>
-                    <span id="total_display">
-                        Rp {{ number_format($basePrice - $discountAmount,0,',','.') }}
-                    </span>
-                </p>
-            </div>
+            <div class="row"><span>Harga Layanan</span><span>Rp {{ number_format($basePrice, 0, ',', '.') }}</span></div>
+            <div class="row"><span>Potongan Promo</span><span id="promo_discount">Rp {{ number_format($discountAmount, 0, ',', '.') }}</span></div>
+            <div class="row"><span>Tip</span><span id="tip_display">Rp 0</span></div>
+            <div class="row total"><span>Total</span><span class="amount" id="total_display">Rp {{ number_format($basePrice - $discountAmount, 0, ',', '.') }}</span></div>
 
             <button type="submit" class="btn-bayar">Bayar Sekarang</button>
         </form>
@@ -123,8 +123,8 @@
     </div>
 
     <script>
+        let basePrice = {{ $basePrice }};
         let discountAmount = {{ $discountAmount ?? 0 }};
-        let appliedPromo = '{{ $appliedPromo ?? '' }}';
 
         function getTip() {
             return parseInt(document.getElementById('tip_amount').value) || 0;
@@ -132,19 +132,10 @@
 
         function updateTotal() {
             let tip = getTip();
-            let total = {{ $basePrice }} + tip - discountAmount;
+            let total = basePrice + tip - discountAmount;
 
-            document.getElementById('tip_display').innerText =
-                'Rp ' + tip.toLocaleString('id-ID');
-
-            document.getElementById('total_display').innerText =
-                'Rp ' + total.toLocaleString('id-ID');
-        }
-
-        function selectPayment(method) {
-            document.querySelectorAll('.payment-option').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.payment-option[data-method="${method}"]`)?.classList.add('active');
-            document.getElementById('payment_method').value = method;
+            document.getElementById('tip_display').innerText = 'Rp ' + tip.toLocaleString('id-ID');
+            document.getElementById('total_display').innerText = 'Rp ' + total.toLocaleString('id-ID');
         }
 
         function applyPromo() {
@@ -152,7 +143,7 @@
             const msg = document.getElementById('promo_message');
 
             if (!code) {
-                msg.innerHTML = '<div class="promo-error">❌ Masukkan kode promo!</div>';
+                msg.innerHTML = '<div class="promo-error">❌ Masukkan kode promo terlebih dahulu!</div>';
                 return;
             }
 
@@ -162,28 +153,55 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ promo_code: code })
+                body: JSON.stringify({ 
+                    promo_code: code,
+                    base_price: basePrice 
+                })
             })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    discountAmount = data.discount;
-                    appliedPromo = code;
+                    discountAmount = data.discount_amount;
 
-                    document.getElementById('promo_discount').innerText =
-                        'Rp ' + data.discount.toLocaleString('id-ID');
+                    document.getElementById('promo_discount').innerText = 'Rp ' + data.discount_amount.toLocaleString('id-ID');
+                    document.getElementById('promo_code').value = '';
 
-                    msg.innerHTML =
-                        '<div class="promo-success">✅ ' +
-                        data.message +
-                        ' <a href="/promos/remove" class="batal-promo">[Batal]</a></div>';
+                    msg.innerHTML = `<div class="promo-success">
+                        <span>✅ ${data.message} (Diskon Rp ${data.discount_amount.toLocaleString('id-ID')})</span>
+                        <button type="button" class="batal-promo" onclick="removePromo()">[Batal]</button>
+                    </div>`;
+
+                    updateTotal();
                 } else {
                     msg.innerHTML = '<div class="promo-error">❌ ' + data.message + '</div>';
                 }
-                updateTotal();
             })
-            .catch(() => {
+            .catch(error => {
+                console.error('Error:', error);
                 msg.innerHTML = '<div class="promo-error">❌ Terjadi kesalahan</div>';
+            });
+        }
+
+        function removePromo() {
+            fetch('/promos/remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    discountAmount = 0;
+                    document.getElementById('promo_discount').innerText = 'Rp 0';
+                    document.getElementById('promo_message').innerHTML = '';
+                    updateTotal();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Gagal menghapus promo');
             });
         }
 
