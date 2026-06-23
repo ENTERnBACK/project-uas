@@ -40,7 +40,6 @@ class ChatMessageController extends Controller
 
     public function storeMessage(Request $request, Trip $trip)
     {
-        // Hanya perlu validasi teks pesan, sisanya otomatis oleh sistem
         $request->validate([
             'message' => 'required|string',
         ]);
@@ -48,25 +47,32 @@ class ChatMessageController extends Controller
         $loggedInUser = Auth::user();
         $current_role = ($trip->user_id === $loggedInUser->id) ? 'user' : 'driver';
 
-        // 1. Simpan pesan ke database secara aman
         $chat = $trip->chatMessages()->create([
             'sender_type' => $current_role,
             'sender_id'   => $loggedInUser->id,
             'message'     => $request->message,
         ]);
 
-        // 2. Kirim Notifikasi ke lawan bicara
         if ($current_role === 'driver') {
-            // Jika Driver yang mengirim, buatkan notifikasi untuk Penumpang
-            Notification::push(User::class, $trip->user_id, 'Pesan Baru dari Driver 💬', $chat->message);
+            Notification::create([
+                'notifiable_type' => User::class,
+                'notifiable_id'   => $trip->user_id,
+                'title'           => 'Pesan Baru dari Driver 💬',
+                'message'         => $chat->message,
+                'is_read'         => false,
+            ]);
         } else {
-            // Jika Penumpang yang mengirim, buatkan notifikasi untuk Driver (jika driver sudah ada)
             if ($trip->driver_id) {
-                Notification::push(Driver::class, $trip->driver_id, 'Pesan Baru dari Penumpang 💬', $chat->message);
+                Notification::create([
+                    'notifiable_type' => Driver::class,
+                    'notifiable_id'   => $trip->driver_id,
+                    'title'           => 'Pesan Baru dari Penumpang 💬',
+                    'message'         => $chat->message,
+                    'is_read'         => false,
+                ]);
             }
         }
 
-        // Kembali secara otomatis ke halaman chatroom
         return back();
     }
 
