@@ -50,6 +50,9 @@ Route::middleware('auth')->group(function () {
         $averageRating = number_format((float)$avg, 1, '.', '');
         return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
     })->name('dashboard.driver');
+
+    Route::patch('/driver-trips/{trip}/complete', [
+        App\Http\Controllers\DriverTripController::class, 'completeTrip'])->name('driver-trips.complete');
     
     Route::get('/profile', [ProfileController::class, 'index'])->name('user_profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user_profile.edit');

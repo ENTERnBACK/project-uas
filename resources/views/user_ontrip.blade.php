@@ -74,9 +74,11 @@
             fetch("{{ route('trips.check-status') }}")
                 .then(response => response.json())
                 .then(data => {
-                    // Kalau terdeteksi selesai, langsung lempar ke halaman create review bawa parameter ID trip
-                    if (data.status === 'completed' || data.status === 'finished' || data.status === 'none') {
+                    if (data.status === 'completed' || data.status === 'finished') {
                         window.location.href = "{{ route('reviews.create') }}?trip_id=" + data.last_trip_id;
+                    }
+                
+                    if (data.status === 'on_trip' && !window.location.href.includes('on_trip')) {
                     }
                 })
                 .catch(error => console.error('Error:', error));
