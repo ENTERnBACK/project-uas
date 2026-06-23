@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [UserTripController::class, 'index'])->name('dashboard');
     Route::get('/trips/status/check', [UserTripController::class, 'show'])->name('trips.check-status');
+    Route::post('/trips/select-driver', [App\Http\Controllers\TripController::class, 'selectDriver'])->name('trips.selectDriver');
 
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
