@@ -34,8 +34,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧾 INVOICE</h1>
-            <p>#{{ $payment->id }} • {{ $payment->created_at->format('d M Y, H:i') }}</p>
+            <h1>🧾 Invoice Pembayaran</h1>
+            <p>#PAY-{{ str_pad($payment->id, 4, '0', STR_PAD_LEFT) }}</p>
         </div>
 
         <div class="info">
@@ -53,8 +53,8 @@
 
         <div class="info" style="background: #e3f2fd;">
             <div class="info-item">
-                <strong>Metode Pembayaran</strong><br>
-                {{ ucfirst($payment->payment_method) }}
+                <strong>ID Transaksi</strong><br>
+                #PAY-{{ str_pad($payment->id, 4, '0', STR_PAD_LEFT) }}
             </div>
             <div class="info-item" style="text-align: right;">
                 <strong>Tanggal</strong><br>
@@ -65,21 +65,14 @@
         <hr class="divider">
 
         <div class="row">
-            <span>Base Price</span>
-            <span>Rp {{ number_format($payment->base_price ?? $payment->total_amount, 0, ',', '.') }}</span>
+            <span>Total Pembayaran</span>
+            <span>Rp {{ number_format($payment->total_amount, 0, ',', '.') }}</span>
         </div>
 
-        @if(($payment->tip_amount ?? 0) > 0)
+        @if($payment->tip_amount > 0)
         <div class="row">
             <span>Tip</span>
-            <span>+ Rp {{ number_format($payment->tip_amount, 0, ',', '.') }}</span>
-        </div>
-        @endif
-
-        @if(($payment->discount_amount ?? 0) > 0)
-        <div class="row" style="color: #c62828;">
-            <span>Diskon</span>
-            <span>- Rp {{ number_format($payment->discount_amount, 0, ',', '.') }}</span>
+            <span>Rp {{ number_format($payment->tip_amount, 0, ',', '.') }}</span>
         </div>
         @endif
 
