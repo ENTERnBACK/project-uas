@@ -50,10 +50,32 @@
 
     <div class="card-body p-4">
 
-        <form method="POST" action="{{ route('user_profile.update') }}">
+        <form method="POST"
+            action="{{ route('user_profile.update') }}"
+            enctype="multipart/form-data">
 
             @csrf
             @method('PUT')
+
+            <div class="text-center mb-4">
+
+            @if($user->photo)
+
+                <img src="{{ asset('storage/profile/'.$user->photo) }}"
+                    width="140"
+                    height="140"
+                    style="border-radius:50%; object-fit:cover; border:4px solid #0d6efd;">
+
+            @else
+
+                <img src="https://via.placeholder.com/140"
+                    width="140"
+                    height="140"
+                    style="border-radius:50%; border:4px solid #0d6efd;">
+
+            @endif
+
+            </div>
 
             <div class="mb-3">
 
@@ -78,6 +100,22 @@
                     class="form-control"
                     value="{{ old('email',$user->email) }}"
                     required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">Foto Profil</label>
+
+                <input
+                    type="file"
+                    name="photo"
+                    class="form-control"
+                    accept="image/*">
+
+                <small class="text-muted">
+                    Format: JPG, JPEG, PNG (maksimal 2 MB)
+                </small>
 
             </div>
 

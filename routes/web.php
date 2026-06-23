@@ -42,7 +42,6 @@ Route::middleware('auth')->group(function () {
         $trips = \App\Models\Trip::latest()->get();
         return view('dashboard', compact('trips'));
     })->name('dashboard');
-   
 
 
     Route::get('/dashboard-driver', function () {
@@ -59,8 +58,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/driver-locations/trip/{tripId}', [DriverLocationController::class, 'showByTrip'])
         ->name('driver-locations.show-by-trip');
-
-    
 
     Route::put('/driver-trips/{id}', [DriverTripController::class, 'update'])->name('driver-trips.update');
     Route::post('/driver-trips', [DriverTripController::class, 'store'])->name('driver-trips.store');
@@ -79,7 +76,6 @@ Route::post('/payments/process', [PaymentController::class, 'processPayment'])
 
         return redirect()->back();
         })->name('promos.remove');
-
 
     Route::post('/payments/set-service', [PaymentController::class, 'setService'])->name('payments.set-service');
     Route::post('/promos/apply', [PromoController::class, 'applyPromo'])->name('promos.apply');
