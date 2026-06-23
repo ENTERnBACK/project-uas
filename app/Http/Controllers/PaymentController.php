@@ -14,11 +14,11 @@ class PaymentController extends Controller
         
         session(['current_trip_id' => $tripId]);
         
-        $selectedService = request()->service ?? session('selected_service', 'standar');
+        $selectedService = session('selected_service_type', 'standar');
         $basePrice = ['hemat' => 7000, 'standar' => 10000, 'comfort' => 15000][$selectedService];
         
         session([
-            'selected_service' => $selectedService,
+            'selected_service_type' => $selectedService,
             'base_price' => $basePrice
         ]);
 
@@ -66,7 +66,7 @@ class PaymentController extends Controller
             'comfort' => 15000
         ];
 
-        $selectedService = session('selected_service', 'standar');
+        $selectedService = session('selected_service_type', 'standar');
         $basePrice = $basePrices[$selectedService];
         $tip = $request->tip_amount ?? 0;
         $discount = session('discount_amount', 0);
@@ -93,11 +93,14 @@ class PaymentController extends Controller
             'passenger_name' => $trip->passenger_name ?? auth()->user()->name ?? 'Guest',
             'total_amount' => $total,
             'tip_amount' => $tip,
+             'base_price' => $basePrice, 
+            'discount_amount' => $discount, 
+            'promo_code' => session('applied_promo'), 
             'payment_method' => $request->payment_method,
             'status' => 'pending',
         ]);
 
-        session()->forget(['discount_amount', 'applied_promo', 'selected_service', 'base_price', 'current_trip_id']);
+        session()->forget(['discount_amount', 'applied_promo', 'selected_service_type', 'base_price', 'current_trip_id']);
 
         return redirect()->route('driver-locations.index')->with('success', 'Payment successful! Silakan Pilih Driver');
     }
