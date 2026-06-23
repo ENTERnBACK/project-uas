@@ -14,4 +14,26 @@ class UserTripController extends Controller
 
         return view('dashboard', compact('trips', 'currentTrip'));
     }
+    
+    public function show()
+    {
+        $user = auth()->user();
+        $currentTrip = $user->trips()
+            ->whereIn('status', ['accepted', 'ontrip'])
+            ->latest()
+            ->first();
+
+        if (!$currentTrip) {
+            $lastTrip = $user->trips()->latest()->first();
+
+            return response()->json([
+                'status' => 'completed',
+                'last_trip_id' => $lastTrip ? $lastTrip->id : null
+            ]);
+        }
+        return response()->json([
+            'status' => $currentTrip->status,
+            'last_trip_id' => $currentTrip->id
+        ]);
+    }
 }
