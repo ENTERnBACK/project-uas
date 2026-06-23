@@ -52,31 +52,18 @@
             @csrf
             <input type="hidden" name="trip_id" value="{{ $trip->id }}">
 
-            <h3>💰 Pilih Layanan</h3>
-            <div class="service-option" onclick="document.getElementById('service_hemat').click();">
-                <input type="radio" name="service_type" id="service_hemat" value="hemat" {{ $selectedService == 'hemat' ? 'checked' : '' }}>
-                <label>Hemat</label>
-                <span class="price">Rp 7.000</span>
-            </div>
-            <div class="service-option" onclick="document.getElementById('service_standar').click();">
-                <input type="radio" name="service_type" id="service_standar" value="standar" {{ $selectedService == 'standar' ? 'checked' : '' }}>
-                <label>Standar</label>
-                <span class="price">Rp 10.000</span>
-            </div>
-            <div class="service-option" onclick="document.getElementById('service_comfort').click();">
-                <input type="radio" name="service_type" id="service_comfort" value="comfort" {{ $selectedService == 'comfort' ? 'checked' : '' }}>
-                <label>Comfort</label>
-                <span class="price">Rp 15.000</span>
+           <h3> Layanan Dipilih</h3>
+            <div class="service-option">
+                <strong>{{ ucfirst($selectedService) }}</strong>
             </div>
 
-            <h3>🎫 Kode Promo</h3>
+            <h3> Kode Promo</h3>
             <div class="promo-section">
                 <input type="text" id="promo_code" placeholder="Masukkan kode promo">
                 <button type="button" class="btn-pakai" onclick="applyPromo()">Pakai</button>
                 <button type="button" class="btn-lihat" onclick="goToPromo()">Lihat Promo </button>
             </div>
 
-            <!-- PROMO MESSAGE + TOMBOL BATAL -->
             <div id="promo_message">
                 @if($appliedPromo && $discountAmount > 0)
                     <div class="promo-success">
@@ -86,31 +73,47 @@
                 @endif
             </div>
 
-            <h3>💳 Metode Pembayaran</h3>
-            <div class="payment-method-group">
-                @foreach($paymentMethods as $pm)
-                    <button type="button" class="payment-option {{ $loop->first ? 'active' : '' }}"
-                            data-method="{{ $pm->method }}"
-                            onclick="selectPayment('{{ $pm->method }}')">
-                        @if($pm->method == 'cash') 💵 Cash
-                        @elseif($pm->method == 'qris') 📱 QRIS
-                        @elseif($pm->method == 'bca') 🏦 BCA VA
-                        @elseif($pm->method == 'card') 💳 Card
-                        @else {{ ucfirst($pm->method) }}
-                        @endif
-                    </button>
-                @endforeach
+            <h3>Metode Pembayaran</h3>
+
+            <div class="service-option">
+                <span>
+                    {{ $paymentMethod->label ?? 'Cash' }}
+                </span>
+
+                <span class="price">
+                    Aktif
+                </span>
             </div>
-            <input type="hidden" name="payment_method" id="payment_method" value="{{ $paymentMethods->first()->method ?? 'cash' }}">
+
+            <input
+                type="hidden", name="payment_method", value="{{ $paymentMethod->method ?? 'cash' }}" >
 
             <h3>💵 Tip (opsional)</h3>
             <div class="tip-section">
                 <input type="number" name="tip_amount" id="tip_amount" placeholder="Masukkan tip" min="0" oninput="updateTotal()">
             </div>
 
-            <div class="total-section">
-                <p style="margin: 0;">Total</p>
-                <div class="amount" id="total_display">Rp 10.000</div>
+            <div class="trip-info">
+                <p><strong>Harga Layanan:</strong> Rp {{ number_format($basePrice,0,',','.') }}</p>
+
+                <p>
+                    <strong>Potongan Promo:</strong>
+                    <span id="promo_discount">Rp {{ number_format($discountAmount,0,',','.') }}</span>
+                </p>
+
+                <p>
+                    <strong>Tip:</strong>
+                    <span id="tip_display">Rp 0</span>
+                </p>
+
+                <hr>
+
+                <p>
+                    <strong>Total:</strong>
+                    <span id="total_display">
+                        Rp {{ number_format($basePrice - $discountAmount,0,',','.') }}
+                    </span>
+                </p>
             </div>
 
             <button type="submit" class="btn-bayar">Bayar Sekarang</button>
@@ -123,20 +126,19 @@
         let discountAmount = {{ $discountAmount ?? 0 }};
         let appliedPromo = '{{ $appliedPromo ?? '' }}';
 
-        const servicePrices = { hemat: 7000, standar: 10000, comfort: 15000 };
-
-        function getBasePrice() {
-            const selected = document.querySelector('input[name="service_type"]:checked');
-            return selected ? servicePrices[selected.value] : 10000;
-        }
-
         function getTip() {
             return parseInt(document.getElementById('tip_amount').value) || 0;
         }
 
         function updateTotal() {
-            let total = getBasePrice() + getTip() - discountAmount;
-            document.getElementById('total_display').innerText = 'Rp ' + total.toLocaleString('id-ID');
+            let tip = getTip();
+            let total = {{ $basePrice }} + tip - discountAmount;
+
+            document.getElementById('tip_display').innerText =
+                'Rp ' + tip.toLocaleString('id-ID');
+
+            document.getElementById('total_display').innerText =
+                'Rp ' + total.toLocaleString('id-ID');
         }
 
         function selectPayment(method) {
@@ -167,7 +169,14 @@
                 if (data.success) {
                     discountAmount = data.discount;
                     appliedPromo = code;
-                    msg.innerHTML = '<div class="promo-success">✅ ' + data.message + '</div>';
+
+                    document.getElementById('promo_discount').innerText =
+                        'Rp ' + data.discount.toLocaleString('id-ID');
+
+                    msg.innerHTML =
+                        '<div class="promo-success">✅ ' +
+                        data.message +
+                        ' <a href="/promos/remove" class="batal-promo">[Batal]</a></div>';
                 } else {
                     msg.innerHTML = '<div class="promo-error">❌ ' + data.message + '</div>';
                 }
@@ -179,64 +188,12 @@
         }
 
         function goToPromo() {
-
-            const selected =
-                document.querySelector('input[name="service_type"]:checked');
-
-            fetch('/payments/set-service', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    service_type: selected.value
-                })
-            })
-            .then(() => {
-                window.location.href = '/promos/user';
-            });
+            window.location.href = '/promos/user';
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            
-            if (appliedPromo && discountAmount > 0) {
-                const msg = document.getElementById('promo_message');
-                
-                msg.innerHTML =
-                '<div class="promo-success">' +
-                '✅ Promo <strong>' + appliedPromo +
-                '</strong> sedang dipakai (Diskon Rp ' +
-                discountAmount.toLocaleString('id-ID') +
-                ') ' +
-                '<a href="/promos/remove" class="batal-promo">[Batal]</a>' +
-                '</div>';
-            }
-
             updateTotal();
-
             document.getElementById('tip_amount').addEventListener('input', updateTotal);
-
-            document.querySelectorAll('input[name="service_type"]').forEach(function(radio) {
-                radio.addEventListener('change', function() {
-                    
-                    fetch('/payments/set-service', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            service_type: this.value
-                        })
-                    })
-                    .then(() => {
-                        checkPromoValidity();
-                        updateTotal();
-                    });
-
-                });
-            });
         });
     </script>
 </body>

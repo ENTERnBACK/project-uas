@@ -24,7 +24,8 @@ class PaymentController extends Controller
 
     $trip = Trip::findOrFail($tripId);
     $passengerName = auth()->user()->name ?? 'Guest';
-    $paymentMethods = PaymentMethods::all();
+    
+    $paymentMethod = PaymentMethods::where('user_id', auth()->id())->where('status', 'active')->first();
 
     $selectedService = session('selected_service', 'standar');
     $basePrice = ['hemat' => 7000, 'standar' => 10000, 'comfort' => 15000][$selectedService];
@@ -52,14 +53,13 @@ class PaymentController extends Controller
         }
     }
 
-    return view('payments.user', compact('trip', 'paymentMethods', 'passengerName', 'discountAmount', 'appliedPromo', 'selectedService'));
+    return view('payments.user', compact('trip', 'paymentMethod', 'passengerName', 'discountAmount', 'appliedPromo', 'selectedService', 'basePrice'));
 }
 
     public function processPayment(Request $request)
     {
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
-            'service_type' => 'required|in:hemat,standar,comfort',
             'payment_method' => 'required|string',
             'tip_amount' => 'nullable|numeric|min:0',
         ]);
@@ -72,7 +72,9 @@ class PaymentController extends Controller
             'comfort' => 15000
         ];
 
-        $basePrice = $basePrices[$request->service_type];
+        $selectedService = session('selected_service', 'standar');
+
+        $basePrice = $basePrices[$selectedService];
         $tip = $request->tip_amount ?? 0;
         
         $discount = session('discount_amount', 0);
@@ -113,24 +115,6 @@ class PaymentController extends Controller
         return redirect()->route('reviews.create', ['paymentId' => $payment->id])
             ->with('success', 'Payment successful! Please leave a review.');
     }
-
-    public function setService(Request $request)
-{
-    $basePrices = [
-        'hemat' => 7000,
-        'standar' => 10000,
-        'comfort' => 15000
-    ];
-
-    session([
-        'selected_service' => $request->service_type,
-        'base_price' => $basePrices[$request->service_type]
-    ]);
-
-    return response()->json([
-        'success' => true
-    ]);
-}
 
     private function getDummyPromos()
 {
