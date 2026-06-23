@@ -89,7 +89,6 @@
                     <select name="jenis_kendaraan" required
                             class="w-full border border-blue-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
                         <option value="GoRide" {{ old('jenis_kendaraan', $driver->jenis_kendaraan) == 'GoRide' ? 'selected' : '' }}>🏍️ GoRide (Sepeda Motor)</option>
-                        <option value="GoCar" {{ old('jenis_kendaraan', $driver->jenis_kendaraan) == 'GoCar' ? 'selected' : '' }}>🚗 GoCar (Mobil Penumpang)</option>
                     </select>
                 </div>
                 <div>
@@ -98,8 +97,6 @@
                            class="w-full border border-blue-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition uppercase">
                 </div>
             </div>
-
-            <input type="hidden" name="status" value="{{ $driver->status }}">
 
             <div class="flex justify-end gap-3 pt-4 border-t border-blue-100">
                 <a href="{{ route('drivers.show', $driver->id) }}" class="bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg font-medium hover:bg-gray-300 transition text-sm">

@@ -8,21 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteLocationController extends Controller
 {
-   
+
     public function index()
     {
-        $locations = FavoriteLocation::where('user_id', Auth::id())->latest()->get();
-        return view('FavoriteLocations.index', compact('locations'));
+
+        $favoriteLocations = FavoriteLocation::where('user_id', Auth::id())->latest()->get();
+        return view('FavoriteLocations.index', compact('favoriteLocations'));
     }
 
-   
+
     public function create()
     {
-        $locations = FavoriteLocation::where('user_id', Auth::id())->latest()->get();
-        return view('FavoriteLocations.create', compact('locations'));
+        return view('FavoriteLocations.create');
     }
-
-  
     public function store(Request $request)
     {
         $request->validate([
@@ -39,7 +37,6 @@ class FavoriteLocationController extends Controller
         return redirect()->route('favorite-locations.index')->with('success', 'Lokasi berhasil disimpan!');
     }
 
-   
     public function show(FavoriteLocation $favoriteLocation)
     {
         if ($favoriteLocation->user_id !== Auth::id()) {
@@ -48,20 +45,14 @@ class FavoriteLocationController extends Controller
         return view('FavoriteLocations.show', compact('favoriteLocation'));
     }
 
-    
     public function edit(FavoriteLocation $favoriteLocation)
     {
         if ($favoriteLocation->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki izin.');
         }
         
-     
-        $locations = FavoriteLocation::where('user_id', Auth::id())->latest()->get();
-        
-        return view('FavoriteLocations.edit', compact('favoriteLocation', 'locations'));
+        return view('FavoriteLocations.edit', compact('favoriteLocation'));
     }
-
-    
     public function update(Request $request, FavoriteLocation $favoriteLocation)
     {
         if ($favoriteLocation->user_id !== Auth::id()) {
@@ -81,7 +72,6 @@ class FavoriteLocationController extends Controller
         return redirect()->route('favorite-locations.index')->with('success', 'Lokasi berhasil diupdate!');
     }
 
-    // 7. Menghapus data
     public function destroy(FavoriteLocation $favoriteLocation)
     {
         if ($favoriteLocation->user_id !== Auth::id()) {

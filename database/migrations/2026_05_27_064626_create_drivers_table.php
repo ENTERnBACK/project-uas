@@ -11,13 +11,11 @@ return new class extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            
             $table->string('nama');            
             $table->string('email')->unique(); 
             $table->string('no_telepon');      
             $table->text('alamat');            
             $table->string('jenis_kendaraan'); 
-            $table->string('status')->default('nonaktif'); 
             $table->string('plate_nomor');    
             $table->string('foto_profil')->nullable();
             $table->timestamps(); 

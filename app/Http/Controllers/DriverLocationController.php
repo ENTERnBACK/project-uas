@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\DriverLocation;
-use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,7 +25,10 @@ class DriverLocationController extends Controller
     {
         $users = User::where('role', 'driver')->get();
 
-        return view('driver_locations.create', compact('users'));
+        return view(
+            'driver_locations.create',
+            compact('users')
+        );
     }
 
     /**
@@ -34,88 +36,49 @@ class DriverLocationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
-        DriverLocation::updateOrCreate(
-            ['user_id' => $request->user_id],
-            [
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude,
-            ]
-        );
+        DriverLocation::create($validated);
 
         return redirect()
             ->route('driver-locations.index')
-            ->with('success', 'Lokasi driver berhasil diperbarui.');
-    }
-
-    /**
-     * User memilih driver.
-     */
-    public function selectDriver(Request $request)
-    {
-        $request->validate([
-            'driver_id' => 'required|exists:users,id',
-        ]);
-
-        // Ambil trip terakhir milik user yang sedang login
-        $trip = Trip::where('user_id', auth()->id())
-                    ->latest()
-                    ->firstOrFail();
-
-        $trip->update([
-            'driver_id' => $request->driver_id,
-            'status'    => 'on_trip',
-        ]);
-
-        return redirect()
-            ->route('trips.show', $trip->id)
-            ->with('success', 'Driver berhasil dipilih.');
+            ->with('success', 'Lokasi driver berhasil ditambahkan.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(DriverLocation $driverLocation)
     {
-        $driverLocation = DriverLocation::findOrFail($id);
-
         return view('driver_locations.show', compact('driverLocation'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(DriverLocation $driverLocation)
     {
-        $driverLocation = DriverLocation::findOrFail($id);
         $users = User::where('role', 'driver')->get();
 
         return view('driver_locations.edit', compact('driverLocation', 'users'));
     }
 
     /**
-     * Update the specified resource.
+     * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, DriverLocation $driverLocation)
     {
-        $request->validate([
-            'user_id' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
-        $driverLocation = DriverLocation::findOrFail($id);
-
-        $driverLocation->update([
-            'user_id' => $request->user_id,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-        ]);
+        $driverLocation->update($validated);
 
         return redirect()
             ->route('driver-locations.index')
@@ -123,12 +86,10 @@ class DriverLocationController extends Controller
     }
 
     /**
-     * Remove the specified resource.
+     * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(DriverLocation $driverLocation)
     {
-        $driverLocation = DriverLocation::findOrFail($id);
-
         $driverLocation->delete();
 
         return redirect()

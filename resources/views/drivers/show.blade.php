@@ -55,11 +55,7 @@
                     <label class="text-xs text-gray-500 uppercase">Plat Nomor</label>
                     <p class="font-semibold text-gray-800">{{ $driver->plate_nomor }}</p>
                 </div>
-                <div>
-                    <label class="text-xs text-gray-500 uppercase">Status</label>
-                    <p class="font-semibold {{ $driver->status == 'aktif' ? 'text-green-600' : 'text-red-600' }}">
-                        {{ ucfirst($driver->status) }}
-                    </p>
+                
                 </div>
             </div>
             <div>

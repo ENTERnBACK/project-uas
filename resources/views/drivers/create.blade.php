@@ -114,7 +114,6 @@
                     <select name="jenis_kendaraan" required 
                             class="w-full border border-blue-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white">
                         <option value="GoRide" {{ old('jenis_kendaraan') == 'GoRide' ? 'selected' : '' }}>🏍️ GoRide (Sepeda Motor)</option>
-                        <option value="GoCar" {{ old('jenis_kendaraan') == 'GoCar' ? 'selected' : '' }}>🚗 GoCar (Mobil Penumpang)</option>
                     </select>
                 </div>
                 <div>
@@ -123,9 +122,6 @@
                            class="w-full border border-blue-200 p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition uppercase">
                 </div>
             </div>
-
-            <input type="hidden" name="status" value="nonaktif">
-
             <div class="flex justify-between gap-3 pt-4 border-t border-blue-100">
                 <a href="{{ route('dashboard.driver') }}" class="bg-gray-500 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-gray-600 transition text-sm">
                     ← Kembali ke Dashboard
@@ -178,8 +174,7 @@
             fotoActions.classList.toggle('hidden');
             fotoActions.classList.toggle('flex');
         }
-
-        // Buka kamera pakai WebRTC
+       
         function bukaKamera() {
             modalKamera.classList.remove('hidden');
             navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
@@ -193,7 +188,7 @@
                 });
         }
 
-        // Ambil foto dari video
+
         function ambilFoto() {
             canvasKamera.width = videoKamera.videoWidth;
             canvasKamera.height = videoKamera.videoHeight;

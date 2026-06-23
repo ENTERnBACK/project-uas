@@ -14,7 +14,7 @@
                 <span class="text-4xl">🚗🏍️</span>
                 <div>
                     <h1 class="text-2xl font-bold text-blue-700">Driver Gojek</h1>
-                    <p class="text-sm text-gray-500">Kelola data, akun, dan status operasional driver</p>
+                    <p class="text-sm text-gray-500">Kelola data, akun, dan operasional driver</p>
                 </div>
             </div>
             <div class="flex gap-3">
@@ -56,7 +56,7 @@
                         </td>
                         <td class="p-4">
                             <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $driver->jenis_kendaraan == 'GoRide' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700' }}">
-                                {{ $driver->jenis_kendaraan == 'GoRide' ? '🏍️' : '🚗' }} {{ $driver->jenis_kendaraan }}
+                                {{ $driver->jenis_kendaraan == 'GoRide' ? '🏍️':''}} {{ $driver->jenis_kendaraan }}
                             </span>
                         </td>
                         <td class="p-4 font-mono font-semibold text-gray-700 uppercase">{{ $driver->plate_nomor }}</td>

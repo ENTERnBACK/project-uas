@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory; // Tambahkan ini
+use Illuminate\Database\Eloquent\Factories\HasFactory; 
 
 class Driver extends Model
 {
-    use HasFactory; // Tambahkan ini
+    use HasFactory; 
 
     protected $fillable = [
         'nama',
@@ -15,7 +15,6 @@ class Driver extends Model
         'no_telepon', 
         'alamat',
         'jenis_kendaraan',
-        'status',
         'plate_nomor',
         'foto_profil', 
     ];
