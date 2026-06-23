@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SavedMethod::class);
     }
+
+    public function trips()
+    {
+        return $this->hasMany(Trip::class);
+    }
 }
