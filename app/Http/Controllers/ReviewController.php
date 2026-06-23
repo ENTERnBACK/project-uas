@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Review;
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -42,6 +44,15 @@ class ReviewController extends Controller
             'rating'        => $request->rating,
             'review_driver' => $request->review_driver,
         ]);
+
+        if ($request->status === 'completed') 
+        {
+            Notification::push(User::class, $trip->user_id, 'Perjalanan Selesai ✅', 'Kamu telah sampai di tujuan.');
+        } 
+        elseif ($request->status === 'cancelled') 
+        {
+            Notification::push(User::class, $trip->user_id, 'Order Dibatalkan ❌', 'Perjalananmu telah dibatalkan.');
+        }
 
         return redirect()->route('/trips')->with('success', 'Review created successfully');
     }
