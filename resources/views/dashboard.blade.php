@@ -61,6 +61,12 @@
                         ⭐ Lokasi Favorit
                     </button>
                 </a>
+
+                <a href="{{ route('promos.user') }}">
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-3 rounded-lg font-semibold transition">
+                        Promo
+                    </button>
+                </a>
             </div>
         </div>
 
@@ -129,6 +135,12 @@
                 <button
                     class="bg-gray-600 hover:bg-gray-700 text-white px-5 py-3 rounded-lg font-semibold transition">
                     📞 Halo Center
+                </button>
+            </a>
+
+            <a href="{{ route('chat-messages.index') }}">
+                <button class="bg-blue-600 hover:bg-gray-700 text-black px-5 py-3 rounded-lg font-semibold transition">
+                    💬 Chat
                 </button>
             </a>
         </div>
