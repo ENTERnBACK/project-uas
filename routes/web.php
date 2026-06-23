@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FavoriteLocationController;
 use App\Http\Controllers\DriverLocationController;
@@ -91,6 +92,7 @@ Route::post('/payments/process', [PaymentController::class, 'processPayment'])
     Route::put('/trips/{id}/accept', [TripController::class, 'acceptTrip'])->name('driver.trips.accept');
     Route::get('/trips/{id}/ontrip', [TripController::class, 'showOnTrip'])->name('driver.trips.ontrip');
 
+Route::get('/payment-methods', [PaymentMethodController::class, 'index'])->name('payment_method.index');
     Route::prefix('payment-methods')->name('payment_method.')->group(function () {
         Route::get('/', [PaymentMethodController::class, 'index'])->name('index');
         Route::get('/create', [PaymentMethodController::class, 'create'])->name('create');
@@ -99,6 +101,7 @@ Route::post('/payments/process', [PaymentController::class, 'processPayment'])
         Route::post('/payment-methods', [PaymentController::class, 'storePaymentMethod'])
     ->name('payment-methods.store');
     });
+Route::post('/service-types/select', [App\Http\Controllers\ServiceTypeController::class, 'selectService'])->name('service_types.select');
     Route::resource('trips', TripController::class);
     Route::resource('drivers', DriverController::class);
     Route::resource('reviews', ReviewController::class);
@@ -108,4 +111,5 @@ Route::post('/payments/process', [PaymentController::class, 'processPayment'])
     Route::resource('favorite-locations', FavoriteLocationController::class);
    Route::resource('payment-methods', PaymentMethodController::class)->names('payment_method');
      Route::resource('chat-messages', ChatMessageController::class);
+     
 });

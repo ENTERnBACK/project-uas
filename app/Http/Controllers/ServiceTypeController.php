@@ -20,7 +20,7 @@ class ServiceTypeController extends Controller
      */
     public function create()
     {
-       // return view('service_types.create');
+        // 
     }
 
     /**
@@ -28,16 +28,8 @@ class ServiceTypeController extends Controller
      */
     public function store(Request $request)
     {
-           $request->validate([
-            'service_type' => 'required'
-        ]);
-
-        ServiceType::create([
-            'service_type' => $request->service_type
-        ]);
-
-        return redirect('/favorite-locations/create');
-    
+      session(['selected_service_type' => $request->service_type]);
+    return redirect()->route('payment_method.index');
     }
 
     /**
@@ -45,7 +37,7 @@ class ServiceTypeController extends Controller
      */
     public function show(ServiceType $service_type)
     {
-        return view('services_types.show' , compact('serviceTypes'));
+        return view('services_types.show', compact('serviceTypes'));
     }
 
     /**
@@ -61,15 +53,11 @@ class ServiceTypeController extends Controller
      */
     public function update(Request $request, ServiceType $service_type)
     {
-        $request->validate([
-            'service_type' => 'required'
-        ]);
+        
+        session(['selected_service_type' => $request->service_type]);
 
-        $service_type->update([
-            'service_type' => $request->service_type
-        ]);
-
-        return redirect('/favorite-locations/create');
+       
+        return redirect()->route('payment_method.index');
     }
 
     /**
