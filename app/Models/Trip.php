@@ -15,4 +15,9 @@ class Trip extends Model
         'dropoff_point',
         'status',
     ];
+
+    public function chatMessages()
+    {
+        return $this->hasMany(ChatMessage::class);
+    }
 }
