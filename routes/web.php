@@ -43,7 +43,6 @@ Route::middleware('auth')->group(function () {
         return view('dashboard', compact('trips'));
     })->name('dashboard');
 
-
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
         $reviews = \App\Models\Review::latest()->get();
@@ -62,43 +61,31 @@ Route::middleware('auth')->group(function () {
     Route::put('/driver-trips/{id}', [DriverTripController::class, 'update'])->name('driver-trips.update');
     Route::post('/driver-trips', [DriverTripController::class, 'store'])->name('driver-trips.store');
 
-    Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])
-    ->name('payments.user');
+    Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])->name('payments.user');
+    Route::post('/payments/process', [PaymentController::class, 'processPayment'])->name('payments.process');
 
-Route::post('/payments/process', [PaymentController::class, 'processPayment'])
-    ->name('payments.process');
-
-    Route::get('/promos/remove', function () {
-        session()->forget([
-            'discount_amount',
-            'applied_promo'
-        ]);
-
-        return redirect()->back();
-        })->name('promos.remove');
+    Route::get('/promos', [PromoController::class, 'index'])->name('promos.index');
+    Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
+    Route::post('/promos/apply', [PromoController::class, 'applyPromo'])->name('promos.apply');
+    Route::post('/promos/remove', [PromoController::class, 'removePromo'])->name('promos.remove');
 
     Route::post('/payments/set-service', [PaymentController::class, 'setService'])->name('payments.set-service');
-    Route::post('/promos/apply', [PromoController::class, 'applyPromo'])->name('promos.apply');
-
-    Route::post('/promos/validate', [PromoController::class, 'validatePromo'])->name('promos.validate');
-
-    Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::put('/trips/{id}/accept', [TripController::class, 'acceptTrip'])->name('driver.trips.accept');
     Route::get('/trips/{id}/ontrip', [TripController::class, 'showOnTrip'])->name('driver.trips.ontrip');
 
-Route::get('/payment-methods', [PaymentMethodController::class, 'index'])->name('payment_method.index');
+    Route::get('/payment-methods', [PaymentMethodController::class, 'index'])->name('payment_method.index');
     Route::prefix('payment-methods')->name('payment_method.')->group(function () {
         Route::get('/', [PaymentMethodController::class, 'index'])->name('index');
         Route::get('/create', [PaymentMethodController::class, 'create'])->name('create');
         Route::post('/', [PaymentMethodController::class, 'store'])->name('store');
         Route::delete('/{id}', [PaymentMethodController::class, 'destroy'])->name('destroy');
-        Route::post('/payment-methods', [PaymentController::class, 'storePaymentMethod'])
-    ->name('payment-methods.store');
+        Route::post('/payment-methods', [PaymentController::class, 'storePaymentMethod'])->name('payment-methods.store');
     });
-Route::post('/service-types/select', [App\Http\Controllers\ServiceTypeController::class, 'selectService'])->name('service_types.select');
+    
+    Route::post('/service-types/select', [App\Http\Controllers\ServiceTypeController::class, 'selectService'])->name('service_types.select');
     Route::resource('trips', TripController::class);
     Route::resource('drivers', DriverController::class);
     Route::resource('reviews', ReviewController::class);
