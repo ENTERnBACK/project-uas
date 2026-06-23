@@ -8,6 +8,7 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Models\Driver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChatMessageController extends Controller
 {
@@ -16,17 +17,60 @@ class ChatMessageController extends Controller
      */
     public function index()
     {
-        $chats = ChatMessage::all();
+        $chats = ChatMessage::orderBy('created_at', 'desc')->get();
         return view('chats.index', compact('chats'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function destroy(ChatMessage $chatMessage)
     {
-        return view('chats.create');
+        $chatMessage->delete();
+        return redirect()->route('chat-messages.index')->with('success', 'Riwayat chat berhasil dihapus.');
     }
+
+    public function room(Trip $trip)
+    {
+        $messages = $trip->chatMessages()->orderBy('created_at', 'asc')->get();
+
+        $loggedInUser = Auth::user();
+        
+        $current_role = ($trip->user_id === $loggedInUser->id) ? 'user' : 'driver';
+
+        return view('chats.room', compact('trip', 'messages', 'current_role'));
+    }
+
+    public function storeMessage(Request $request, Trip $trip)
+    {
+        // Hanya perlu validasi teks pesan, sisanya otomatis oleh sistem
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $loggedInUser = Auth::user();
+        $current_role = ($trip->user_id === $loggedInUser->id) ? 'user' : 'driver';
+
+        // 1. Simpan pesan ke database secara aman
+        $chat = $trip->chatMessages()->create([
+            'sender_type' => $current_role,
+            'sender_id'   => $loggedInUser->id,
+            'message'     => $request->message,
+        ]);
+
+        // 2. Kirim Notifikasi ke lawan bicara
+        if ($current_role === 'driver') {
+            // Jika Driver yang mengirim, buatkan notifikasi untuk Penumpang
+            Notification::push(User::class, $trip->user_id, 'Pesan Baru dari Driver 💬', $chat->message);
+        } else {
+            // Jika Penumpang yang mengirim, buatkan notifikasi untuk Driver (jika driver sudah ada)
+            if ($trip->driver_id) {
+                Notification::push(Driver::class, $trip->driver_id, 'Pesan Baru dari Penumpang 💬', $chat->message);
+            }
+        }
+
+        // Kembali secara otomatis ke halaman chatroom
+        return back();
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -68,41 +112,5 @@ class ChatMessageController extends Controller
         return back()->with('success', 'Pesan terkirim.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ChatMessage $chatMessage)
-    {
-        return view('chats.show', compact('chatMessage'));
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ChatMessage $chatMessage)
-    {
-        return view('chats.edit', compact('chatMessage'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ChatMessage $chatMessage)
-    {
-        $request->validate([
-            'message' => 'required|string',
-        ]);
-
-        $chatMessage->update($request->only('message'));
-        return redirect()->route('chat-messages.index')->with('success', 'Chat updated successfully.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ChatMessage $chatMessage)
-    {
-        $chatMessage->delete();
-        return redirect()->route('chat-messages.index')->with('success', 'Chat deleted successfully.');
-    }
 }
