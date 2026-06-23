@@ -131,9 +131,23 @@
 
 @endif
 
-<a href="{{ route('dashboard') }}" class="btn">
-    ← Kembali ke Dashboard
-</a>
+<div class="mt-3">
+
+    @if(auth()->user()->role == 'driver')
+
+        <a href="{{ route('dashboard.driver') }}" class="btn btn-secondary">
+            Kembali ke Dashboard 
+        </a>
+
+    @else
+
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary">
+            Kembali ke Dashboard 
+        </a>
+
+    @endif
+
+</div>
 
 <table>
 
