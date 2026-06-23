@@ -26,7 +26,7 @@
         </p>
     </div>
 
-    <form action="{{ route('driver-trips.store') }}" method="POST" style="margin: 0;">
+    <form action="{{ route('driver-trips.complete') }}" method="POST" style="margin: 0;">
         @csrf
         <input type="hidden" name="trip_id" value="{{ $trip->id }}">
     
