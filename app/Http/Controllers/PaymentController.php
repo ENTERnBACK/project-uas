@@ -98,6 +98,32 @@ class PaymentController extends Controller
          return redirect()->route('driver-locations.index')->with('success', 'Payment successful! Silakan Pilih Driver');
     }
 
+        public function store(Request $request)
+        {
+            $request->validate([
+                'driver_id' => 'required|exists:drivers,id',
+                'passenger_name' => 'required|string',
+                'total_amount' => 'required|numeric|min:0',
+                'tip_amount' => 'nullable|numeric|min:0',
+                'payment_method' => 'required|string',
+            ]);
+
+            $payment = Payment::create([
+                'driver_id' => $request->driver_id,
+                'passenger_name' => $request->passenger_name,
+                'total_amount' => $request->total_amount,
+                'tip_amount' => $request->tip_amount ?? 0,
+                'payment_method' => $request->payment_method,
+                'status' => 'completed',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment data saved successfully',
+                'data' => $payment
+            ], 201);
+        }
+
     private function getDummyPromos()
     {
         return collect([

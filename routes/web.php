@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])->name('payments.user');
     Route::post('/payments/process', [PaymentController::class, 'processPayment'])->name('payments.process');
+    Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
 
     Route::get('/promos', [PromoController::class, 'index'])->name('promos.index');
     Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');
