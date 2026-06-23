@@ -17,6 +17,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\UserTripController;
 
 Route::get('/', function () {
     return view('home');
@@ -37,11 +38,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    
-    Route::get('/dashboard', function () {
-        $trips = \App\Models\Trip::latest()->get();
-        return view('dashboard', compact('trips'));
-    })->name('dashboard');
+
+    Route::get('/dashboard', [UserTripController::class, 'index'])->name('dashboard');
+    Route::get('/trips/status/check', [UserTripController::class, 'show'])->name('trips.check-status');
 
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
@@ -87,6 +86,7 @@ Route::middleware('auth')->group(function () {
     });
     
     Route::post('/service-types/select', [App\Http\Controllers\ServiceTypeController::class, 'selectService'])->name('service_types.select');
+    
     Route::resource('trips', TripController::class);
     Route::resource('drivers', DriverController::class);
     Route::resource('reviews', ReviewController::class);

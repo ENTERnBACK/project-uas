@@ -51,8 +51,6 @@
                     </td>
                     <td>{{ $trip->updated_at->format('d M Y, H:i') }} WIB</td>
                     <td>
-                        <a href="{{ route('trips.edit', $trip->id) }}" class="btn btn-edit">Edit</a>
-
                         <form action="{{ route('trips.destroy', $trip->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus trip ini?')">
                             @csrf
                             @method('DELETE')
