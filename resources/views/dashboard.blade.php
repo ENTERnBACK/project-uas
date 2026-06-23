@@ -112,6 +112,16 @@
                                             {{ ucfirst($trip->status ?? 'Active') }}
                                         </span>
                                     </td>
+                                    </td>
+                                    <td class="p-3 text-center">
+                                        @if(in_array($trip->status, ['pending', 'on_trip']))
+                                            <a href="{{ route('trips.chat', $trip->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm font-semibold transition shadow-sm">
+                                                💬 Chat Driver
+                                            </a>
+                                        @else
+                                            <span class="text-xs text-gray-400">-</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -135,12 +145,6 @@
                 <button
                     class="bg-gray-600 hover:bg-gray-700 text-white px-5 py-3 rounded-lg font-semibold transition">
                     📞 Halo Center
-                </button>
-            </a>
-
-            <a href="{{ route('chat-messages.index') }}">
-                <button class="bg-blue-600 hover:bg-gray-700 text-black px-5 py-3 rounded-lg font-semibold transition">
-                    💬 Chat
                 </button>
             </a>
         </div>
