@@ -22,7 +22,7 @@ class TripController extends Controller
     public function create()
     {
         $favoriteLocations = \App\Models\FavoriteLocation::where('user_id', auth()->id())->get();
-        return view('trips.create', compact('favoriteLocations'));;
+        return view('trips.create', compact('favoriteLocations'));
     }
 
     /**
@@ -68,7 +68,6 @@ class TripController extends Controller
      */
     public function update(Request $request, Trip $trip)
     {
-
         if ($request->has('activate_trip')) {
             $trip->update([
                 'status' => 'pending'
@@ -81,7 +80,7 @@ class TripController extends Controller
             'pickup_point' => 'required|string|max:255',
             'dropoff_point' => 'required|string|max:255',
             'status' => 'required|in:pending,on_trip,completed,cancelled',
-        ]);;
+        ]);
 
         $trip->update([
             'pickup_point' => $request->pickup_point,
@@ -99,5 +98,33 @@ class TripController extends Controller
     {
         $trip->delete();
         return redirect()->route('trips.index')->with('success', 'Trip berhasil dihapus!');
+    }
+
+    public function selectDriver(Request $request)
+    {
+        $request->validate([
+            'driver_id' => 'required|exists:users,id',
+        ]);
+
+        $trip = Trip::where('user_id', auth()->id())
+                    ->latest()
+                    ->first();
+
+        if (!$trip) {
+            $trip = Trip::create([
+                'user_id' => auth()->id(),
+                'pickup_point' => 'Lokasi Penumpang',
+                'dropoff_point' => 'Tujuan Perjalanan',
+                'status' => 'on_trip',
+            ]);
+        }
+
+        $trip->update([
+            'driver_id' => $request->driver_id,
+            'status'    => 'on_trip',
+        ]);
+
+        return redirect()->route('trips.show', ['trip' => $trip->id])
+                         ->with('success', 'Driver berhasil dipilih, perjalanan dimulai!');
     }
 }
