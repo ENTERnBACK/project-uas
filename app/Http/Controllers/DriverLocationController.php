@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DriverLocation;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -25,10 +26,7 @@ class DriverLocationController extends Controller
     {
         $users = User::where('role', 'driver')->get();
 
-        return view(
-            'driver_locations.create',
-            compact('users')
-        );
+        return view('driver_locations.create', compact('users'));
     }
 
     /**
@@ -36,49 +34,19 @@ class DriverLocationController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+        $request->validate([
+            'user_id' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
         ]);
 
-        DriverLocation::create($validated);
-
-        return redirect()
-            ->route('driver-locations.index')
-            ->with('success', 'Lokasi driver berhasil ditambahkan.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(DriverLocation $driverLocation)
-    {
-        return view('driver_locations.show', compact('driverLocation'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DriverLocation $driverLocation)
-    {
-        $users = User::where('role', 'driver')->get();
-
-        return view('driver_locations.edit', compact('driverLocation', 'users'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, DriverLocation $driverLocation)
-    {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-        ]);
-
-        $driverLocation->update($validated);
+        DriverLocation::updateOrCreate(
+            ['user_id' => $request->user_id],
+            [
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+            ]
+        );
 
         return redirect()
             ->route('driver-locations.index')
@@ -86,10 +54,81 @@ class DriverLocationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * User memilih driver.
      */
-    public function destroy(DriverLocation $driverLocation)
+    public function selectDriver(Request $request)
     {
+        $request->validate([
+            'driver_id' => 'required|exists:users,id',
+        ]);
+
+        // Ambil trip terakhir milik user yang sedang login
+        $trip = Trip::where('user_id', auth()->id())
+                    ->latest()
+                    ->firstOrFail();
+
+        $trip->update([
+            'driver_id' => $request->driver_id,
+            'status'    => 'on_trip',
+        ]);
+
+        return redirect()
+            ->route('trips.show', $trip->id)
+            ->with('success', 'Driver berhasil dipilih.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $driverLocation = DriverLocation::findOrFail($id);
+
+        return view('driver_locations.show', compact('driverLocation'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $driverLocation = DriverLocation::findOrFail($id);
+        $users = User::where('role', 'driver')->get();
+
+        return view('driver_locations.edit', compact('driverLocation', 'users'));
+    }
+
+    /**
+     * Update the specified resource.
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+        ]);
+
+        $driverLocation = DriverLocation::findOrFail($id);
+
+        $driverLocation->update([
+            'user_id' => $request->user_id,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+
+        return redirect()
+            ->route('driver-locations.index')
+            ->with('success', 'Lokasi driver berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified resource.
+     */
+    public function destroy($id)
+    {
+        $driverLocation = DriverLocation::findOrFail($id);
+
         $driverLocation->delete();
 
         return redirect()
