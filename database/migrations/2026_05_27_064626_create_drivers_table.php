@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('jenis_kendaraan'); 
             $table->string('status')->default('nonaktif'); 
             $table->string('plate_nomor');    
-            
+            $table->string('foto_profil')->nullable();
             $table->timestamps(); 
         });
     }

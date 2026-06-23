@@ -1,4 +1,7 @@
-</div>
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,69 +12,73 @@
 </head>
 <body class="bg-blue-50 p-8">
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-blue-100">
-        <div class="mb-6 border-b border-blue-100 pb-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <span class="text-4xl">{{ $driver->jenis_kendaraan == 'GoRide' ? '🏍️' : '🚗' }}</span>
+        {{-- Foto Profil --}}
+        <div class="flex flex-col items-center py-5 border-b border-blue-100">
+            @if($driver->foto_profil)
+                <img src="{{ Storage::url($driver->foto_profil) }}"
+                     alt="Foto Profil"
+                     class="w-28 h-28 rounded-full object-cover border-4 border-blue-300 shadow-md"
+                     onerror="this.style.display='none'; document.getElementById('avatar-fallback').style.display='flex';">
+                
+                <div id="avatar-fallback" style="display:none;"
+                     class="w-28 h-28 rounded-full border-4 border-blue-300 shadow-md bg-blue-500 flex items-center justify-center">
+                    <span class="text-white text-3xl font-bold">{{ strtoupper(substr($driver->nama, 0, 2)) }}</span>
+                </div>
+            @else
+                <div class="w-28 h-28 rounded-full border-4 border-blue-300 shadow-md bg-blue-500 flex items-center justify-center">
+                    <span class="text-white text-3xl font-bold">{{ strtoupper(substr($driver->nama, 0, 2)) }}</span>
+                </div>
+            @endif
+        </div>
+
+        {{-- Informasi Driver (Data yang tersimpan) --}}
+        <div class="mt-6 space-y-4">
+            <h2 class="text-lg font-bold text-blue-900 border-b pb-2">Informasi Profil</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-blue-700">Profil Lengkap Driver</h1>
-                    <p class="text-sm text-gray-500">Informasi personal dan operasional mitra</p>
+                    <label class="text-xs text-gray-500 uppercase">Nama Lengkap</label>
+                    <p class="font-semibold text-gray-800">{{ $driver->nama }}</p>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500 uppercase">Email</label>
+                    <p class="font-semibold text-gray-800">{{ $driver->email }}</p>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500 uppercase">No. Telepon</label>
+                    <p class="font-semibold text-gray-800">{{ $driver->no_telepon }}</p>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500 uppercase">Jenis Kendaraan</label>
+                    <p class="font-semibold text-gray-800">{{ $driver->jenis_kendaraan }}</p>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500 uppercase">Plat Nomor</label>
+                    <p class="font-semibold text-gray-800">{{ $driver->plate_nomor }}</p>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500 uppercase">Status</label>
+                    <p class="font-semibold {{ $driver->status == 'aktif' ? 'text-green-600' : 'text-red-600' }}">
+                        {{ ucfirst($driver->status) }}
+                    </p>
                 </div>
             </div>
-        </div>
-  <div class="divide-y divide-blue-50">
-            
-            <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-blue-600">Nama Lengkap</span>
-                <span class="text-sm font-medium text-gray-900 col-span-2">{{ $driver->nama }}</span>
+            <div>
+                <label class="text-xs text-gray-500 uppercase">Alamat</label>
+                <p class="font-semibold text-gray-800">{{ $driver->alamat }}</p>
             </div>
-
-            <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-blue-600">Alamat Email</span>
-                <span class="text-sm text-gray-800 col-span-2 font-mono">{{ $driver->email }}</span>
-            </div>
-
-            <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-blue-600">Nomor Telepon</span>
-                <span class="text-sm text-gray-800 col-span-2">{{ $driver->no_telepon }}</span>
-            </div>
-
-            <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-blue-600">Jenis Layanan</span>
-                <div class="col-span-2">
-                    <span class="px-2.5 py-1 rounded text-xs font-bold {{ $driver->jenis_kendaraan == 'GoRide' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700' }}">
-                        {{ $driver->jenis_kendaraan == 'GoRide' ? '🏍️' : '🚗' }} {{ $driver->jenis_kendaraan }}
-                    </span>
-                </div>
-            </div>
-
-            <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-blue-600">Nomor Plate</span>
-                <span class="text-sm font-mono font-bold text-gray-800 col-span-2 uppercase">{{ $driver->plate_nomor }}</span>
-            </div>
-
-            <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-blue-600">Alamat Lengkap</span>
-                <span class="text-sm text-gray-600 col-span-2 leading-relaxed">{{ $driver->alamat }}</span>
-            </div>
-
-            <div class="py-3.5 grid grid-cols-3 gap-4">
-                <span class="text-sm font-semibold text-blue-600">Bergabung Pada</span>
-                <span class="text-sm text-gray-400 col-span-2">{{ $driver->created_at->format('d F Y, H:i') }} WIB</span>
-            </div>
-
         </div>
 
-        <div class="flex justify-between items-center pt-6 mt-6 border-t border-blue-100">
-            <a href="{{ route('dashboard.driver') }}" class="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1 transition">
-                &larr; Kembali ke Dashboard
+        {{-- Tombol Navigasi Edit --}}
+        <div class="mt-8 pt-6 border-t border-blue-100 flex gap-3">
+            <a href="{{ route('drivers.edit', $driver->id) }}" 
+               class="flex-1 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+               Edit Profil
             </a>
-            <a href="{{ route('drivers.edit', $driver->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition shadow-sm">
-                Edit Profil Ini
+            <a href="{{ url('/drivers') }}" 
+               class="flex-1 text-center bg-gray-100 text-gray-600 py-2 rounded-lg hover:bg-gray-200 transition font-medium">
+               Kembali
             </a>
         </div>
-
     </div>
-
 </body>
 </html>
-</div>
