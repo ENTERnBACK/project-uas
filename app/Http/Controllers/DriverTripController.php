@@ -29,4 +29,12 @@ class DriverTripController extends Controller
         ]);
         return redirect()->to('/dashboard-driver')->with('success', 'Hore! Berhasil menyelesaikan orderan.');
     }
+
+    public function completeTrip($id)
+    {
+        $trip = \App\Models\Trip::findOrFail($id);
+        $trip->update(['status' => 'completed']);
+    
+        return redirect()->route('dashboard.driver')->with('success', 'Perjalanan selesai!');
+    }
 }

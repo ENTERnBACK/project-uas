@@ -16,6 +16,7 @@ class Driver extends Model
         'alamat',
         'jenis_kendaraan',
         'status',
-        'plate_nomor', 
+        'plate_nomor',
+        'foto_profil', 
     ];
 }

@@ -7,7 +7,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e3f2fd; padding: 20px; }
         .container { max-width: 520px; margin: 0 auto; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(25, 118, 210, 0.15); }
-        
         h1 { font-size: 24px; margin-bottom: 20px; color: #0d47a1; }
         .trip-info { background: #e3f2fd; padding: 16px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #1976D2; }
         .trip-info p { margin: 6px 0; font-size: 14px; color: #333; }
@@ -16,39 +15,31 @@
         .service-box { background: #e3f2fd; padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
         .service-box .service-name { font-weight: 600; color: #0d47a1; text-transform: capitalize; }
         .service-box .service-price { font-weight: 700; color: #1976D2; }
-        
         .promo-section { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
         .promo-section input { flex: 1; padding: 11px 14px; border: 2px solid #bbdefb; border-radius: 10px; font-size: 14px; min-width: 150px; }
         .promo-section input:focus { outline: none; border-color: #1976D2; }
-        
         .btn-pakai { background: #0d47a1; color: white; border: none; padding: 11px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; }
         .btn-pakai:hover { background: #062a6e; }
         .btn-lihat { background: #F57C00; color: white; border: none; padding: 11px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; text-decoration: none; display: inline-block; }
-        .btn-lihat:hover { background: #0d47a1; }
-        
+        .btn-lihat:hover { background: #e65100; }
         .promo-success { background: #e3f2fd; padding: 12px 16px; border-radius: 10px; color: #0d47a1; margin: 10px 0; border-left: 4px solid #1976D2; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
         .promo-error { background: #ffebee; padding: 12px 16px; border-radius: 10px; color: #c62828; margin: 10px 0; border-left: 4px solid #f44336; font-size: 14px; }
         .batal-promo { color: #c62828; font-weight: 600; cursor: pointer; background: none; border: none; font-size: 13px; }
         .batal-promo:hover { color: #b71c1c; }
-        
         .payment-method-box { background: #e3f2fd; padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
         .payment-method-box .method-label { font-weight: 500; color: #0d47a1; }
         .payment-method-box .method-status { font-size: 13px; color: #1976D2; }
-        
         .tip-section input { padding: 11px 14px; border: 2px solid #bbdefb; border-radius: 10px; width: 100%; box-sizing: border-box; font-size: 14px; }
         .tip-section input:focus { outline: none; border-color: #1976D2; }
         .divider { border: none; border-top: 2px dashed #bbdefb; margin: 16px 0; }
-        
         .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 15px; color: #333; }
         .row.total { font-weight: 700; font-size: 18px; color: #0d47a1; padding-top: 12px; border-top: 2px solid #bbdefb; margin-top: 6px; }
         .total .amount { color: #1976D2; }
-        
         .btn-bayar { width: 100%; padding: 16px; background: #4CAF50; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 18px; }
         .btn-bayar:hover { background: #388E3C; }
         .back-link { display: block; margin-top: 16px; color: #1976D2; text-decoration: none; text-align: center; font-size: 14px; }
         .back-link:hover { color: #0d47a1; }
         #promo_message { min-height: 50px; }
-        
         .flash-message { padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 14px; }
         .flash-success { background: #e3f2fd; color: #0d47a1; border-left: 4px solid #1976D2; }
         .flash-error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
@@ -77,13 +68,13 @@
             <input type="hidden" name="trip_id" value="{{ $trip->id }}">
             <input type="hidden" name="payment_method" id="payment_method" value="cash">
 
-            <div class="section-title">Layanan Dipilih</div>
+            <div class="section-title">🚗 Layanan Dipilih</div>
             <div class="service-box">
                 <span class="service-name">{{ ucfirst($selectedService) }}</span>
                 <span class="service-price">Rp {{ number_format($basePrice, 0, ',', '.') }}</span>
             </div>
 
-            <div class="section-title">Kode Promo</div>
+            <div class="section-title">🎫 Kode Promo</div>
             <div class="promo-section">
                 <input type="text" id="promo_code" placeholder="Masukkan kode promo" onkeypress="if(event.key==='Enter'){event.preventDefault();applyPromo();}">
                 <button type="button" class="btn-pakai" onclick="applyPromo()">Pakai</button>
@@ -93,7 +84,7 @@
                 @if($appliedPromo && $discountAmount > 0)
                     <div class="promo-success">
                         <span>✅ Promo <strong>{{ $appliedPromo }}</strong> (Diskon Rp {{ number_format($discountAmount, 0, ',', '.') }})</span>
-                        <button type="button" class="batal-promo" onclick="removePromo()">Batal</button>
+                        <button type="button" class="batal-promo" onclick="removePromo()">[Batal]</button>
                     </div>
                 @endif
             </div>

@@ -12,6 +12,7 @@ class Payment extends Model
     protected $fillable = [
         'trip_id',
         'passenger_name',
+        'passenger_id',
         'total_amount',
         'tip_amount',
         'status',

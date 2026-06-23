@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [UserTripController::class, 'index'])->name('dashboard');
     Route::get('/trips/status/check', [UserTripController::class, 'show'])->name('trips.check-status');
+    Route::post('/trips/select-driver', [App\Http\Controllers\TripController::class, 'selectDriver'])->name('trips.selectDriver');
 
     Route::get('/dashboard-driver', function () {
         $availableTrips = \App\Models\Trip::where('status', 'pending')->latest()->get();
@@ -49,6 +50,9 @@ Route::middleware('auth')->group(function () {
         $averageRating = number_format((float)$avg, 1, '.', '');
         return view('dashboard_driver', compact('availableTrips', 'reviews', 'averageRating'));
     })->name('dashboard.driver');
+
+    Route::patch('/driver-trips/{trip}/complete', [
+        App\Http\Controllers\DriverTripController::class, 'completeTrip'])->name('driver-trips.complete');
     
     Route::get('/profile', [ProfileController::class, 'index'])->name('user_profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user_profile.edit');
@@ -65,6 +69,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/{tripId}', [PaymentController::class, 'userPayment'])->name('payments.user');
     Route::post('/payments/process', [PaymentController::class, 'processPayment'])->name('payments.process');
     Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
+
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+    Route::get('/payments/{id}', [PaymentController::class, 'show'])->name('payments.show');
 
     Route::get('/promos', [PromoController::class, 'index'])->name('promos.index');
     Route::get('/promos/user', [PromoController::class, 'userIndex'])->name('promos.user');

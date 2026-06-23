@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Review;
 use App\Models\Notification;
 use App\Models\User;
+use App\Models\Trip;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -21,9 +22,12 @@ class ReviewController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('reviews.create');
+        $tripId = $request->query('trip_id');
+        $trip = Trip::find($tripId);
+
+        return view('reviews.create', compact('trip'));
     }
 
     /**
@@ -37,7 +41,7 @@ class ReviewController extends Controller
             'trip_id' => 'required|exists:trips,id',
         ]);
 
-        $trip = \App\Models\Trip::findOrFail($request->trip_id);
+        $trip = Trip::findOrFail($request->trip_id);
         Review::create([
             'trip_id'       => $trip->id,
             'driver_id'     => $trip->driver_id,
@@ -47,14 +51,14 @@ class ReviewController extends Controller
 
         if ($request->status === 'completed') 
         {
-            Notification::push(User::class, $trip->user_id, 'Perjalanan Selesai ✅', 'Kamu telah sampai di tujuan.');
+            Notification::push(User::class, $trip->user_id, 'Perjalanan Selesai', 'Kamu telah sampai di tujuan.');
         } 
         elseif ($request->status === 'cancelled') 
         {
-            Notification::push(User::class, $trip->user_id, 'Order Dibatalkan ❌', 'Perjalananmu telah dibatalkan.');
+            Notification::push(User::class, $trip->user_id, 'Order Dibatalkan', 'Perjalananmu telah dibatalkan.');
         }
 
-        return redirect()->route('/trips')->with('success', 'Review created successfully');
+        return redirect()->route('dashboard')->with('success', 'Review created successfully');
     }
 
     /**
