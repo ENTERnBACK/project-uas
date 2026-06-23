@@ -13,7 +13,7 @@ class Notification extends Model
         return $this->morphTo();
     }
 
-    public static function push($tipeAkun, $idAkun, $judul, $pesan)
+    public static function send($tipeAkun, $idAkun, $judul, $pesan)
     {
         return self::create([
             'notifiable_type' => $tipeAkun,
