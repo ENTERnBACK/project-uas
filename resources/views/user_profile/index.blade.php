@@ -48,6 +48,16 @@
 
         <h2>👤 My Profile</h2>
 
+        <div style="text-align:center;margin-bottom:20px;">
+
+    <img
+    src="{{ asset('storage/profile/'.$user->photo) }}"
+    alt="Foto Profil"
+    width="150"
+    height="150"
+    style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:5px solid #0d6efd;background:#fff;">
+
+
         <p>Informasi akun Anda</p>
 
     </div>
