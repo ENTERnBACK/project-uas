@@ -12,7 +12,7 @@
         .total-earnings { background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         .total-earnings .amount { font-size: 24px; font-weight: bold; color: #0d47a1; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #0d47a1; color: white; padding: 12px; text-align: left; }
+        th { background: #0d47a1; color: white; padding: 12px; text-align: center; }
         td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
         tr:hover { background: #f5f5f5; }
         .status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
@@ -43,39 +43,49 @@
 
         @if($payments->isEmpty())
             <div class="empty">
-                <p style="font-size: 18px;">😊 Belum ada riwayat pembayaran</p>
+                <p style="font-size: 18px;"> Belum ada riwayat pembayaran</p>
                 <p style="font-size: 14px; margin-top: 8px;">Silakan lakukan pembayaran untuk melihat history</p>
             </div>
         @else
             <table>
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tanggal</th>
-                        <th>Metode</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($payments as $payment)
-                    <tr>
-                        <td>#{{ $payment->id }}</td>
-                        <td>{{ $payment->created_at->format('d M Y H:i') }}</td>
-                        <td>{{ ucfirst($payment->payment_method) }}</td>
-                        <td>Rp {{ number_format($payment->total_amount, 0, ',', '.') }}</td>
-                        <td>
-                            <span class="status status-{{ $payment->status }}">
-                                {{ ucfirst($payment->status) }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ route('payments.show', $payment->id) }}" class="btn-detail">Detail</a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
+                <tr>
+                    <th style="width:15%; text-align:center;">ID</th>
+                    <th style="width:35%;">Tanggal</th>
+                    <th style="width:20%; text-align:center;">Total</th>
+                    <th style="width:15%; text-align:center;">Status</th>
+                    <th style="width:15%; text-align:center;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($payments as $payment)
+                <tr>
+                    <td style="text-align:center;">
+                        #PAY-{{ str_pad($payment->id, 4, '0', STR_PAD_LEFT) }}
+                    </td>
+
+                    <td>
+                        {{ $payment->created_at->format('d M Y H:i') }}
+                    </td>
+
+                    <td style="text-align:center;">
+                        Rp {{ number_format($payment->total_amount, 0, ',', '.') }}
+                    </td>
+
+                    <td style="text-align:center;">
+                        <span class="status status-{{ $payment->status }}">
+                            {{ ucfirst($payment->status) }}
+                        </span>
+                    </td>
+
+                    <td style="text-align:center;">
+                        <a href="{{ route('payments.show', $payment->id) }}" class="btn-detail">
+                            Detail
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
             </table>
 
             <div class="pagination">
