@@ -42,7 +42,6 @@
         .notif-item:last-child { border-bottom: none; }
         .notif-item:hover { background-color: #fafafa; }
         
-        /* Indikator Belum Dibaca */
         .notif-item.unread { background-color: #f2fcf6; }
         .notif-item.unread .notif-title { color: #00aa5b; font-weight: 700; }
         
@@ -72,7 +71,7 @@
     <div class="notification-container">
         <div class="header">
             <h2>🔔 Notifikasi Sistem</h2>
-            <a href="/" class="back-btn">Tutup &times;</a>
+            <a href="{{ auth()->user()->role === 'driver' ? route('dashboard.driver') : route('dashboard') }}" class="back-btn">Tutup &times;</a>
         </div>
 
         <ul class="notif-list">
