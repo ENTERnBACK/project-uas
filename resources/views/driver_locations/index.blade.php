@@ -207,7 +207,7 @@ Hapus
     <button>Detail</button>
 </a>
 
-<form action="{{ route('driver-locations.select-driver') }}" method="POST">
+<form action="{{ route('trips.select-driver') }}" method="POST">
     @csrf
 
     <input type="hidden"
